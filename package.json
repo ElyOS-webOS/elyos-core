@@ -1,0 +1,37 @@
+{
+	"name": "elyos",
+	"private": false,
+	"license": "MIT",
+	"workspaces": [
+		"packages/*",
+		"apps/*",
+		"examples/plugins/*"
+	],
+	"scripts": {
+		"app:dev": "bun --elide-lines=0 --filter @elyos/core dev",
+		"app:build": "bun --filter @elyos/core build",
+		"app:check": "bun --elide-lines=0 --filter @elyos/core check",
+		"db:generate": "bun --filter @elyos/database db:generate",
+		"db:migrate": "bun --elide-lines=0 --filter @elyos/database db:migrate",
+		"db:studio": "bun --filter @elyos/database db:studio",
+		"db:seed": "bun --filter @elyos/database db:seed",
+		"db:init": "bun --elide-lines=0 --filter @elyos/database db:init",
+		"db:reset": "bun --filter @elyos/database db:reset",
+		"docker:up": "docker compose -f docker/docker-compose.yml --env-file .env up -d --build",
+		"docker:rebuild": "docker compose -f docker/docker-compose.yml --env-file .env build --no-cache && docker compose -f docker/docker-compose.yml --env-file .env up -d",
+		"docker:db": "docker compose -f docker/docker-compose.yml --env-file .env up postgres -d",
+		"docker:down": "docker compose -f docker/docker-compose.yml down",
+		"docker:logs": "docker compose -f docker/docker-compose.yml logs -f",
+		"docker:build": "docker build -f docker/Dockerfile -t elyos/core:latest .",
+		"docker:build:multi": "docker buildx build -f docker/Dockerfile --platform linux/amd64,linux/arm64 -t elyos/core:latest -t elyos/core:1.0.0 .",
+		"docker:push": "docker buildx build -f docker/Dockerfile --platform linux/amd64,linux/arm64 -t elyos/core:latest -t elyos/core:1.0.0 --push .",
+		"docker:save": "docker save -o docker/elyos-core.tar elyos/core:latest"
+	},
+	"devDependencies": {
+		"@types/dompurify": "^3.2.0",
+		"prettier": "~3.8.1",
+		"prettier-plugin-css-order": "^2.2.0",
+		"prettier-plugin-svelte": "^3.5.0",
+		"prettier-plugin-tailwindcss": "^0.7.2"
+	}
+}

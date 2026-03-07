@@ -1,0 +1,39 @@
+{
+	"id": "weather",
+	"name": {
+		"hu": "Időjárás",
+		"en": "Weather"
+	},
+	"description": {
+		"hu": "Időjárás plugin — RemoteService API hívások és kedvencek kezelése",
+		"en": "Weather plugin — RemoteService API calls and favorites management"
+	},
+	"version": "1.0.0",
+	"author": "ElyOS Team <team@elyos.dev>",
+	"entry": "dist/index.iife.js",
+	"icon": "icon.svg",
+	"iconStyle": "cover",
+	"category": "utilities",
+	"permissions": ["database", "remote_functions"],
+	"multiInstance": false,
+	"defaultSize": {
+		"width": 650,
+		"height": 550
+	},
+	"minSize": {
+		"width": 400,
+		"height": 350
+	},
+	"maxSize": {
+		"width": 1200,
+		"height": 900
+	},
+	"keywords": ["weather", "időjárás", "api", "example"],
+	"isPublic": true,
+	"sortOrder": 102,
+	"dependencies": {
+		"svelte": "^5.0.0"
+	},
+	"minWebOSVersion": "2.0.0",
+	"locales": ["hu", "en"]
+}

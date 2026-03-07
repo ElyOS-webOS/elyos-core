@@ -1,0 +1,23 @@
+// See https://svelte.dev/docs/kit/types#app.d.ts
+// for information about these interfaces
+import type { Server as SocketIOServer } from 'socket.io';
+
+declare global {
+	namespace App {
+		// interface Error {}
+		interface Locals {
+			user: import('better-auth').User | null;
+			session: import('better-auth').Session | null;
+			settings: import('$lib/types/settings').UserSettings;
+			locale: string;
+		}
+		// interface PageData {}
+		// interface PageState {}
+		// interface Platform {}
+	}
+
+	// Global Socket.IO instance for production server
+	var io: SocketIOServer | undefined;
+}
+
+export {};

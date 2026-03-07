@@ -1,0 +1,95 @@
+# =============================================================================
+# ElyOS Core — Docker Compose konfiguráció
+# =============================================================================
+# Szolgáltatások:
+#   - postgres:  PostgreSQL adatbázis
+#   - db-init:   Adatbázis inicializálás (migráció + seed), egyszeri futás
+#   - elyos:     ElyOS webalkalmazás (SvelteKit + Express + Socket.IO)
+#
+# Indítási sorrend:
+#   postgres (healthy) → db-init (completed) → elyos
+#
+# Használat:
+#   docker compose up -d          # Indítás háttérben
+#   docker compose down           # Leállítás
+#   docker compose logs -f        # Logok követése
+#
+# Környezeti változók:
+#   Másold a gyökér .env.example fájlt .env-ként és töltsd ki az értékeket,
+#   vagy állítsd be közvetlenül a környezeti változókat.
+# =============================================================================
+
+services:
+  # ---------------------------------------------------------------------------
+  # PostgreSQL adatbázis
+  # ---------------------------------------------------------------------------
+  postgres:
+    build:
+      context: postgres
+      dockerfile: Dockerfile
+    container_name: elyos-postgres
+    env_file:
+      - ../.env
+    volumes:
+      - elyos-data:/var/lib/postgresql
+    ports:
+      - '${POSTGRES_PORT:-5432}:5432'
+    networks:
+      - elyos-network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-elyos} -d ${POSTGRES_DB:-elyos}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  # ---------------------------------------------------------------------------
+  # Adatbázis inicializálás (migráció + seed) — egyszeri futás
+  # ---------------------------------------------------------------------------
+  db-init:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: elyos-db-init
+    command: >
+      sh -c 'bun --filter @elyos/database db:init ${RESET:+-- --reset}'
+    env_file:
+      - ../.env
+    environment:
+      - RESET=${RESET:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - elyos-network
+    restart: 'no'
+
+  # ---------------------------------------------------------------------------
+  # ElyOS webalkalmazás
+  # ---------------------------------------------------------------------------
+  elyos:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: elyos-app
+    ports:
+      - '${ELYOS_PORT:-3000}:3000'
+    env_file:
+      - ../.env
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+    networks:
+      - elyos-network
+    restart: unless-stopped
+
+# Megnevezett kötet a PostgreSQL adatok perzisztálásához
+volumes:
+  elyos-data:
+    driver: local
+
+# Belső hálózat a szolgáltatások közötti kommunikációhoz
+networks:
+  elyos-network:
+    driver: bridge

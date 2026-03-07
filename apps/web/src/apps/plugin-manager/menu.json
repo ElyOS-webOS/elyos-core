@@ -1,0 +1,29 @@
+[
+	{
+		"labelKey": "menu.store",
+		"href": "#store",
+		"icon": "Store",
+		"component": "PluginStore"
+	},
+	{
+		"labelKey": "menu.installed",
+		"href": "#installed",
+		"icon": "Package",
+		"component": "PluginList"
+	},
+	{
+		"labelKey": "menu.manualInstall",
+		"href": "#upload",
+		"icon": "Upload",
+		"component": "PluginUpload",
+		"requiredPermission": "plugin.manual.install"
+	},
+	{
+		"labelKey": "menu.devPlugins",
+		"href": "#dev-plugins",
+		"icon": "Code",
+		"component": "DevPlugins",
+		"requiredPermission": "plugin.manual.install",
+		"hideWhen": "notDevMode"
+	}
+]

@@ -1,0 +1,38 @@
+{
+	"name": "@elyos/database",
+	"version": "0.0.1",
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts",
+		"./schemas": "./src/schemas/index.ts",
+		"./schemas/*": "./src/schemas/*.ts",
+		"./schemas/auth/*": "./src/schemas/auth/*",
+		"./schemas/platform/*": "./src/schemas/platform/*"
+	},
+	"scripts": {
+		"typecheck": "tsc --noEmit",
+		"db:generate": "drizzle-kit generate",
+		"db:migrate": "drizzle-kit migrate",
+		"db:studio": "drizzle-kit studio",
+		"db:seed": "bun --env-file=../../.env src/seeds/runner.ts",
+		"db:seed:only": "bun --env-file=../../.env src/seeds/runner.ts --no-truncate --only",
+		"db:reset": "bun --env-file=../../.env src/seeds/reset.ts",
+		"db:demo-reset": "bun --env-file=../../.env src/seeds/demo-reset.ts",
+		"db:init": "bun --env-file=../../.env src/seeds/init-db.ts"
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"@types/pg": "^8.16.0"
+	},
+	"peerDependencies": {
+		"typescript": "^5"
+	},
+	"dependencies": {
+		"dotenv": "^17.2.3",
+		"drizzle-kit": "^0.31.8",
+		"drizzle-orm": "^0.45.1",
+		"drizzle-valibot": "^0.4.2",
+		"pg": "^8.17.2",
+		"valibot": "^1.2.0"
+	}
+}

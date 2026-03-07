@@ -1,0 +1,15 @@
+[
+	{
+		"labelKey": "menu.error",
+		"href": "#error",
+		"icon": "ShieldAlert",
+		"component": "ErrorLog",
+		"requiredPermission": "log.error.view"
+	},
+	{
+		"labelKey": "menu.activity",
+		"href": "#activity",
+		"icon": "ShieldAlert",
+		"component": "ActivityLog"
+	}
+]

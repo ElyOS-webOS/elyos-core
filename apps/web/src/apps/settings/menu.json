@@ -1,0 +1,70 @@
+[
+	{
+		"labelKey": "menu.account",
+		"href": "#profile",
+		"icon": "UserPen",
+		"component": "ProfileSettings"
+	},
+	{
+		"labelKey": "menu.security",
+		"href": "#security",
+		"icon": "Shield",
+		"component": "SecuritySettings"
+	},
+	{
+		"labelKey": "menu.appearance",
+		"href": "#appearance",
+		"icon": "Palette",
+		"component": "AppearanceSettings"
+	},
+	{
+		"labelKey": "menu.desktop",
+		"href": "#",
+		"icon": "Monitor",
+		"children": [
+			{
+				"labelKey": "menu.general",
+				"href": "#desktop",
+				"icon": "Settings",
+				"component": "DesktopSettings"
+			},
+			{
+				"labelKey": "menu.background",
+				"href": "#background",
+				"icon": "Image",
+				"component": "BackgroundSettings"
+			},
+			{
+				"labelKey": "menu.taskbar",
+				"href": "#taskbar",
+				"icon": "PanelBottom",
+				"component": "TaskbarSettings"
+			},
+			{
+				"labelKey": "menu.startPanel",
+				"href": "#start",
+				"icon": "LayoutGrid",
+				"component": "StartMenuSettings"
+			}
+		]
+	},
+	{
+		"labelKey": "menu.performance",
+		"href": "#performance",
+		"icon": "CircleGauge",
+		"component": "PerformanceSettings"
+	},
+	{
+		"labelKey": "menu.language",
+		"href": "#language",
+		"icon": "Globe",
+		"component": "LanguageSettings",
+		"hideWhen": "singleLocale"
+	},
+	{
+		"labelKey": "menu.about",
+		"href": "#system-info",
+		"icon": "Info",
+		"component": "About"
+	}
+]

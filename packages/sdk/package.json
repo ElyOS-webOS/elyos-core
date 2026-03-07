@@ -1,0 +1,54 @@
+{
+	"name": "@elyos/sdk",
+	"version": "1.0.0",
+	"description": "ElyOS SDK — runtime and development SDK for ElyOS plugin development",
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		},
+		"./dev": {
+			"types": "./dist/dev/index.d.ts",
+			"import": "./dist/dev/index.js"
+		},
+		"./types": {
+			"types": "./dist/types/index.d.ts"
+		}
+	},
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "tsc -p tsconfig.json && tsc -p tsconfig.dev.json",
+		"build:runtime": "tsc -p tsconfig.json",
+		"build:dev": "tsc -p tsconfig.dev.json",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.dev.json",
+		"clean": "rm -rf dist",
+		"prepublishOnly": "bun run clean && bun run build",
+		"jsr:publish": "bunx jsr publish",
+		"jsr:publish:dry": "bunx jsr publish --dry-run"
+	},
+	"keywords": [
+		"elyos",
+		"webos",
+		"sdk",
+		"plugin",
+		"typescript"
+	],
+	"author": "ElyOS Team",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/elyos/core",
+		"directory": "packages/sdk"
+	},
+	"devDependencies": {
+		"typescript": "^5.7.0",
+		"vitest": "^3.1.0"
+	}
+}

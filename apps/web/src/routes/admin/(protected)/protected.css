@@ -1,0 +1,8 @@
+:root {
+	--taskbar-height: 58px;
+	--taskbar-z-index: 1000;
+	--startmenu-width: 500px;
+	--startmenu-height: 300px;
+
+	--startmenu-margin: 0px;
+}

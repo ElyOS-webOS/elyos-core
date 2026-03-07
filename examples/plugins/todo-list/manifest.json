@@ -1,0 +1,39 @@
+{
+	"id": "todo-list",
+	"name": {
+		"hu": "Teendők",
+		"en": "Todo List"
+	},
+	"description": {
+		"hu": "Egyszerű teendőlista plugin — CRUD műveletek az ElyOS SDK DataService használatával",
+		"en": "Simple todo list plugin — CRUD operations using the ElyOS SDK DataService"
+	},
+	"version": "1.0.0",
+	"author": "ElyOS Team <team@elyos.dev>",
+	"entry": "dist/index.iife.js",
+	"icon": "icon.svg",
+	"iconStyle": "cover",
+	"category": "utilities",
+	"permissions": ["database", "notifications"],
+	"multiInstance": false,
+	"defaultSize": {
+		"width": 600,
+		"height": 500
+	},
+	"minSize": {
+		"width": 350,
+		"height": 300
+	},
+	"maxSize": {
+		"width": 1200,
+		"height": 900
+	},
+	"keywords": ["todo", "tasks", "teendők", "example"],
+	"isPublic": true,
+	"sortOrder": 101,
+	"dependencies": {
+		"svelte": "^5.0.0"
+	},
+	"minWebOSVersion": "2.0.0",
+	"locales": ["hu", "en"]
+}
