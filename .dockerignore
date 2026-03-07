@@ -1,0 +1,46 @@
+# Dependencies
+node_modules
+**/node_modules
+apps/web/node_modules
+packages/database/node_modules
+
+# Build output
+build
+.svelte-kit
+apps/web/.svelte-kit
+.output
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+
+# Docker
+docker/**
+!docker/prod/entrypoint.sh
+!docker/prod/demo-reset-cron.sh
+
+# Tests
+tests
+test-results
+playwright-report
+coverage
+
+# Documentation
+docs
+*.md
+
+# Environment files (will be mounted separately)
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Misc
+*.log
+*.lock
+!bun.lock

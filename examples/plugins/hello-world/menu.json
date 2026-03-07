@@ -1,0 +1,26 @@
+[
+	{
+		"labelKey": "menu.overview",
+		"href": "#overview",
+		"icon": "Home",
+		"component": "Overview"
+	},
+	{
+		"labelKey": "menu.demo",
+		"href": "#demo",
+		"icon": "Puzzle",
+		"component": "HelloWorldDemo"
+	},
+	{
+		"labelKey": "menu.datatable",
+		"href": "#datatable",
+		"icon": "Table",
+		"component": "DataTableDemo"
+	},
+	{
+		"labelKey": "menu.settings",
+		"href": "#settings",
+		"icon": "Settings",
+		"component": "Settings"
+	}
+]

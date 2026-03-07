@@ -1,0 +1,13 @@
+{
+	"name": "@elyos/sdk",
+	"version": "1.0.0",
+	"exports": {
+		".": "./src/index.ts",
+		"./dev": "./src/dev/index.ts",
+		"./types": "./src/types/index.ts"
+	},
+	"publish": {
+		"include": ["src/**/*.ts", "README.md", "LICENSE"],
+		"exclude": ["**/*.test.ts", "**/__tests__/**"]
+	}
+}

@@ -1,0 +1,31 @@
+# dependencies
+node_modules
+
+# build output
+dist
+.svelte-kit
+
+# env files
+.env
+.env.*
+!.env.example
+
+# logs
+*.log
+
+# IDE
+.idea
+.vscode
+.kiro
+
+# OS
+.DS_Store
+
+# bun
+bun.lock
+
+tmp
+
+*.tar
+todo.md
+docs_tmp

@@ -1,0 +1,24 @@
+{
+	"name": "hello-world-plugin",
+	"version": "1.0.0",
+	"description": "Hello World plugin for ElyOS — demonstrates all SDK features",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "bun build-all.js",
+		"package": "bun build-package.js",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"@elyos/sdk": "workspace:*",
+		"svelte": "^5.0.0",
+		"@lucide/svelte": "^0.561.0"
+	},
+	"devDependencies": {
+		"@sveltejs/vite-plugin-svelte": "^5.0.0",
+		"archiver": "^7.0.0",
+		"dotenv": "^17.3.1",
+		"typescript": "^5.7.0",
+		"vite": "^6.0.0"
+	}
+}

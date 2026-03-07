@@ -1,0 +1,37 @@
+{
+    "compilerOptions": {
+        "lib": [
+            "ESNext",
+            "DOM",
+            "DOM.Iterable"
+        ],
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "strict": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "types": [],
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedIndexedAccess": true,
+        "noImplicitOverride": true,
+        "verbatimModuleSyntax": true
+    },
+    "include": [
+        "src/runtime/**/*.ts",
+        "src/types/**/*.ts",
+        "src/index.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist",
+        "**/*.test.ts",
+        "**/__tests__/**"
+    ]
+}

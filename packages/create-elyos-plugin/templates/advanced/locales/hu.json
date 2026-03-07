@@ -1,0 +1,11 @@
+{
+	"title": "Haladó Plugin",
+	"welcome": "Üdvözöljük a haladó ElyOS pluginban!",
+	"nav.main": "Főoldal",
+	"nav.settings": "Beállítások",
+	"remote_demo": "Remote Függvény Demo",
+	"get_time": "Szerver Idő Lekérdezése",
+	"settings.title": "Beállítások",
+	"settings.name": "Neved",
+	"settings.save": "Mentés"
+}

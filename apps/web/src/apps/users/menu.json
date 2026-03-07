@@ -1,0 +1,44 @@
+[
+	{
+		"labelKey": "menu.users",
+		"href": "#users",
+		"icon": "Users",
+		"component": "UserList",
+		"requiredPermission": "users.users.view"
+	},
+	{
+		"labelKey": "menu.accessManagement",
+		"href": "#",
+		"icon": "ShieldCheck",
+		"children": [
+			{
+				"labelKey": "menu.groups",
+				"href": "#groups",
+				"icon": "UsersRound",
+				"component": "GroupList",
+				"requiredPermission": "users.groups.view"
+			},
+			{
+				"labelKey": "menu.roles",
+				"href": "#roles",
+				"icon": "Crown",
+				"component": "RoleList",
+				"requiredPermission": "users.roles.view"
+			},
+			{
+				"labelKey": "menu.permissions",
+				"href": "#permissions",
+				"icon": "KeyRound",
+				"component": "PermissionList",
+				"requiredPermission": "users.permissions.view"
+			},
+			{
+				"labelKey": "menu.resources",
+				"href": "#resources",
+				"icon": "Box",
+				"component": "ResourceList",
+				"requiredPermission": "users.resources.view"
+			}
+		]
+	}
+]

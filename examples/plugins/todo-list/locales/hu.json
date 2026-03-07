@@ -1,0 +1,17 @@
+{
+	"title": "Teendők",
+	"add_placeholder": "Mi a teendő?",
+	"add_button": "Hozzáadás",
+	"empty": "Nincs még teendő. Adj hozzá egyet!",
+	"completed": "kész",
+	"remaining": "hátralévő",
+	"clear_completed": "Készek törlése",
+	"todo_added": "Teendő hozzáadva",
+	"todo_removed": "Teendő törölve",
+	"todo_completed": "Teendő kész",
+	"todo_uncompleted": "Teendő visszaállítva",
+	"cleared": "Kész teendők törölve",
+	"filter_all": "Összes",
+	"filter_active": "Aktív",
+	"filter_done": "Kész"
+}

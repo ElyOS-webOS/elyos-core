@@ -1,0 +1,40 @@
+{
+	"id": "hello-world",
+	"name": {
+		"hu": "Hello World Plugin",
+		"en": "Hello World Plugin"
+	},
+	"description": {
+		"hu": "Egy egyszerű példa plugin, amely bemutatja a WebOS SDK használatát",
+		"en": "A simple example plugin demonstrating WebOS SDK usage"
+	},
+	"version": "1.0.0",
+	"author": "WebOS Team <team@elyos.dev>",
+	"entry": "dist/index.iife.js",
+	"icon": "icon.svg",
+	"iconStyle": "cover",
+	"category": "utilities",
+	"permissions": ["database", "notifications", "remote_functions"],
+	"multiInstance": false,
+	"defaultSize": {
+		"width": 800,
+		"height": 600
+	},
+	"minSize": {
+		"width": 400,
+		"height": 300
+	},
+	"maxSize": {
+		"width": 1920,
+		"height": 1080
+	},
+	"keywords": ["example", "demo", "hello", "példa"],
+	"isPublic": true,
+	"sortOrder": 100,
+	"dependencies": {
+		"svelte": "^5.0.0",
+		"@lucide/svelte": "^0.561.0"
+	},
+	"minWebOSVersion": "2.0.0",
+	"locales": ["hu", "en"]
+}

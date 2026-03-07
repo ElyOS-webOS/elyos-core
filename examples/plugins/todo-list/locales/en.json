@@ -1,0 +1,17 @@
+{
+	"title": "Todo List",
+	"add_placeholder": "What needs to be done?",
+	"add_button": "Add",
+	"empty": "No todos yet. Add one above!",
+	"completed": "completed",
+	"remaining": "remaining",
+	"clear_completed": "Clear completed",
+	"todo_added": "Todo added",
+	"todo_removed": "Todo removed",
+	"todo_completed": "Todo completed",
+	"todo_uncompleted": "Todo uncompleted",
+	"cleared": "Completed todos cleared",
+	"filter_all": "All",
+	"filter_active": "Active",
+	"filter_done": "Done"
+}
