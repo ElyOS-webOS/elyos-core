@@ -14,6 +14,7 @@ Thank you for your interest in contributing to ElyOS! This guide will help you g
 - [Pull Request Process](#pull-request-process)
 - [Issue Reporting](#issue-reporting)
 - [Development Tips](#development-tips)
+- [Release Process](#release-process)
 - [Getting Help](#getting-help)
 
 ---
@@ -417,6 +418,68 @@ cd apps/web && bunx vitest run src/lib/utils/myUtil.test.ts
 # Run property-based tests only
 cd apps/web && bun test:pbt
 ```
+
+---
+
+## Release Process
+
+### Versioning
+
+ElyOS follows **[Semantic Versioning](https://semver.org/)**:
+
+- `0.1.0` — initial development release
+- `0.2.0` — new features (minor version bump)
+- `0.2.1` — bug fixes (patch version bump)
+- `1.0.0` — first stable release
+
+### Creating a Release
+
+1. **Update version numbers** in all `package.json` files:
+   - Root: `elyos-core/package.json`
+   - App: `apps/web/package.json`
+   - Packages: `packages/database/package.json`, `packages/sdk/package.json`, `packages/create-elyos-plugin/package.json`
+
+2. **Update CHANGELOG.md** and **CHANGELOG_HU.md**:
+   - Add a new section for the version with the date
+   - Document all changes under `Added`, `Changed`, `Fixed`, `Removed` as appropriate
+
+3. **Commit the changes:**
+
+   ```bash
+   git add package.json apps/web/package.json packages/*/package.json CHANGELOG.md CHANGELOG_HU.md
+   git commit -m "chore: bump version to v0.2.0"
+   ```
+
+4. **Create a Git tag:**
+
+   ```bash
+   git tag -a v0.2.0 -m "ElyOS v0.2.0 - New features"
+   ```
+
+5. **Push the tag to GitHub:**
+
+   ```bash
+   git push origin v0.2.0
+   ```
+
+### Automated Release
+
+When you push a tag matching `v*` (e.g., `v0.2.0`), a GitHub Actions workflow automatically:
+
+- Creates a GitHub Release
+- Generates release notes from commits since the last tag
+- Publishes the release
+
+You can view the release on the [Releases page](https://github.com/ElyOS-webOS/elyos-core/releases).
+
+### Release Checklist
+
+- [ ] All PRs for this release are merged
+- [ ] Version numbers updated in all `package.json` files
+- [ ] CHANGELOG.md and CHANGELOG_HU.md updated
+- [ ] Changes committed and pushed to `main` or `develop`
+- [ ] Git tag created and pushed
+- [ ] GitHub Release published (automatic via workflow)
 
 ---
 
