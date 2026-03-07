@@ -7,6 +7,9 @@ import { enhancedImages } from '@sveltejs/enhanced-img';
 export default defineConfig({
 	plugins: [devtoolsJson(), tailwindcss(), enhancedImages(), sveltekit()],
 	envDir: '../..',
+	server: {
+		port: 3000
+	},
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}', 'src/**/*.svelte.{test,spec}.{js,ts}'],
 		environment: 'jsdom',

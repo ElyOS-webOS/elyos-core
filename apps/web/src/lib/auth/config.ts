@@ -99,11 +99,12 @@ export const baseAuthConfig: Omit<BetterAuthOptions, 'plugins'> = {
 			console.log(user);
 			const emailManager = new EmailManager();
 
+			const baseUrl = config.APP_URL || 'http://localhost:3000';
 			const templateData = {
 				name: user.name,
 				email: user.email,
-				appName: `${config.APP_NAME} (TEST)`,
-				dashboardUrl: '/admin',
+				appName: config.APP_NAME,
+				dashboardUrl: `${baseUrl}/`,
 				userId: 'test-user-id'
 			};
 

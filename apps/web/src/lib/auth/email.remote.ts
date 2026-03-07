@@ -28,11 +28,13 @@ export const sendWelcomeEmail = command(welcomeEmailSchema, async ({ name, email
 	}
 
 	// Prepare template data for welcome email
+	const { config } = await import('$lib/config');
+	const baseUrl = config.APP_URL || 'http://localhost:3000';
 	const templateData = {
 		name,
 		email,
-		appName: 'Desktop Environment',
-		dashboardUrl: '/admin', // Relative URL since we're on the same domain
+		appName: config.APP_NAME || 'Desktop Environment',
+		dashboardUrl: `${baseUrl}/`,
 		userId: userId || undefined
 	};
 
