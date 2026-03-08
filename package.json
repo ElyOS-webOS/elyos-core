@@ -24,9 +24,10 @@
 		"docker:down": "docker compose -f docker/docker-compose.yml down",
 		"docker:logs": "docker compose -f docker/docker-compose.yml logs -f",
 		"docker:build": "docker build -f docker/Dockerfile -t elyos/core:latest .",
-		"docker:build:multi": "docker buildx build -f docker/Dockerfile --platform linux/amd64,linux/arm64 -t elyos/core:latest -t elyos/core:1.0.0 .",
-		"docker:push": "docker buildx build -f docker/Dockerfile --platform linux/amd64,linux/arm64 -t elyos/core:latest -t elyos/core:1.0.0 --push .",
-		"docker:save": "docker save -o docker/elyos-core.tar elyos/core:latest"
+		"docker:build:amd64": "docker build -f docker/Dockerfile --platform linux/amd64 -t elyos/core:latest-amd64 -t elyos/core:0.1.0-amd64 .",
+		"docker:build:arm64": "docker build -f docker/Dockerfile --platform linux/arm64 -t elyos/core:latest-arm64 -t elyos/core:0.1.0-arm64 .",
+		"docker:save:amd64": "docker save -o docker/elyos-core.tar elyos/core:latest-amd64",
+		"docker:save:arm64": "docker save -o docker/elyos-core.tar elyos/core:latest-amd64"
 	},
 	"devDependencies": {
 		"@types/dompurify": "^3.2.0",

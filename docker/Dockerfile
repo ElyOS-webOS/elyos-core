@@ -93,6 +93,9 @@ COPY --from=builder --chown=elyos:nodejs /app/apps/web/build ./apps/web/build
 # Express + Socket.IO szerver
 COPY --from=builder --chown=elyos:nodejs /app/apps/web/server.js ./apps/web/server.js
 
+# Demo reset cron script
+COPY --chmod=755 docker/prod/demo-reset-cron.sh /app/demo-reset-cron.sh
+
 # Database package — migrációk és séma (szükséges runtime-ban a Drizzle-nek)
 COPY --from=builder --chown=elyos:nodejs /app/packages/database/drizzle ./packages/database/drizzle
 COPY --from=builder --chown=elyos:nodejs /app/packages/database/src ./packages/database/src
