@@ -150,7 +150,7 @@ export const DEFAULTS = {
 	// Háttér alapértelmezett értékek
 	BACKGROUND: {
 		type: 'image' as BackgroundType,
-		value: '08.jpg'
+		value: '08.webp'
 	},
 
 	// Taskbar alapértelmezett értékek

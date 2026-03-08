@@ -39,7 +39,7 @@ INSERT INTO platform.theme_presets (locale, name, description, settings, is_defa
 		},
 		"background": {
 			"type": "image",
-			"value": "05.jpg"
+			"value": "05.webp"
 		}
 	}'::jsonb,
 	false, 6, NOW(), NOW()
@@ -79,7 +79,7 @@ INSERT INTO platform.theme_presets (locale, name, description, settings, is_defa
 		},
 		"background": {
 			"type": "image",
-			"value": "08.jpg"
+			"value": "08.webp"
 		}
 	}'::jsonb,
 	false, 1, NOW(), NOW()
@@ -119,7 +119,7 @@ INSERT INTO platform.theme_presets (locale, name, description, settings, is_defa
 		},
 		"background": {
 			"type": "image",
-			"value": "06.jpg"
+			"value": "06.webp"
 		}
 	}'::jsonb,
 	false, 3, NOW(), NOW()
@@ -188,7 +188,7 @@ INSERT INTO platform.theme_presets (locale, name, description, settings, is_defa
 		},
 		"background": {
 			"type": "image",
-			"value": "05.jpg"
+			"value": "05.webp"
 		}
 	}'::jsonb,
 	false, 6, NOW(), NOW()
@@ -228,7 +228,7 @@ INSERT INTO platform.theme_presets (locale, name, description, settings, is_defa
 		},
 		"background": {
 			"type": "image",
-			"value": "08.jpg"
+			"value": "08.webp"
 		}
 	}'::jsonb,
 	false, 1, NOW(), NOW()
@@ -268,7 +268,7 @@ INSERT INTO platform.theme_presets (locale, name, description, settings, is_defa
 		},
 		"background": {
 			"type": "image",
-			"value": "06.jpg"
+			"value": "06.webp"
 		}
 	}'::jsonb,
 	false, 3, NOW(), NOW()
