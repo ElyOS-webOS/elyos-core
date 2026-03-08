@@ -115,7 +115,7 @@ The `.env.example` file is fully documented — read through it carefully. Key t
 | `APP_URL` / `ORIGIN`                        | Always                  | SvelteKit CSRF protection blocks all server actions (remote functions return 403), and auth callbacks break |
 | `DATABASE_URL`                              | Always                  | App cannot connect to the database                                                                          |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Only for Google login   | Google sign-in will not work                                                                                |
-| `SMTP_*` / `RESEND_API_KEY` / etc.          | Only for email features | Email verification, OTP, and password reset will not work                                                   |
+| `SMTP_*` / `RESEND_API_KEY` / etc.          | Only for email features | Email verification, OTP (one time password), and password reset will not work                               |
 | `ADMIN_USER_EMAIL`                          | Recommended             | Admin account will use the default email from seed data                                                     |
 
 Every feature that depends on a missing or incorrect variable will silently fail or return an error. **Read the `.env.example` comments before starting.**

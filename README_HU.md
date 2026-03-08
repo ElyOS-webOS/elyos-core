@@ -113,7 +113,7 @@ A `.env.example` fájl részletesen dokumentált — olvasd át figyelmesen. A l
 | `APP_URL` / `ORIGIN`                        | Mindig                       | A SvelteKit CSRF védelem blokkol minden szerver akciót (a remote functionök 403-at adnak vissza), és az auth callback-ek sem működnek |
 | `DATABASE_URL`                              | Mindig                       | Az alkalmazás nem tud csatlakozni az adatbázishoz                                                                                     |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Csak Google bejelentkezéshez | A Google-lel való bejelentkezés nem fog működni                                                                                       |
-| `SMTP_*` / `RESEND_API_KEY` / stb.          | Csak email funkciókhoz       | Az email megerősítés, OTP és jelszó-visszaállítás nem fog működni                                                                     |
+| `SMTP_*` / `RESEND_API_KEY` / stb.          | Csak email funkciókhoz       | Az email megerősítés, OTP (egyszeri jelszó) és jelszó-visszaállítás nem fog működni                                                   |
 | `ADMIN_USER_EMAIL`                          | Ajánlott                     | A rendszergazda fiók a seed adatokban lévő alapértelmezett emailt kapja                                                               |
 
 Minden funkció, amely egy hiányzó vagy helytelen változótól függ, csendben meghibásodik vagy hibát ad vissza. **Olvasd el a `.env.example` kommentjeit az indítás előtt.**
