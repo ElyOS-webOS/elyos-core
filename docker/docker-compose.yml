@@ -77,9 +77,11 @@ services:
     ports:
       - '${ELYOS_PORT:-3000}:3000'
     env_file:
+      # Csak a bootstrap credentials — minden más secret Infisical-ból érkezik Varlock-on keresztül
       - ../.env
     environment:
-      - DATABASE_URL=postgresql://${POSTGRES_USER:-elyos}:${POSTGRES_PASSWORD:-elyos123}@postgres:5432/${POSTGRES_DB:-elyos}
+      - INFISICAL_CLIENT_ID=${INFISICAL_CLIENT_ID}
+      - INFISICAL_CLIENT_SECRET=${INFISICAL_CLIENT_SECRET}
     depends_on:
       db-init:
         condition: service_completed_successfully

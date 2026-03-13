@@ -108,18 +108,53 @@ Before starting the system, copy the example file and fill in the values:
 cp .env.example .env
 ```
 
-The `.env.example` file is fully documented — read through it carefully. Key things to configure:
+**With Varlock + Infisical (recommended):** Only two variables are required in `.env`:
 
-| Variable                                    | Required                | Effect if missing or incorrect                                                                              |
-| ------------------------------------------- | ----------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `BETTER_AUTH_SECRET`                        | Always                  | Auth tokens cannot be signed — login breaks in every environment                                            |
-| `APP_URL` / `ORIGIN`                        | Always                  | SvelteKit CSRF protection blocks all server actions (remote functions return 403), and auth callbacks break |
-| `DATABASE_URL`                              | Always                  | App cannot connect to the database                                                                          |
-| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Only for Google login   | Google sign-in will not work                                                                                |
-| `SMTP_*` / `RESEND_API_KEY` / etc.          | Only for email features | Email verification, OTP (one time password), and password reset will not work                               |
-| `ADMIN_USER_EMAIL`                          | Recommended             | Admin account will use the default email from seed data                                                     |
+```bash
+INFISICAL_CLIENT_ID=your-machine-identity-client-id
+INFISICAL_CLIENT_SECRET=your-machine-identity-client-secret
+```
 
-Every feature that depends on a missing or incorrect variable will silently fail or return an error. **Read the `.env.example` comments before starting.**
+All other secrets (database URL, auth secrets, SMTP credentials, etc.) are fetched from Infisical at runtime. To request Infisical access, contact your team admin and ask for a Machine Identity for your environment.
+
+**Without Infisical (local fallback mode):** Set `VARLOCK_FALLBACK=local` and provide all variables in `.env`. The `.env.example` file lists all available variables with documentation.
+
+| Variable                                    | Required                     | Effect if missing or incorrect                                                  |
+| ------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------- |
+| `INFISICAL_CLIENT_ID`                       | Always (Infisical mode)      | Varlock cannot authenticate — app won't start                                   |
+| `INFISICAL_CLIENT_SECRET`                   | Always (Infisical mode)      | Varlock cannot authenticate — app won't start                                   |
+| `VARLOCK_FALLBACK=local`                    | Only for local fallback mode | Without this, Varlock tries to connect to Infisical                             |
+| `BETTER_AUTH_SECRET`                        | Fallback mode only           | Auth tokens cannot be signed — login breaks                                     |
+| `APP_URL` / `ORIGIN`                        | Fallback mode only           | SvelteKit CSRF protection blocks all server actions (403), auth callbacks break |
+| `DATABASE_URL`                              | Fallback mode only           | App cannot connect to the database                                              |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Only for Google login        | Google sign-in will not work                                                    |
+| `SMTP_*` / `RESEND_API_KEY` / etc.          | Only for email features      | Email verification, OTP, and password reset will not work                       |
+| `ADMIN_USER_EMAIL`                          | Recommended                  | Admin account will use the default email from seed data                         |
+
+See [`docs/CONFIGURATION.md`](./docs/CONFIGURATION.md) for the full environment variable reference and Varlock configuration details.
+
+### Developer Onboarding
+
+To set up your local development environment with Infisical:
+
+1. **Request Infisical access** — contact your team admin and ask for a Machine Identity for the `elyos-core` project in the `development` environment.
+2. **Receive bootstrap credentials** — you'll get an `INFISICAL_CLIENT_ID` and `INFISICAL_CLIENT_SECRET`.
+3. **Configure your `.env`:**
+   ```bash
+   cp .env.example .env
+   # Add your bootstrap credentials:
+   INFISICAL_CLIENT_ID=your-client-id
+   INFISICAL_CLIENT_SECRET=your-client-secret
+   ```
+4. **Start the app** — Varlock will fetch all secrets from Infisical automatically on startup.
+
+If you don't have Infisical access yet, use local fallback mode:
+
+```bash
+# .env
+VARLOCK_FALLBACK=local
+# ... fill in all variables from .env.example
+```
 
 ### Using Docker (recommended)
 

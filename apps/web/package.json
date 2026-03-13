@@ -9,6 +9,7 @@
 	},
 	"scripts": {
 		"dev": "dotenv -e ../../.env -- vite dev",
+		"dev:varlock": "varlock run -- vite dev",
 		"build": "dotenv -e ../../.env -- vite build",
 		"preview": "node server.js",
 		"prepare": "svelte-kit sync || echo ''",
@@ -94,12 +95,15 @@
 		"@tanstack/table-core": "^8.21.3",
 		"@types/dompurify": "^3.2.0",
 		"@types/sharp": "^0.32.0",
+		"@varlock/infisical-plugin": "^0.0.3",
+		"@varlock/vite-integration": "^0.2.3",
 		"adm-zip": "^0.5.16",
 		"express": "^4.18.2",
 		"file-type": "^21.3.0",
 		"isomorphic-dompurify": "^2.35.0",
 		"sharp": "^0.34.5",
 		"socket.io": "^4.7.2",
-		"socket.io-client": "^4.7.2"
+		"socket.io-client": "^4.7.2",
+		"varlock": "^0.4.0"
 	}
 }

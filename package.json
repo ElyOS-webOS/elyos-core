@@ -10,6 +10,7 @@
 	],
 	"scripts": {
 		"app:dev": "bun --elide-lines=0 --filter @elyos/core dev",
+		"app:dev:varlock": "bun --elide-lines=0 --filter @elyos/core dev:varlock",
 		"app:build": "bun --filter @elyos/core build",
 		"app:check": "bun --elide-lines=0 --filter @elyos/core check",
 		"db:generate": "bun --filter @elyos/database db:generate",

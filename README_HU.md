@@ -106,18 +106,53 @@ Az indítás előtt másold le a példafájlt és töltsd ki az értékeket:
 cp .env.example .env
 ```
 
-A `.env.example` fájl részletesen dokumentált — olvasd át figyelmesen. A legfontosabb beállítások:
+**Varlock + Infisical használatával (ajánlott):** Csak két változó szükséges a `.env` fájlban:
 
-| Változó                                     | Kötelező                     | Mi történik, ha hiányzik vagy helytelen                                                                                               |
-| ------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `BETTER_AUTH_SECRET`                        | Mindig                       | Az auth tokenek nem írhatók alá — a bejelentkezés minden környezetben meghibásodik                                                    |
-| `APP_URL` / `ORIGIN`                        | Mindig                       | A SvelteKit CSRF védelem blokkol minden szerver akciót (a remote functionök 403-at adnak vissza), és az auth callback-ek sem működnek |
-| `DATABASE_URL`                              | Mindig                       | Az alkalmazás nem tud csatlakozni az adatbázishoz                                                                                     |
-| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Csak Google bejelentkezéshez | A Google-lel való bejelentkezés nem fog működni                                                                                       |
-| `SMTP_*` / `RESEND_API_KEY` / stb.          | Csak email funkciókhoz       | Az email megerősítés, OTP (egyszeri jelszó) és jelszó-visszaállítás nem fog működni                                                   |
-| `ADMIN_USER_EMAIL`                          | Ajánlott                     | A rendszergazda fiók a seed adatokban lévő alapértelmezett emailt kapja                                                               |
+```bash
+INFISICAL_CLIENT_ID=your-machine-identity-client-id
+INFISICAL_CLIENT_SECRET=your-machine-identity-client-secret
+```
 
-Minden funkció, amely egy hiányzó vagy helytelen változótól függ, csendben meghibásodik vagy hibát ad vissza. **Olvasd el a `.env.example` kommentjeit az indítás előtt.**
+Az összes többi secret (adatbázis URL, auth secret, SMTP hitelesítő adatok stb.) futásidőben kerül lekérésre az Infisical-ból. Infisical hozzáférés igényléséhez fordulj a csapat adminisztrátorához, és kérj Machine Identity-t a saját környezetedhez.
+
+**Infisical nélkül (lokális fallback mód):** Állítsd be a `VARLOCK_FALLBACK=local` értéket, és add meg az összes változót a `.env` fájlban. A `.env.example` fájl tartalmazza az összes elérhető változót dokumentációval.
+
+| Változó                                     | Kötelező                     | Mi történik, ha hiányzik vagy helytelen                                                        |
+| ------------------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------- |
+| `INFISICAL_CLIENT_ID`                       | Mindig (Infisical mód)       | A Varlock nem tud hitelesíteni — az alkalmazás nem indul el                                    |
+| `INFISICAL_CLIENT_SECRET`                   | Mindig (Infisical mód)       | A Varlock nem tud hitelesíteni — az alkalmazás nem indul el                                    |
+| `VARLOCK_FALLBACK=local`                    | Csak lokális fallback módhoz | Enélkül a Varlock az Infisical-hoz próbál csatlakozni                                          |
+| `BETTER_AUTH_SECRET`                        | Csak fallback módban         | Az auth tokenek nem írhatók alá — a bejelentkezés meghibásodik                                 |
+| `APP_URL` / `ORIGIN`                        | Csak fallback módban         | A SvelteKit CSRF védelem blokkol minden szerver akciót (403), az auth callback-ek sem működnek |
+| `DATABASE_URL`                              | Csak fallback módban         | Az alkalmazás nem tud csatlakozni az adatbázishoz                                              |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Csak Google bejelentkezéshez | A Google-lel való bejelentkezés nem fog működni                                                |
+| `SMTP_*` / `RESEND_API_KEY` / stb.          | Csak email funkciókhoz       | Az email megerősítés, OTP és jelszó-visszaállítás nem fog működni                              |
+| `ADMIN_USER_EMAIL`                          | Ajánlott                     | A rendszergazda fiók a seed adatokban lévő alapértelmezett emailt kapja                        |
+
+A teljes környezeti változó referenciáért és a Varlock konfigurációs részletekért lásd a [`docs/CONFIGURATION.md`](./docs/CONFIGURATION.md) fájlt.
+
+### Fejlesztői onboarding
+
+A lokális fejlesztői környezet Infisical-lal való beállításához:
+
+1. **Kérj Infisical hozzáférést** — fordulj a csapat adminisztrátorához, és kérj Machine Identity-t az `elyos-core` projekthez a `development` környezetben.
+2. **Kapd meg a bootstrap credentials-t** — kapsz egy `INFISICAL_CLIENT_ID`-t és `INFISICAL_CLIENT_SECRET`-et.
+3. **Konfiguráld a `.env` fájlt:**
+   ```bash
+   cp .env.example .env
+   # Add hozzá a bootstrap credentials-t:
+   INFISICAL_CLIENT_ID=your-client-id
+   INFISICAL_CLIENT_SECRET=your-client-secret
+   ```
+4. **Indítsd el az alkalmazást** — a Varlock automatikusan lekéri az összes secretet az Infisical-ból indításkor.
+
+Ha még nincs Infisical hozzáférésed, használd a lokális fallback módot:
+
+```bash
+# .env
+VARLOCK_FALLBACK=local
+# ... töltsd ki az összes változót a .env.example alapján
+```
 
 ### Docker segítségével (ajánlott)
 

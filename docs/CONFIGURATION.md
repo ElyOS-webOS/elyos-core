@@ -4,6 +4,7 @@ This guide covers all environment variables and configuration options for self-h
 
 ## Table of Contents
 
+- [Environment Variable Management](#environment-variable-management)
 - [Quick Start](#quick-start)
 - [Environment Variables Reference](#environment-variables-reference)
   - [Server Configuration](#server-configuration)
@@ -14,6 +15,7 @@ This guide covers all environment variables and configuration options for self-h
   - [Email Verification](#email-verification)
   - [Internationalization](#internationalization)
   - [Logging](#logging)
+  - [Initial Admin User](#initial-admin-user)
   - [Development Mode](#development-mode)
   - [Demo Mode](#demo-mode)
   - [Public Site](#public-site)
@@ -27,6 +29,37 @@ This guide covers all environment variables and configuration options for self-h
 
 ---
 
+## Environment Variable Management
+
+ElyOS uses **Varlock** for typesafe environment variable management. Varlock validates all configuration at startup, ensuring misconfiguration is caught immediately.
+
+For detailed Varlock documentation, see the [developer documentation](https://docs.elyos.dev/en/varlock).
+
+### Bootstrap credentials
+
+Only bootstrap credentials remain in the `.env` file:
+
+```dotenv
+INFISICAL_CLIENT_ID=your-machine-identity-client-id
+INFISICAL_CLIENT_SECRET=your-machine-identity-client-secret
+```
+
+All other secrets are fetched from Infisical at runtime.
+
+### Local fallback mode
+
+For offline development or without Infisical:
+
+```dotenv
+VARLOCK_FALLBACK=local
+NODE_ENV=development
+DATABASE_URL=postgresql://elyos:elyos123@localhost:5432/elyos
+BETTER_AUTH_SECRET=your-local-secret
+# ... all other variables
+```
+
+---
+
 ## Quick Start
 
 1. Copy the example environment file:
@@ -37,8 +70,19 @@ This guide covers all environment variables and configuration options for self-h
 
 2. Set the required variables:
 
+   **With Varlock + Infisical (recommended):**
+
    ```bash
-   # Minimum required for local development
+   # Only bootstrap credentials are required in .env
+   INFISICAL_CLIENT_ID=your-machine-identity-client-id
+   INFISICAL_CLIENT_SECRET=your-machine-identity-client-secret
+   ```
+
+   **Without Infisical (local fallback mode):**
+
+   ```bash
+   # Set VARLOCK_FALLBACK=local and provide all variables
+   VARLOCK_FALLBACK=local
    DATABASE_URL=postgresql://elyos:elyos123@localhost:5432/elyos
    NODE_ENV=development
    BETTER_AUTH_SECRET=generate-a-random-secret
@@ -74,15 +118,16 @@ This guide covers all environment variables and configuration options for self-h
 
 ### Database
 
-| Variable            | Required | Default    | Description                                                         |
-| ------------------- | -------- | ---------- | ------------------------------------------------------------------- |
-| `DATABASE_URL`      | Yes      | —          | PostgreSQL connection string: `postgresql://USER:PASS@HOST:PORT/DB` |
-| `POSTGRES_USER`     | Docker   | `elyos`    | PostgreSQL username (used by Docker Compose)                        |
-| `POSTGRES_PASSWORD` | Docker   | `elyos123` | PostgreSQL password (used by Docker Compose)                        |
-| `POSTGRES_DB`       | Docker   | `elyos`    | PostgreSQL database name (used by Docker Compose)                   |
-| `POSTGRES_PORT`     | Docker   | `5432`     | PostgreSQL host port (used by Docker Compose)                       |
+| Variable            | Required | Default     | Description                                                         |
+| ------------------- | -------- | ----------- | ------------------------------------------------------------------- |
+| `DATABASE_URL`      | Yes      | —           | PostgreSQL connection string: `postgresql://USER:PASS@HOST:PORT/DB` |
+| `POSTGRES_USER`     | Yes      | —           | PostgreSQL username                                                 |
+| `POSTGRES_PASSWORD` | Yes      | —           | PostgreSQL password                                                 |
+| `POSTGRES_HOST`     | Yes      | `localhost` | PostgreSQL server address                                           |
+| `POSTGRES_DB`       | Yes      | —           | PostgreSQL database name                                            |
+| `POSTGRES_PORT`     | Yes      | `5432`      | PostgreSQL port                                                     |
 
-> **Note:** When using Docker Compose, the `DATABASE_URL` is constructed automatically from the individual `POSTGRES_*` variables. You only need to set `DATABASE_URL` when running ElyOS outside Docker.
+> **Note:** The `DATABASE_URL` is automatically constructed from the `POSTGRES_*` variables in the schema. When using Docker Compose, `POSTGRES_HOST` should be set to `postgres` (the service name).
 
 ### Application Branding
 
@@ -177,6 +222,12 @@ This guide covers all environment variables and configuration options for self-h
 | `LOG_LEVEL`   | No       | `error`   | Minimum log level: `debug`, `info`, `warn`, `error`, `fatal` |
 | `LOG_DIR`     | No       | `./logs`  | Directory for log files (when `file` target is active)       |
 
+### Initial Admin User
+
+| Variable           | Required | Default | Description                                                             |
+| ------------------ | -------- | ------- | ----------------------------------------------------------------------- |
+| `ADMIN_USER_EMAIL` | Yes      | —       | Email address for the first admin user (used during db:init / db:reset) |
+
 ### Development Mode
 
 | Variable   | Required | Default | Description                                   |
@@ -229,6 +280,7 @@ The fastest way to run ElyOS is with Docker Compose. This starts both ElyOS and 
    # .env
    BETTER_AUTH_SECRET=your-random-secret-here
    POSTGRES_PASSWORD=your-db-password
+   ADMIN_USER_EMAIL=admin@example.com
    ```
 
 3. Start the services:
@@ -256,6 +308,7 @@ APP_URL=https://elyos.yourdomain.com
 # Database
 POSTGRES_USER=elyos
 POSTGRES_PASSWORD=a-strong-random-password
+POSTGRES_HOST=postgres
 POSTGRES_DB=elyos
 POSTGRES_PORT=5432
 
@@ -274,6 +327,9 @@ SMTP_PASSWORD=your-smtp-password
 
 # Branding
 APP_NAME=My ElyOS Instance
+
+# Admin
+ADMIN_USER_EMAIL=admin@yourdomain.com
 
 # Logging
 LOG_TARGETS=console,database
@@ -315,6 +371,7 @@ These variables are used by Docker Compose and have defaults in the compose file
 | `POSTGRES_PORT`        | `5432`                    | Host port mapped to the PostgreSQL container |
 | `POSTGRES_USER`        | `elyos`                   | PostgreSQL superuser name                    |
 | `POSTGRES_PASSWORD`    | `elyos123`                | PostgreSQL superuser password                |
+| `POSTGRES_HOST`        | `postgres`                | PostgreSQL server address (service name)     |
 | `POSTGRES_DB`          | `elyos`                   | PostgreSQL database name                     |
 | `NODE_ENV`             | `production`              | Application environment inside the container |
 | `DEV_MODE`             | `false`                   | Enable dev plugin loading                    |
@@ -420,14 +477,14 @@ Never reuse secrets across environments. Rotating the secret will invalidate all
 
 ElyOS supports TOTP-based 2FA with backup codes. This is configured per-user through the Settings app — no environment variables needed.
 
-### Development Mode Security
-
-`DEV_MODE=true` allows loading plugins from `localhost` URLs. This is a security risk in production because it enables arbitrary code execution. Always set `DEV_MODE=false` in production.
-
 ### Registration Control
 
 - `REGISTRATION_ENABLED=false` — disables new user sign-ups (admin can still create users)
 - `PUBLIC_SITE_ENABLED=false` — redirects all unauthenticated traffic to the login page
+
+### Development Mode Security
+
+`DEV_MODE=true` allows loading plugins from `localhost` URLs. This is a security risk in production because it enables arbitrary code execution. Always set `DEV_MODE=false` in production.
 
 ### Recommended Production Settings
 
@@ -438,4 +495,5 @@ PUBLIC_SITE_ENABLED=false
 REQUIRE_EMAIL_VERIFICATION=true
 BETTER_AUTH_SECRET=<strong-random-value>
 POSTGRES_PASSWORD=<strong-random-value>
+ADMIN_USER_EMAIL=admin@example.com
 ```
