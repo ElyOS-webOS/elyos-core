@@ -266,7 +266,13 @@ export class PluginInstaller {
 		}));
 
 		if (values.length > 0) {
-			await db.insert(translationsTable).values(values);
+			await db
+				.insert(translationsTable)
+				.values(values)
+				.onConflictDoUpdate({
+					target: [translationsTable.namespace, translationsTable.key, translationsTable.locale],
+					set: { value: db.sql`excluded.value`, updatedAt: new Date() }
+				});
 		}
 	}
 

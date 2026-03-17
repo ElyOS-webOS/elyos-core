@@ -26,7 +26,11 @@
 	import type { Snippet } from 'svelte';
 	import { setContext, onMount } from 'svelte';
 	import { getI18nService } from '../service.js';
-	import { getTranslationStore } from '../store.svelte.js';
+	import {
+		getTranslationStore,
+		getGlobalEverLoaded,
+		setGlobalEverLoaded
+	} from '../store.svelte.js';
 	import type { TranslationParams } from '../types.js';
 
 	const I18N_CONTEXT_KEY = Symbol('i18n');
@@ -57,10 +61,13 @@
 	let allLoaded = $derived(namespaces.every((ns) => store.loadedNamespaces.has(ns)));
 	let hasError = $derived(store.error !== null);
 	let errorMessage = $derived(store.error ?? '');
-	// Egyszer már betöltöttük-e (locale váltáskor ne unmountolja a gyerekeket)
-	let everLoaded = $state(false);
+	// Egyszer már betöltöttük-e — globális flag, layout újramountolásnál sem resetelődik
+	let everLoaded = $state(getGlobalEverLoaded());
 	$effect(() => {
-		if (allLoaded) everLoaded = true;
+		if (allLoaded) {
+			everLoaded = true;
+			setGlobalEverLoaded(true);
+		}
 	});
 
 	// Context létrehozása a gyermek komponensek számára
@@ -78,6 +85,15 @@
 	};
 
 	setContext(I18N_CONTEXT_KEY, context);
+
+	// Namespace-ek regisztrálása a DOM frissítés ELŐTT ($effect.pre),
+	// hogy a logMissingKey ne logoljon az első render során.
+	// A tényleges betöltés onMount-ban történik.
+	$effect.pre(() => {
+		for (const ns of namespaces) {
+			store.registerNamespace(ns);
+		}
+	});
 
 	// Namespace-ek betöltése mount-kor
 	onMount(async () => {
@@ -100,8 +116,6 @@
 	<p class="i18n-error">Hiba a fordítások betöltésekor: {errorMessage}</p>
 {:else if !allLoaded && !everLoaded && loading}
 	{@render loading()}
-{:else if !allLoaded && !everLoaded}
-	<!--<p class="i18n-loading">Betöltés...</p>-->
 {:else}
 	{@render children()}
 {/if}

@@ -1,7 +1,7 @@
 /**
  * Remote functions for plugin management.
  */
-import { command, getRequestEvent } from '$app/server';
+import { command, query, getRequestEvent } from '$app/server';
 import * as v from 'valibot';
 import db from '$lib/server/database';
 import { apps } from '@elyos/database/schemas';
@@ -78,7 +78,7 @@ interface PluginDetailResponse {
 /**
  * Get list of installed plugins with pagination and filtering.
  */
-export const fetchPlugins = command(
+export const fetchPlugins = query(
 	pluginListSchema,
 	async ({ page = 1, pageSize = 20, sortBy = 'name', sortOrder = 'asc', search, status }) => {
 		const event = getRequestEvent();
@@ -212,7 +212,7 @@ export const fetchPlugins = command(
 /**
  * Get detailed information about a specific plugin.
  */
-export const fetchPluginDetail = command(pluginIdSchema, async ({ pluginId }) => {
+export const fetchPluginDetail = query(pluginIdSchema, async ({ pluginId }) => {
 	const event = getRequestEvent();
 	const { locals } = event;
 

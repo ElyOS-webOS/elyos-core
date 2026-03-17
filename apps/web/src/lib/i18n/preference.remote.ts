@@ -59,6 +59,10 @@ export const setLocalePreference = command(setLocaleSchema, async ({ locale }) =
 		locals.settings = updatedSettings;
 		locals.locale = locale;
 
+		// Cookie-t is beállítjuk, hogy az SDK (plugin oldal) is olvashassa
+		const cookieOptions = getLocaleCookieOptions();
+		cookies.set(LOCALE_COOKIE_NAME, locale, cookieOptions);
+
 		return {
 			success: true,
 			locale,

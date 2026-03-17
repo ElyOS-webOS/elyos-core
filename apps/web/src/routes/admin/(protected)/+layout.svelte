@@ -28,9 +28,11 @@
 	let { children, data } = $props();
 
 	// Settings state - reaktív állapot a data.settings alapján
+	// $derived.by-t használunk, hogy csak valódi értékváltozáskor frissüljön
 	const settings = $derived(data.settings);
 
-	// Settings kontextus beállítása - use a getter to maintain reactivity
+	// Settings kontextus beállítása - stabil referencia, getter-ekkel reaktív
+	// A setContext egyszer fut le, a getter-ek mindig a legfrissebb értéket adják vissza
 	const settingsContext = {
 		get windowPreview() {
 			return settings.windowPreview;

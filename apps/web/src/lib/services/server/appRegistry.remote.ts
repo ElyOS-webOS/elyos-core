@@ -4,7 +4,7 @@
  *
  * Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6
  */
-import { command, getRequestEvent } from '$app/server';
+import { query, command, getRequestEvent } from '$app/server';
 import * as v from 'valibot';
 import { appRepository, type AppEntity } from '$lib/server/database/repositories';
 import type { AppMetadata } from '$lib/types/window';
@@ -63,7 +63,7 @@ function convertToWindowMetadata(entity: AppEntity, locale: string): AppMetadata
  *
  * @returns Apps accessible to the user based on their roles and groups.
  */
-export const getUserApps = command(emptySchema, async (): Promise<AppRegistryResponse> => {
+export const getUserApps = query(emptySchema, async (): Promise<AppRegistryResponse> => {
 	const event = getRequestEvent();
 	const { locals } = event;
 

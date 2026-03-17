@@ -205,6 +205,22 @@ async function handleRequest(
 			DEFAULT_FALLBACK_LOCALE
 		);
 
+		// Cookie szinkronizálása — az SDK (plugin oldal) ebből olvassa a locale-t
+		// Csak navigációs kéréseknél (nem API/fetch), hogy ne triggereljon layout reload-ot
+		const isApiOrFetch =
+			event.url.pathname.startsWith('/api/') ||
+			event.request.headers.get('x-sveltekit-action') !== null ||
+			event.request.headers.get('accept') === 'application/json';
+		if (event.locals.locale !== cookieLocale && !isApiOrFetch) {
+			event.cookies.set(LOCALE_COOKIE_NAME, event.locals.locale, {
+				path: '/',
+				maxAge: 60 * 60 * 24 * 365,
+				httpOnly: false,
+				secure: true,
+				sameSite: 'lax'
+			});
+		}
+
 		// Effektív téma mód kiszámítása (auto esetén a rendszer beállítás alapján)
 		let effectiveMode = event.locals.settings.theme.mode;
 		if (effectiveMode === 'auto') {

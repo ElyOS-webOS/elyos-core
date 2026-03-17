@@ -13,7 +13,7 @@ export class I18nService implements II18nService {
 	private _locale: string = 'en';
 	private loadingPromise: Promise<void> | null = null;
 	private storageListener: ((e: StorageEvent) => void) | null = null;
-	private _onLocaleChange: (() => void) | null = null;
+	private _onLocaleChangeCallbacks: Array<() => void> = [];
 
 	constructor(pluginId: string, skipAutoLoad = false) {
 		this.pluginId = pluginId;
@@ -24,9 +24,10 @@ export class I18nService implements II18nService {
 		this.listenForLocaleChanges();
 	}
 
-	/** Callback regisztrálása locale váltáskor (pl. Svelte $state frissítéshez) */
+	/** Callback regisztrálása locale váltáskor (pl. Svelte $state frissítéshez).
+	 *  Több callback is regisztrálható — mindegyik meghívódik a fordítások betöltése után. */
 	onLocaleChange(callback: () => void): void {
-		this._onLocaleChange = callback;
+		this._onLocaleChangeCallbacks.push(callback);
 	}
 
 	/** Rendszer szintű locale váltás figyelése (ElyOS CustomEvent) */
@@ -39,7 +40,7 @@ export class I18nService implements II18nService {
 				this._locale = detail.locale;
 				this.translations.clear();
 				this.loadingPromise = this.loadTranslations().then(() => {
-					this._onLocaleChange?.();
+					this._onLocaleChangeCallbacks.forEach((cb) => cb());
 				});
 			}
 		}) as (e: StorageEvent) => void;

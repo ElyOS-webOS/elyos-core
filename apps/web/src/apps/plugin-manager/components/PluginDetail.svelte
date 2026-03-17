@@ -8,7 +8,7 @@
 	import { getAppShell } from '$lib/apps/appShell.svelte';
 	import { getActionBar } from '$lib/apps/actionBar.svelte';
 	import { useI18n } from '$lib/i18n/hooks';
-	import { fetchPluginDetail, uninstallPlugin } from '../plugins.remote';
+	import { fetchPluginDetail } from '../plugins.remote';
 	import type { PluginDetail } from '../plugins.remote';
 	import { ConfirmDialog } from '$lib/components/ui';
 	import { toast } from 'svelte-sonner';
@@ -55,18 +55,20 @@
 
 		uninstalling = true;
 		try {
-			const result = await uninstallPlugin({ pluginId: plugin.appId });
+			// Sima fetch hívás a command helyett, hogy ne invalidálja a layout load-ot
+			const response = await fetch(`/api/plugins/${plugin.appId}`, { method: 'DELETE' });
+			const result = await response.json();
 
 			if (result.success) {
 				toast.success(t('plugin-manager.detail.uninstallSuccess'));
 				uninstallDialogOpen = false;
 				actionBar.clear();
 
-				// Refresh app registry to remove plugin from start menu
+				// App registry frissítése, hogy a plugin eltűnjön a start menüből
 				const appRegistry = getClientAppRegistry();
 				await appRegistry.refresh();
 
-				// Navigate back to list
+				// Visszanavigálás a listára
 				shell.navigateTo(returnTo);
 			} else {
 				toast.error(result.error || t('plugin-manager.detail.uninstallError'));

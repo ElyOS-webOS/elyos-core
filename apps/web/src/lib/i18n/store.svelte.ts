@@ -42,6 +42,9 @@ export class TranslationStore {
 	// Reaktív számláló a DevTools frissítéséhez
 	private _issueCounter = $state(0);
 	private _pendingLoads = new SvelteSet<string>();
+	// Namespace-ek amelyek betöltése be van ütemezve (I18nProvider regisztrálta),
+	// de az onMount még nem futott le — logMissingKey ezeket kihagyja
+	private _registeredNamespaces = new Set<string>();
 	// Locale váltás közben ne logoljunk hiányzó kulcsokat (race condition elkerülése)
 	private _isSwitchingLocale = false;
 
@@ -157,6 +160,16 @@ export class TranslationStore {
 		}
 	}
 
+	/**
+	 * Namespace regisztrálása betöltésre (I18nProvider hívja mount előtt).
+	 * Csak a logMissingKey elnyomásához — a tényleges betöltés loadNamespace-ben történik.
+	 */
+	registerNamespace(namespace: string): void {
+		if (!this._loadedNamespaces.has(namespace)) {
+			this._registeredNamespaces.add(namespace);
+		}
+	}
+
 	async loadNamespace(namespace: string): Promise<void> {
 		if (this._loadedNamespaces.has(namespace)) return;
 		if (this._pendingLoads.has(namespace)) return;
@@ -199,6 +212,7 @@ export class TranslationStore {
 			console.error(`[I18n] Failed to load namespace "${namespace}":`, error);
 		} finally {
 			this._pendingLoads.delete(namespace);
+			this._registeredNamespaces.delete(namespace);
 		}
 	}
 
@@ -262,6 +276,14 @@ export class TranslationStore {
 		// Locale váltás közben ne logoljunk — a fordítások még töltődnek
 		if (this._isSwitchingLocale) return;
 
+		// Ha a kulcs namespace-e még töltés alatt van, ne logoljunk
+		const keyNamespace = key.split('.')[0];
+		if (keyNamespace && this._pendingLoads.has(keyNamespace)) return;
+
+		// Ha a namespace be van ütemezve (I18nProvider regisztrálta, de onMount még nem futott),
+		// ne logoljunk — a fordítások hamarosan betöltődnek
+		if (keyNamespace && this._registeredNamespaces.has(keyNamespace)) return;
+
 		if (typeof window !== 'undefined' && import.meta.env?.DEV) {
 			console.warn(`[I18n] Missing key: "${key}" for locale "${this._locale}"`);
 		}
@@ -294,6 +316,17 @@ export class TranslationStore {
 
 // Globális singleton
 let globalTranslationStore: TranslationStore | null = null;
+
+// Globális "egyszer már betöltöttük" flag — layout újramountolásnál sem resetelődik
+let globalEverLoaded = false;
+
+export function getGlobalEverLoaded(): boolean {
+	return globalEverLoaded;
+}
+
+export function setGlobalEverLoaded(value: boolean): void {
+	globalEverLoaded = value;
+}
 
 export function createTranslationStore(
 	initialLocale?: string,
