@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 /**
- * create-elyos-plugin CLI
+ * create-elyos-app CLI
  *
- * Interaktív wizard ElyOS plugin projektek létrehozásához.
+ * Interaktív wizard ElyOS app projektek létrehozásához.
  *
  * Használat:
- *   bunx create-elyos-plugin
- *   bunx create-elyos-plugin my-plugin
- *   bunx create-elyos-plugin my-plugin --template basic --no-install
+ *   bunx @elyos-dev/create-app
+ *   bunx @elyos-dev/create-app my-app
+ *   bunx @elyos-dev/create-app my-app --template basic --no-install
  */
 
 import { Command } from 'commander';

@@ -1,30 +1,24 @@
-# create-elyos-plugin
+# @elyos-dev/create-app
 
-CLI tool to scaffold [ElyOS](https://elyos.hu) plugin projects. Generates a complete project structure with SDK integration, build configuration, and localization — ready to develop in seconds.
+CLI tool to scaffold [ElyOS](https://elyos.hu) app projects. Generates a complete project structure with SDK integration, build configuration, and localization — ready to develop in seconds.
 
-<a href="https://www.npmjs.com/package/create-elyos-plugin"><img src="https://img.shields.io/npm/v/create-elyos-plugin?color=blue" alt="npm version" /></a>
+<a href="https://www.npmjs.com/package/@elyos-dev/create-app"><img src="https://img.shields.io/npm/v/@elyos-dev/create-app?color=blue" alt="npm version" /></a>
 <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="License" /></a>
 
 ## Usage
 
 ```bash
 # Interactive wizard
-bunx create-elyos-plugin
+bunx @elyos-dev/create-app
 
 # With a name
-bunx create-elyos-plugin my-plugin
+bunx @elyos-dev/create-app my-app
 
 # With a name and template
-bunx create-elyos-plugin my-plugin --template advanced
+bunx @elyos-dev/create-app my-app --template advanced
 
 # Skip dependency installation
-bunx create-elyos-plugin my-plugin --no-install
-```
-
-Also works with `bun create`:
-
-```bash
-bun create elyos-plugin my-plugin
+bunx @elyos-dev/create-app my-app --no-install
 ```
 
 ## Templates

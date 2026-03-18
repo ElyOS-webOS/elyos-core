@@ -1,30 +1,30 @@
-# @elyos/sdk
+# @elyos-dev/sdk
 
 The official SDK for building [ElyOS](https://elyos.hu) plugins. Provides runtime services (injected by ElyOS), a mock SDK for standalone development, and full TypeScript type definitions.
 
-<a href="https://www.npmjs.com/package/@elyos/sdk"><img src="https://img.shields.io/npm/v/@elyos/sdk?color=blue" alt="npm version" /></a>
-<a href="https://jsr.io/@elyos/sdk"><img src="https://jsr.io/badges/@elyos/sdk" alt="JSR" /></a>
+<a href="https://www.npmjs.com/package/@elyos-dev/sdk"><img src="https://img.shields.io/npm/v/@elyos-dev/sdk?color=blue" alt="npm version" /></a>
+<a href="https://jsr.io/@elyos-dev/sdk"><img src="https://jsr.io/badges/@elyos-dev/sdk" alt="JSR" /></a>
 <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="License" /></a>
 
 ## Installation
 
 ```bash
 # npm / bun
-bun add @elyos/sdk
+bun add @elyos-dev/sdk
 
 # JSR (Deno / Bun / Node)
-bunx jsr add @elyos/sdk
+bunx jsr add @elyos-dev/sdk
 # or
-deno add jsr:@elyos/sdk
+deno add jsr:@elyos-dev/sdk
 ```
 
 ## Package Exports
 
 | Export             | Description                                  |
 | ------------------ | -------------------------------------------- |
-| `@elyos/sdk`       | Runtime SDK (injected by ElyOS at load time) |
-| `@elyos/sdk/dev`   | Mock SDK for standalone development          |
-| `@elyos/sdk/types` | TypeScript type definitions only             |
+| `@elyos-dev/sdk`       | Runtime SDK (injected by ElyOS at load time) |
+| `@elyos-dev/sdk/dev`   | Mock SDK for standalone development          |
+| `@elyos-dev/sdk/types` | TypeScript type definitions only             |
 
 ## Quick Start
 
@@ -48,7 +48,7 @@ For local development without a running ElyOS instance, use the mock SDK:
 
 ```ts
 // src/main.ts
-import { MockWebOSSDK } from '@elyos/sdk/dev';
+import { MockWebOSSDK } from '@elyos-dev/sdk/dev';
 
 if (!window.webOS) {
 	MockWebOSSDK.initialize({
@@ -82,7 +82,7 @@ The mock SDK simulates all services locally:
 For type checking without importing runtime code:
 
 ```ts
-import type { WebOSSDKInterface, UIService, DataService } from '@elyos/sdk/types';
+import type { WebOSSDKInterface, UIService, DataService } from '@elyos-dev/sdk/types';
 ```
 
 ## API Overview
@@ -163,7 +163,7 @@ const imageUrl = sdk.assets.getUrl('images/banner.png');
 
 ## TypeScript Support
 
-The SDK ships with full type definitions. All service interfaces are exported from `@elyos/sdk/types`:
+The SDK ships with full type definitions. All service interfaces are exported from `@elyos-dev/sdk/types`:
 
 ```ts
 import type {
@@ -182,7 +182,7 @@ import type {
 	ToastType,
 	MockSDKConfig,
 	PluginErrorCode
-} from '@elyos/sdk/types';
+} from '@elyos-dev/sdk/types';
 ```
 
 ## Building

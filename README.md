@@ -259,7 +259,7 @@ elyos-core/
 ├── packages/
 │   ├── database/                 # Drizzle ORM schemas, migrations, seeds
 │   ├── sdk/                      # @elyos/sdk — plugin SDK (npm)
-│   └── create-elyos-plugin/      # CLI tool for scaffolding plugins (npm)
+│   └── create-elyos-app/      # CLI tool for scaffolding plugins (npm)
 ├── examples/plugins/             # Example plugin implementations
 ├── docker/                       # Dockerfile and docker-compose.yml
 ├── docs/                         # Documentation
