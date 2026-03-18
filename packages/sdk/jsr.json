@@ -8,6 +8,6 @@
 	},
 	"publish": {
 		"include": ["src/**/*.ts", "README.md", "LICENSE"],
-		"exclude": ["**/*.test.ts", "**/__tests__/**"]
+		"exclude": ["**/*.test.ts", "**/__tests__/**", "**/window.d.ts"]
 	}
 }

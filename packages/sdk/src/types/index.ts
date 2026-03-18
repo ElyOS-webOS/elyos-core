@@ -186,15 +186,6 @@ export interface MockSDKConfig {
 	};
 }
 
-// ─── Global Window Extension ────────────────────────────────────
-
-declare global {
-	interface Window {
-		webOS?: WebOSSDKInterface;
-		__webOS_instances?: Map<string, WebOSSDKInterface>;
-	}
-}
-
 // ─── Error Codes ────────────────────────────────────────────────
 
 export enum PluginErrorCode {
