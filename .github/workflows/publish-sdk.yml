@@ -19,7 +19,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: packages/sdk
-        run: bun install
+        run: bun install --ignore-workspace
 
       - name: Build
         working-directory: packages/sdk
