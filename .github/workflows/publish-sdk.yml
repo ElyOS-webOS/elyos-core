@@ -12,6 +12,9 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: packages/sdk
+          sparse-checkout-cone-mode: true
 
       - uses: oven-sh/setup-bun@v2
         with:

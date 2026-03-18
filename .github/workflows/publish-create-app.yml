@@ -12,6 +12,9 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: packages/create-elyos-app
+          sparse-checkout-cone-mode: true
 
       - uses: oven-sh/setup-bun@v2
         with:
@@ -19,7 +22,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: packages/create-elyos-app
-        run: bun install --ignore-workspace
+        run: bun install
 
       - name: Build
         working-directory: packages/create-elyos-app
