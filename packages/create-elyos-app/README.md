@@ -142,9 +142,7 @@ Configured to build your plugin as an IIFE bundle (`dist/index.iife.js`) compati
 
 ## Further Reading
 
-- [Plugin Development Guide](../../docs/PLUGIN_DEVELOPMENT.md)
-- [SDK API Reference](../../docs/API_REFERENCE.md)
-- [ElyOS Documentation](https://docs.elyos.hu)
+- [ElyOS Documentation for users](https://docs.elyos.hu)
 
 ## License
 
