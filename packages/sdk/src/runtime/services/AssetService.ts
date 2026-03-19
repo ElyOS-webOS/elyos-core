@@ -9,6 +9,7 @@ import type { AssetService as IAssetService } from '../../types/index.js';
 
 /** Asset service — generates URLs for plugin asset files with path traversal protection. */
 export class AssetService implements IAssetService {
+	/** @internal Plugin identifier used to construct asset URLs */
 	private readonly pluginId: string;
 
 	/** @param pluginId - Unique plugin identifier */

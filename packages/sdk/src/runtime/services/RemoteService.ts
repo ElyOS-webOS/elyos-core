@@ -10,7 +10,7 @@ import { PluginErrorCode } from '../../types/index.js';
 
 /** Remote service — call server-side functions via HTTP POST with retry logic. */
 export class RemoteService implements IRemoteService {
-	/** @internal */
+	/** @internal Plugin identifier used to construct remote call URLs */
 	private readonly pluginId: string;
 
 	/** @param pluginId - Unique plugin identifier */
