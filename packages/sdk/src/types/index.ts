@@ -1,13 +1,22 @@
 /**
- * ElyOS SDK Type Definitions
+ * @module
+ * TypeScript type definitions for the ElyOS SDK.
  *
- * TypeScript típusdefiníciók a WebOS SDK-hoz.
+ * Import types from this module for type-safe access to SDK services
+ * without importing any runtime code.
+ *
+ * @example
+ * ```ts
+ * import type { WebOSSDKInterface, UIService } from '@elyos-dev/sdk/types';
+ * ```
  */
 
 // ─── Toast & Dialog ─────────────────────────────────────────────
 
+/** Toast notification type */
 export type ToastType = 'info' | 'success' | 'warning' | 'error';
 
+/** Options for showing a dialog */
 export interface DialogOptions {
 	title: string;
 	message: string;
@@ -16,12 +25,14 @@ export interface DialogOptions {
 	buttons?: DialogButton[];
 }
 
+/** A button in a dialog */
 export interface DialogButton {
 	label: string;
 	action: string;
 	primary?: boolean;
 }
 
+/** Result returned after a dialog is closed */
 export interface DialogResult {
 	action: string;
 	value?: string;
@@ -29,6 +40,7 @@ export interface DialogResult {
 
 // ─── Theme ──────────────────────────────────────────────────────
 
+/** Current theme color palette */
 export interface ThemeColors {
 	primary: string;
 	secondary: string;
@@ -46,6 +58,7 @@ export interface ThemeColors {
 
 // ─── Services ───────────────────────────────────────────────────
 
+/** UI service — toasts, dialogs, theme, and UI components */
 export interface UIService {
 	/** Toast értesítés megjelenítése */
 	toast(message: string, type?: ToastType, duration?: number): void;
@@ -57,10 +70,12 @@ export interface UIService {
 	theme: ThemeColors;
 }
 
+/** Options for remote function calls */
 export interface CallOptions {
 	timeout?: number;
 }
 
+/** Remote service — call server-side functions defined in your app's server/ directory */
 export interface RemoteService {
 	/** Szerver oldali függvény hívása (retry logikával) */
 	call<T = unknown>(
@@ -70,12 +85,14 @@ export interface RemoteService {
 	): Promise<T>;
 }
 
+/** A database transaction */
 export interface Transaction {
 	query<T = unknown>(sql: string, params?: unknown[]): Promise<T[]>;
 	commit(): Promise<void>;
 	rollback(): Promise<void>;
 }
 
+/** Data service — key-value storage and SQL queries */
 export interface DataService {
 	/** Kulcs-érték pár tárolása */
 	set(key: string, value: unknown): Promise<void>;
@@ -89,6 +106,7 @@ export interface DataService {
 	transaction<T = unknown>(callback: (tx: Transaction) => Promise<T>): Promise<T>;
 }
 
+/** Internationalization service — translations and locale switching */
 export interface I18nService {
 	/** Fordítási kulcs feloldása (paraméter interpolációval) */
 	t(key: string, params?: Record<string, string | number>): string;
@@ -102,6 +120,7 @@ export interface I18nService {
 	onLocaleChange(callback: () => void): void;
 }
 
+/** Options for sending a notification */
 export interface NotificationOptions {
 	userId: string;
 	title: string;
@@ -109,11 +128,13 @@ export interface NotificationOptions {
 	type?: ToastType;
 }
 
+/** Notification service — send notifications to users (requires `notifications` permission) */
 export interface NotificationService {
 	/** Értesítés küldése (jogosultság szükséges) */
 	send(options: NotificationOptions): Promise<void>;
 }
 
+/** Authenticated user information */
 export interface UserInfo {
 	id: string;
 	name: string;
@@ -122,11 +143,13 @@ export interface UserInfo {
 	groups: string[];
 }
 
+/** Controls for the app's window */
 export interface WindowControls {
 	close(): void;
 	setTitle(title: string): void;
 }
 
+/** Context service — app identity, user info, permissions, and window controls */
 export interface ContextService {
 	/** Plugin azonosítója */
 	pluginId: string;
@@ -140,6 +163,7 @@ export interface ContextService {
 	window: WindowControls;
 }
 
+/** Asset service — resolve URLs for bundled app assets */
 export interface AssetService {
 	/** Asset URL generálása (path traversal védelemmel) */
 	getUrl(assetPath: string): string;
@@ -147,13 +171,14 @@ export interface AssetService {
 
 // ─── Components ─────────────────────────────────────────────────
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+/** ElyOS UI components exposed to apps */
 export interface WebOSComponents {
 	[key: string]: any;
 }
 
 // ─── SDK Main Interface ─────────────────────────────────────────
 
+/** Main SDK interface — injected into `window.webOS` by ElyOS at runtime */
 export interface WebOSSDKInterface {
 	ui: UIService;
 	remote: RemoteService;
@@ -167,6 +192,7 @@ export interface WebOSSDKInterface {
 
 // ─── Mock SDK Config ────────────────────────────────────────────
 
+/** Configuration for the mock SDK used during standalone development */
 export interface MockSDKConfig {
 	ui?: Partial<UIService>;
 	remote?: {
@@ -188,6 +214,7 @@ export interface MockSDKConfig {
 
 // ─── Error Codes ────────────────────────────────────────────────
 
+/** Error codes thrown by SDK operations */
 export enum PluginErrorCode {
 	PERMISSION_DENIED = 'PERMISSION_DENIED',
 	REMOTE_CALL_TIMEOUT = 'REMOTE_CALL_TIMEOUT',

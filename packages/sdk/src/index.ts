@@ -1,15 +1,16 @@
 /**
- * @elyos/sdk — ElyOS Plugin SDK
+ * @module
+ * Runtime SDK for ElyOS apps.
  *
- * Runtime SDK az ElyOS pluginokhoz.
- * A WebOSSDK osztályt az ElyOS core injektálja a pluginokba.
+ * When your app runs inside ElyOS, the SDK is automatically injected into `window.webOS`.
+ * Import this module to access the runtime services and TypeScript types.
  *
  * @example
  * ```ts
- * import { WebOSSDK } from '@elyos/sdk';
+ * import { WebOSSDK } from '@elyos-dev/sdk';
  *
- * const sdk = WebOSSDK.initialize('my-plugin', user, params, permissions);
- * sdk.ui.toast('Hello from my plugin!', 'success');
+ * const sdk = window.webOS!;
+ * sdk.ui.toast('Hello from my app!', 'success');
  * ```
  */
 

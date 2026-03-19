@@ -1,15 +1,21 @@
 /**
- * @elyos/sdk/dev — Mock SDK fejlesztéshez
+ * @module
+ * Mock SDK for standalone ElyOS app development.
  *
- * Standalone plugin fejlesztéshez használható mock SDK.
- * Console-based feedback, localStorage-based storage.
+ * Use this module during local development when a running ElyOS instance is not available.
+ * All services are simulated locally — toasts log to the console, data is stored in localStorage.
  *
  * @example
  * ```ts
- * import { MockWebOSSDK } from '@elyos/sdk/dev';
+ * import { MockWebOSSDK } from '@elyos-dev/sdk/dev';
  *
  * if (!window.webOS) {
- *   MockWebOSSDK.initialize();
+ *   MockWebOSSDK.initialize({
+ *     context: {
+ *       pluginId: 'my-app',
+ *       user: { id: '1', name: 'Dev User', email: 'dev@example.com', roles: ['admin'], groups: [] }
+ *     }
+ *   });
  * }
  * ```
  */
