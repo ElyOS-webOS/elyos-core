@@ -1,19 +1,18 @@
 /**
  * MockWebOSSDK — Development Mock SDK
  *
- * Standalone plugin fejlesztéshez használható mock SDK.
+ * Mock SDK for standalone plugin development.
  * Console-based feedback, localStorage-based storage.
  *
  * @example
  * ```ts
- * import { MockWebOSSDK } from '@elyos/sdk/dev';
+ * import { MockWebOSSDK } from '@elyos-dev/sdk/dev';
  *
  * if (!window.webOS) {
  *   MockWebOSSDK.initialize({
  *     i18n: {
- *       locale: 'hu',
+ *       locale: 'en',
  *       translations: {
- *         hu: { title: 'Szia Világ' },
  *         en: { title: 'Hello World' }
  *       }
  *     }
@@ -31,6 +30,7 @@ import { MockNotificationService } from './services/MockNotificationService.js';
 import { MockContextService } from './services/MockContextService.js';
 import { MockAssetService } from './services/MockAssetService.js';
 
+/** Mock WebOS SDK — simulates all services locally for standalone plugin development. */
 export class MockWebOSSDK implements WebOSSDKInterface {
 	/** Mock UI service */
 	readonly ui: MockUIService;
@@ -46,10 +46,10 @@ export class MockWebOSSDK implements WebOSSDKInterface {
 	readonly context: MockContextService;
 	/** Mock Asset service */
 	readonly assets: MockAssetService;
-	/** Mock UI komponensek — üres objektum */
+	/** Mock UI components — empty object in dev mode */
 	readonly components: WebOSSDKInterface['components'];
 
-	/** @param config - Opcionális mock SDK konfiguráció */
+	/** @param config - Optional mock SDK configuration */
 	constructor(config?: MockSDKConfig) {
 		this.ui = new MockUIService();
 		this.remote = new MockRemoteService(config?.remote);
@@ -64,10 +64,10 @@ export class MockWebOSSDK implements WebOSSDKInterface {
 	}
 
 	/**
-	 * Mock SDK inicializálása és `window.webOS`-hoz csatolása.
+	 * Initialize the mock SDK and attach it to `window.webOS`.
 	 *
-	 * @param config - Opcionális mock SDK konfiguráció
-	 * @returns Az inicializált MockWebOSSDK példány
+	 * @param config - Optional mock SDK configuration
+	 * @returns The initialized MockWebOSSDK instance
 	 *
 	 * @example
 	 * ```ts

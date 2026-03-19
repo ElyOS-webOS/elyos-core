@@ -7,6 +7,7 @@
 
 import type { I18nService as II18nService } from '../../types/index.js';
 
+/** I18n service — plugin fordítások kezelése, locale detektálás és váltás. */
 export class I18nService implements II18nService {
 	private readonly pluginId: string;
 	private translations: Map<string, string> = new Map();

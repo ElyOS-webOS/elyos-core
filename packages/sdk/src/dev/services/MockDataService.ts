@@ -1,21 +1,23 @@
 /**
  * Mock Data Service
  *
- * localStorage-based key-value storage, mock SQL.
+ * localStorage-based key-value storage and mock SQL for dev mode.
  */
 
 import type { DataService, Transaction } from '../../types/index.js';
 
+/** Configuration for the mock data service */
 export interface MockDataConfig {
 	/** Pre-populated key-value data loaded into the mock store on initialization */
 	initialData?: Record<string, unknown>;
 }
 
+/** Mock Data service — in-memory and localStorage-based key-value storage for standalone development. */
 export class MockDataService implements DataService {
 	private storage = new Map<string, unknown>();
 	private readonly prefix = 'elyos-mock-';
 
-	/** @param config - Opcionális kezdeti adatok */
+	/** @param config - Optional initial data */
 	constructor(config?: MockDataConfig) {
 		if (config?.initialData) {
 			for (const [key, value] of Object.entries(config.initialData)) {
@@ -25,9 +27,9 @@ export class MockDataService implements DataService {
 	}
 
 	/**
-	 * Kulcs-érték pár tárolása memóriában és `localStorage`-ban.
-	 * @param key - Tárolandó kulcs
-	 * @param value - Tárolandó érték
+	 * Store a key-value pair in memory and `localStorage`.
+	 * @param key - Key to store
+	 * @param value - Value to store
 	 */
 	async set(key: string, value: unknown): Promise<void> {
 		this.storage.set(key, value);
@@ -37,9 +39,9 @@ export class MockDataService implements DataService {
 	}
 
 	/**
-	 * Kulcs-érték pár lekérdezése memóriából vagy `localStorage`-ból.
-	 * @param key - Lekérdezendő kulcs
-	 * @returns A tárolt érték, vagy `null` ha nem létezik
+	 * Retrieve a value from memory or `localStorage`.
+	 * @param key - Key to look up
+	 * @returns The stored value, or `null` if not found
 	 */
 	async get<T = unknown>(key: string): Promise<T | null> {
 		if (this.storage.has(key)) {
@@ -57,8 +59,8 @@ export class MockDataService implements DataService {
 	}
 
 	/**
-	 * Kulcs-érték pár törlése memóriából és `localStorage`-ból.
-	 * @param key - Törlendő kulcs
+	 * Delete a key-value pair from memory and `localStorage`.
+	 * @param key - Key to delete
 	 */
 	async delete(key: string): Promise<void> {
 		this.storage.delete(key);
@@ -68,9 +70,9 @@ export class MockDataService implements DataService {
 	}
 
 	/**
-	 * SQL lekérdezés szimulálása — mock módban nem támogatott, üres tömböt ad vissza.
-	 * @param sql - SQL lekérdezés (csak logolásra kerül)
-	 * @param params - Paraméterek (csak logolásra kerülnek)
+	 * Simulate a SQL query — not supported in mock mode, returns an empty array.
+	 * @param sql - SQL query string (logged only)
+	 * @param params - Query parameters (logged only)
 	 */
 	async query<T = unknown>(sql: string, params?: unknown[]): Promise<T[]> {
 		console.warn('[Mock Data] SQL queries are not supported in mock mode:', sql, params);
@@ -78,8 +80,8 @@ export class MockDataService implements DataService {
 	}
 
 	/**
-	 * Tranzakció szimulálása — mock módban nincs valódi tranzakció, a callback azonnal fut.
-	 * @param callback - Tranzakció callback
+	 * Simulate a transaction — no real transaction in mock mode, callback runs immediately.
+	 * @param callback - Transaction callback
 	 */
 	async transaction<T>(callback: (tx: Transaction) => Promise<T>): Promise<T> {
 		console.warn('[Mock Data] Transactions are simulated in mock mode');

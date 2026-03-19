@@ -1,8 +1,8 @@
 /**
  * UI Service
  *
- * Biztosítja a plugin számára a UI komponensek és funkciók elérését.
- * Toast értesítések, dialógusok, téma színek.
+ * Provides the plugin with access to UI components and functions.
+ * Toast notifications, dialogs, theme colors.
  */
 
 import type {
@@ -14,54 +14,55 @@ import type {
 	WebOSComponents
 } from '../../types/index.js';
 
+/** UI service — toast notifications, dialogs, theme colors, and UI component access. */
 export class UIService implements IUIService {
 	private toastFn: ((message: string, type: ToastType, duration: number) => void) | null = null;
 	private dialogFn: ((options: DialogOptions) => Promise<DialogResult>) | null = null;
 
 	/**
-	 * Toast callback regisztrálása (az ElyOS core hívja meg).
-	 * @param fn - Toast megjelenítő függvény
+	 * Register the toast handler (called by the ElyOS core).
+	 * @param fn - Function that displays a toast notification
 	 */
 	_setToastHandler(fn: (message: string, type: ToastType, duration: number) => void): void {
 		this.toastFn = fn;
 	}
 
 	/**
-	 * Dialog callback regisztrálása (az ElyOS core hívja meg).
-	 * @param fn - Dialógus megjelenítő függvény
+	 * Register the dialog handler (called by the ElyOS core).
+	 * @param fn - Function that displays a dialog
 	 */
 	_setDialogHandler(fn: (options: DialogOptions) => Promise<DialogResult>): void {
 		this.dialogFn = fn;
 	}
 
 	/**
-	 * Toast értesítés megjelenítése.
+	 * Show a toast notification.
 	 *
-	 * @param message - Megjelenítendő szöveg
-	 * @param type - Toast típusa (`info` | `success` | `warning` | `error`)
-	 * @param duration - Megjelenítési idő milliszekundumban (alapértelmezett: 3000)
+	 * @param message - Text to display
+	 * @param type - Toast type (`info` | `success` | `warning` | `error`)
+	 * @param duration - Display duration in milliseconds (default: 3000)
 	 */
 	toast(message: string, type: ToastType = 'info', duration: number = 3000): void {
 		if (this.toastFn) {
 			this.toastFn(message, type, duration);
 		} else {
-			// Fallback ha nincs regisztrált handler
+			// Fallback when no handler is registered
 			console.log(`[Toast ${type}] ${message}`);
 		}
 	}
 
 	/**
-	 * Dialógus megjelenítése.
+	 * Show a dialog.
 	 *
-	 * @param options - Dialógus beállítások (cím, szöveg, típus, gombok)
-	 * @returns A felhasználó által kiválasztott akció és opcionális érték
+	 * @param options - Dialog options (title, message, type, buttons)
+	 * @returns The action selected by the user and an optional value
 	 */
 	async dialog(options: DialogOptions): Promise<DialogResult> {
 		if (this.dialogFn) {
 			return this.dialogFn(options);
 		}
 
-		// Fallback ha nincs regisztrált handler
+		// Fallback when no handler is registered
 		const { title, message, type = 'info' } = options;
 		if (type === 'confirm') {
 			const confirmed = window.confirm(`${title}\n\n${message}`);
@@ -76,16 +77,16 @@ export class UIService implements IUIService {
 	}
 
 	/**
-	 * ElyOS UI komponensek elérése.
-	 * A komponensek az ElyOS core által kerülnek regisztrálásra.
+	 * Access ElyOS UI components.
+	 * Components are registered by the ElyOS core.
 	 */
 	get components(): WebOSComponents {
 		return {};
 	}
 
 	/**
-	 * Aktuális téma színek CSS változókból olvasva.
-	 * Ha nem böngésző környezetben fut, üres értékeket ad vissza.
+	 * Current theme colors read from CSS custom properties.
+	 * Returns empty values when running outside a browser environment.
 	 */
 	get theme(): ThemeColors {
 		if (typeof document === 'undefined') {

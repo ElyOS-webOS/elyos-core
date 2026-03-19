@@ -1,28 +1,30 @@
 /**
  * Mock Asset Service
  *
- * Mock asset URL generálás.
+ * Mock asset URL generation for dev mode.
  */
 
 import type { AssetService } from '../../types/index.js';
 
+/** Configuration for the mock asset service */
 export interface MockAssetConfig {
 	/** Base URL prepended to all asset paths (default: `"/assets"`) */
 	baseUrl?: string;
 }
 
+/** Mock Asset service — generates asset URLs using a configurable base URL for standalone development. */
 export class MockAssetService implements AssetService {
 	private readonly baseUrl: string;
 
-	/** @param config - Opcionális base URL konfiguráció (alapértelmezett: `/assets`) */
+	/** @param config - Optional base URL configuration (default: `/assets`) */
 	constructor(config?: MockAssetConfig) {
 		this.baseUrl = config?.baseUrl ?? '/assets';
 	}
 
 	/**
-	 * Mock asset URL generálása a konfigurált base URL alapján.
-	 * @param assetPath - Asset fájl elérési útja (relatív)
-	 * @returns Teljes URL
+	 * Generate a mock asset URL using the configured base URL.
+	 * @param assetPath - Relative asset file path
+	 * @returns Full URL
 	 */
 	getUrl(assetPath: string): string {
 		const sanitized = assetPath.replace(/\.\./g, '').replace(/^\/+/, '');

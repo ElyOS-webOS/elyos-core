@@ -1,7 +1,7 @@
 /**
  * Context Service
  *
- * Plugin kontextus információk és ablak vezérlők.
+ * Plugin context information and window controls.
  */
 
 import type {
@@ -10,24 +10,25 @@ import type {
 	WindowControls
 } from '../../types/index.js';
 
+/** Context service — plugin identity, authenticated user, permissions, and window controls. */
 export class ContextService implements IContextService {
-	/** Plugin egyedi azonosítója */
+	/** Unique plugin identifier */
 	readonly pluginId: string;
-	/** Bejelentkezett felhasználó adatai */
+	/** Authenticated user data */
 	readonly user: UserInfo;
-	/** Plugin indításkor átadott paraméterek */
+	/** Parameters passed when the app was launched */
 	readonly params: Record<string, unknown>;
-	/** Plugin jogosultságok listája */
+	/** List of permissions granted to the plugin */
 	readonly permissions: string[];
-	/** Ablak vezérlők (close, setTitle) */
+	/** Window controls (close, setTitle) */
 	readonly window: WindowControls;
 
 	/**
-	 * @param pluginId - Plugin egyedi azonosítója
-	 * @param user - Bejelentkezett felhasználó adatai
-	 * @param params - Plugin indításkor átadott paraméterek
-	 * @param permissions - Plugin jogosultságok listája
-	 * @param windowElement - Opcionális Window referencia (iframe-hez)
+	 * @param pluginId - Unique plugin identifier
+	 * @param user - Authenticated user data
+	 * @param params - Parameters passed when the app was launched
+	 * @param permissions - List of permissions granted to the plugin
+	 * @param windowElement - Optional Window reference (for iframe-based plugins)
 	 */
 	constructor(
 		pluginId: string,

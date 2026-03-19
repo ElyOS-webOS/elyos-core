@@ -1,34 +1,35 @@
 /**
  * Data Service
  *
- * Plugin adattárolás és adatbázis műveletek.
- * Adatok plugin_{plugin_id} sémában tárolva, más plugin sémák nem elérhetők.
+ * Plugin data storage and database operations.
+ * Data is stored in the plugin_{plugin_id} schema — other plugin schemas are not accessible.
  */
 
 import type { DataService as IDataService, Transaction } from '../../types/index.js';
 import { PluginErrorCode } from '../../types/index.js';
 
+/** Data service — key-value storage and SQL queries, scoped to the plugin's own schema. */
 export class DataService implements IDataService {
 	private readonly pluginId: string;
 
-	/** @param pluginId - Plugin egyedi azonosítója */
+	/** @param pluginId - Unique plugin identifier */
 	constructor(pluginId: string) {
 		this.pluginId = pluginId;
 	}
 
 	/**
-	 * Kulcs-érték pár tárolása.
-	 * @param key - Tárolandó kulcs
-	 * @param value - Tárolandó érték (JSON-szerializálható)
+	 * Store a key-value pair.
+	 * @param key - Key to store
+	 * @param value - Value to store (must be JSON-serializable)
 	 */
 	async set(key: string, value: unknown): Promise<void> {
 		await this.apiCall('/set', { key, value });
 	}
 
 	/**
-	 * Kulcs-érték pár lekérdezése.
-	 * @param key - Lekérdezendő kulcs
-	 * @returns A tárolt érték, vagy `null` ha nem létezik
+	 * Retrieve a value by key.
+	 * @param key - Key to look up
+	 * @returns The stored value, or `null` if not found
 	 */
 	async get<T = unknown>(key: string): Promise<T | null> {
 		const result = await this.apiCall<{ value: T | null }>('/get', { key });
@@ -36,18 +37,18 @@ export class DataService implements IDataService {
 	}
 
 	/**
-	 * Kulcs-érték pár törlése.
-	 * @param key - Törlendő kulcs
+	 * Delete a key-value pair.
+	 * @param key - Key to delete
 	 */
 	async delete(key: string): Promise<void> {
 		await this.apiCall('/delete', { key });
 	}
 
 	/**
-	 * SQL lekérdezés végrehajtása (csak a plugin saját sémájában).
-	 * @param sql - SQL lekérdezés
-	 * @param params - Paraméterek (SQL injection védelem)
-	 * @returns Lekérdezés eredménye
+	 * Execute a raw SQL query (scoped to the plugin's own schema only).
+	 * @param sql - SQL query string
+	 * @param params - Query parameters (SQL injection protection)
+	 * @returns Query result rows
 	 */
 	async query<T = unknown>(sql: string, params?: unknown[]): Promise<T[]> {
 		const result = await this.apiCall<{ rows: T[] }>('/query', { sql, params });
@@ -55,9 +56,9 @@ export class DataService implements IDataService {
 	}
 
 	/**
-	 * Tranzakció végrehajtása.
-	 * @param callback - Tranzakció callback, megkapja a `Transaction` objektumot
-	 * @returns A callback visszatérési értéke
+	 * Execute multiple operations in a single transaction.
+	 * @param callback - Transaction callback, receives a `Transaction` object
+	 * @returns The return value of the callback
 	 */
 	async transaction<T>(callback: (tx: Transaction) => Promise<T>): Promise<T> {
 		const tx: Transaction = {
@@ -68,7 +69,7 @@ export class DataService implements IDataService {
 		return callback(tx);
 	}
 
-	/** API hívás a data service endpoint-hoz */
+	/** Internal API call to the data service endpoint */
 	private async apiCall<T>(endpoint: string, data: Record<string, unknown>): Promise<T> {
 		try {
 			const response = await fetch(`/api/plugins/${this.pluginId}/data${endpoint}`, {

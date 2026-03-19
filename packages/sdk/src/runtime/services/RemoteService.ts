@@ -1,32 +1,33 @@
 /**
  * Remote Service
  *
- * Szerver oldali függvények hívása HTTP POST kéréssel.
- * Retry logika exponenciális backoff-fal.
+ * Call server-side functions via HTTP POST.
+ * Includes retry logic with exponential backoff.
  */
 
 import type { RemoteService as IRemoteService, CallOptions } from '../../types/index.js';
 import { PluginErrorCode } from '../../types/index.js';
 
+/** Remote service — call server-side functions via HTTP POST with retry logic. */
 export class RemoteService implements IRemoteService {
 	private readonly pluginId: string;
 
-	/** @param pluginId - Plugin egyedi azonosítója */
+	/** @param pluginId - Unique plugin identifier */
 	constructor(pluginId: string) {
 		this.pluginId = pluginId;
 	}
 
 	/**
-	 * Szerver oldali függvény hívása retry logikával (max 3 kísérlet, exponenciális backoff).
+	 * Call a server-side function with retry logic (max 3 attempts, exponential backoff).
 	 *
-	 * @param functionName - A szerver oldali függvény neve
-	 * @param params - Átadandó paraméterek
-	 * @param options - Hívás beállítások (pl. timeout)
-	 * @returns A szerver által visszaadott eredmény
-	 * @throws `REMOTE_CALL_TIMEOUT` ha a kérés túllépi az időkorlátot
-	 * @throws `NETWORK_ERROR` ha hálózati hiba történik
-	 * @throws `SERVER_ERROR` ha a szerver 5xx hibát ad vissza
-	 * @throws `CLIENT_ERROR` ha a szerver 4xx hibát ad vissza
+	 * @param functionName - Name of the server-side function
+	 * @param params - Parameters to pass
+	 * @param options - Call options (e.g. timeout)
+	 * @returns The result returned by the server
+	 * @throws `REMOTE_CALL_TIMEOUT` if the request exceeds the timeout
+	 * @throws `NETWORK_ERROR` if a network error occurs
+	 * @throws `SERVER_ERROR` if the server returns a 5xx error
+	 * @throws `CLIENT_ERROR` if the server returns a 4xx error
 	 */
 	async call<T = unknown>(
 		functionName: string,
@@ -43,7 +44,7 @@ export class RemoteService implements IRemoteService {
 			} catch (error) {
 				lastError = error as Error;
 
-				// Ne próbáljuk újra, ha nem hálózati hiba
+				// Do not retry non-network errors
 				if (
 					error instanceof Error &&
 					!error.message.includes('network') &&
@@ -52,7 +53,7 @@ export class RemoteService implements IRemoteService {
 					throw error;
 				}
 
-				// Exponenciális backoff: 1s, 2s, 4s
+				// Exponential backoff: 1s, 2s, 4s
 				if (attempt < maxRetries - 1) {
 					const delay = Math.pow(2, attempt) * 1000;
 					await new Promise((resolve) => setTimeout(resolve, delay));
@@ -65,9 +66,7 @@ export class RemoteService implements IRemoteService {
 		);
 	}
 
-	/**
-	 * Egyetlen remote hívás végrehajtása
-	 */
+	/** Execute a single remote call */
 	private async executeCall<T>(
 		functionName: string,
 		params: Record<string, unknown> | undefined,

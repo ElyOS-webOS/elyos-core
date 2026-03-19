@@ -1,8 +1,8 @@
 /**
  * WebOS SDK — Runtime SDK
  *
- * Az ElyOS core injektálja ezt az SDK-t a pluginokba.
- * Összefogja az összes service-t egyetlen objektumba.
+ * Injected into plugins by the ElyOS core.
+ * Aggregates all services into a single object.
  */
 
 import type { WebOSComponents, UserInfo, WebOSSDKInterface } from '../types/index.js';
@@ -14,34 +14,35 @@ import { NotificationService } from './services/NotificationService.js';
 import { ContextService } from './services/ContextService.js';
 import { AssetService } from './services/AssetService.js';
 
+/** WebOS SDK — injected into plugins by the ElyOS core, aggregates all services. */
 export class WebOSSDK implements WebOSSDKInterface {
-	/** UI service — toasts, dialógusok, téma */
+	/** UI service — toasts, dialogs, theme */
 	readonly ui: UIService;
-	/** Remote service — szerver oldali függvények hívása */
+	/** Remote service — call server-side functions */
 	readonly remote: RemoteService;
-	/** Data service — kulcs-érték tárolás és SQL lekérdezések */
+	/** Data service — key-value storage and SQL queries */
 	readonly data: DataService;
-	/** I18n service — fordítások és locale váltás */
+	/** I18n service — translations and locale switching */
 	readonly i18n: I18nService;
-	/** Notification service — értesítések küldése */
+	/** Notification service — send notifications */
 	readonly notifications: NotificationService;
-	/** Context service — plugin azonosító, felhasználó, jogosultságok, ablak vezérlők */
+	/** Context service — plugin identity, user, permissions, window controls */
 	readonly context: ContextService;
-	/** Asset service — plugin asset URL-ek generálása */
+	/** Asset service — generate plugin asset URLs */
 	readonly assets: AssetService;
-	/** ElyOS UI komponensek */
+	/** ElyOS UI components */
 	readonly components: WebOSComponents;
 
 	/**
-	 * WebOSSDK példány létrehozása.
+	 * Create a WebOSSDK instance.
 	 *
-	 * @param pluginId - Plugin egyedi azonosítója
-	 * @param user - Bejelentkezett felhasználó adatai
-	 * @param params - Plugin indításkor átadott paraméterek
-	 * @param permissions - Plugin jogosultságok listája
-	 * @param windowElement - Opcionális Window referencia (iframe-hez)
-	 * @param components - ElyOS UI komponensek
-	 * @param devMode - Fejlesztői mód (kihagyja a fordítások automatikus betöltését)
+	 * @param pluginId - Unique plugin identifier
+	 * @param user - Authenticated user data
+	 * @param params - Parameters passed when the app was launched
+	 * @param permissions - List of permissions granted to the plugin
+	 * @param windowElement - Optional Window reference (for iframe-based plugins)
+	 * @param components - ElyOS UI components
+	 * @param devMode - Dev mode flag (skips automatic translation loading)
 	 */
 	constructor(
 		pluginId: string,
@@ -63,16 +64,16 @@ export class WebOSSDK implements WebOSSDKInterface {
 	}
 
 	/**
-	 * SDK inicializálása és globális objektumhoz csatolása.
+	 * Initialize the SDK and attach it to the global object.
 	 *
-	 * @param pluginId - Plugin egyedi azonosítója
-	 * @param user - Bejelentkezett felhasználó adatai
-	 * @param params - Plugin indításkor átadott paraméterek
-	 * @param permissions - Plugin jogosultságok listája
-	 * @param windowElement - Opcionális Window referencia (iframe-hez)
-	 * @param components - ElyOS UI komponensek
-	 * @param devMode - Fejlesztői mód
-	 * @returns Az inicializált SDK példány
+	 * @param pluginId - Unique plugin identifier
+	 * @param user - Authenticated user data
+	 * @param params - Parameters passed when the app was launched
+	 * @param permissions - List of permissions granted to the plugin
+	 * @param windowElement - Optional Window reference (for iframe-based plugins)
+	 * @param components - ElyOS UI components
+	 * @param devMode - Dev mode flag
+	 * @returns The initialized SDK instance
 	 */
 	static initialize(
 		pluginId: string,
@@ -105,10 +106,10 @@ export class WebOSSDK implements WebOSSDKInterface {
 	}
 
 	/**
-	 * SDK lekérése plugin ID alapján.
+	 * Retrieve an SDK instance by plugin ID.
 	 *
-	 * @param pluginId - Plugin egyedi azonosítója
-	 * @returns Az SDK példány, vagy `undefined` ha nem található
+	 * @param pluginId - Unique plugin identifier
+	 * @returns The SDK instance, or `undefined` if not found
 	 */
 	static getInstance(pluginId: string): WebOSSDK | undefined {
 		if (typeof window !== 'undefined' && window.__webOS_instances) {
@@ -118,9 +119,9 @@ export class WebOSSDK implements WebOSSDKInterface {
 	}
 
 	/**
-	 * SDK cleanup — eltávolítja az SDK példányt a globális objektumból.
+	 * Clean up the SDK — removes the instance from the global object.
 	 *
-	 * @param pluginId - Ha meg van adva, csak ezt a plugin példányt távolítja el. Ha nincs, az összes SDK példányt törli.
+	 * @param pluginId - If provided, removes only this plugin's instance. Otherwise removes all instances.
 	 */
 	static cleanup(pluginId?: string): void {
 		if (typeof window !== 'undefined') {

@@ -1,11 +1,12 @@
 /**
  * Mock I18n Service
  *
- * Mock fordítások konfigurálható translation map-pel.
+ * Mock translations with a configurable translation map.
  */
 
 import type { I18nService } from '../../types/index.js';
 
+/** Configuration for the mock i18n service */
 export interface MockI18nConfig {
 	/** Initial locale code (default: `"en"`) */
 	locale?: string;
@@ -13,22 +14,23 @@ export interface MockI18nConfig {
 	translations?: Record<string, Record<string, string>>;
 }
 
+/** Mock I18n service — resolves translations from a configurable in-memory map. */
 export class MockI18nService implements I18nService {
 	private _locale: string;
 	private translations: Record<string, Record<string, string>>;
 	private _onLocaleChange: (() => void) | null = null;
 
-	/** @param config - Opcionális locale és fordítások konfigurálása */
+	/** @param config - Optional locale and translations configuration */
 	constructor(config?: MockI18nConfig) {
 		this._locale = config?.locale ?? 'en';
 		this.translations = config?.translations ?? {};
 	}
 
 	/**
-	 * Fordítási kulcs feloldása a konfigurált fordítások alapján.
-	 * @param key - Fordítási kulcs
-	 * @param params - Interpolációs paraméterek
-	 * @returns Fordított szöveg, vagy a kulcs ha nincs fordítás
+	 * Resolve a translation key from the configured translations.
+	 * @param key - Translation key
+	 * @param params - Interpolation parameters
+	 * @returns Translated string, or the key if no translation is found
 	 */
 	t(key: string, params?: Record<string, string | number>): string {
 		const localeTranslations = this.translations[this._locale];
@@ -47,14 +49,14 @@ export class MockI18nService implements I18nService {
 		return translation;
 	}
 
-	/** Aktuális nyelv kódja. */
+	/** Current locale code. */
 	get locale(): string {
 		return this._locale;
 	}
 
 	/**
-	 * Nyelv váltása — console-ra logol és meghívja az `onLocaleChange` callbacket.
-	 * @param locale - Az új nyelv kódja
+	 * Switch locale — logs to the console and calls the `onLocaleChange` callback.
+	 * @param locale - New locale code
 	 */
 	async setLocale(locale: string): Promise<void> {
 		this._locale = locale;
@@ -62,14 +64,14 @@ export class MockI18nService implements I18nService {
 		this._onLocaleChange?.();
 	}
 
-	/** Mock módban azonnal kész — nincs aszinkron betöltés. */
+	/** Immediately ready in mock mode — no async loading. */
 	async ready(): Promise<void> {
-		// Mock — azonnal kész
+		// No-op in mock mode
 	}
 
 	/**
-	 * Callback regisztrálása locale váltáskor.
-	 * @param callback - Meghívandó függvény locale váltás után
+	 * Register a callback to be called after locale changes.
+	 * @param callback - Function to call after locale change
 	 */
 	onLocaleChange(callback: () => void): void {
 		this._onLocaleChange = callback;

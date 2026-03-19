@@ -1,8 +1,8 @@
 /**
  * Mock UI Service
  *
- * Standalone fejlesztői módhoz: böngésző natív dialógusok (confirm/prompt/alert),
- * console-based toast és mock téma.
+ * For standalone dev mode: native browser dialogs (confirm/prompt/alert),
+ * console-based toasts, and a mock theme palette.
  */
 
 import type {
@@ -14,21 +14,22 @@ import type {
 	WebOSComponents
 } from '../../types/index.js';
 
+/** Mock UI service — simulates toasts, dialogs, and theme for standalone development. */
 export class MockUIService implements UIService {
 	/**
-	 * Toast szimulálása — console-ra logol.
-	 * @param message - Megjelenítendő szöveg
-	 * @param type - Toast típusa
-	 * @param duration - Megjelenítési idő ms-ban
+	 * Simulate a toast — logs to the console.
+	 * @param message - Text to display
+	 * @param type - Toast type
+	 * @param duration - Display duration in ms
 	 */
 	toast(message: string, type: ToastType = 'info', duration: number = 3000): void {
 		console.log(`[Mock Toast ${type}] ${message} (${duration}ms)`);
 	}
 
 	/**
-	 * Dialógus szimulálása böngésző natív `confirm`/`prompt`/`alert` segítségével.
-	 * @param options - Dialógus beállítások
-	 * @returns A felhasználó által kiválasztott akció
+	 * Simulate a dialog using native browser `confirm`/`prompt`/`alert`.
+	 * @param options - Dialog options
+	 * @returns The action selected by the user
 	 */
 	async dialog(options: DialogOptions): Promise<DialogResult> {
 		const title = options.title ? `${options.title}\n\n` : '';
@@ -50,12 +51,12 @@ export class MockUIService implements UIService {
 		return { action: 'ok' };
 	}
 
-	/** Mock UI komponensek — üres objektum fejlesztői módban. */
+	/** Mock UI components — empty object in dev mode. */
 	get components(): WebOSComponents {
 		return {};
 	}
 
-	/** Mock téma színek — alapértelmezett fejlesztői paletta. */
+	/** Mock theme colors — default dev palette. */
 	get theme(): ThemeColors {
 		return {
 			primary: '#667eea',

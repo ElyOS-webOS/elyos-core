@@ -1,29 +1,31 @@
 /**
  * Mock Remote Service
  *
- * Szerver hívások szimulálása konfigurálható handler-ekkel.
+ * Simulates server calls with configurable handlers.
  */
 
 import type { RemoteService, CallOptions } from '../../types/index.js';
 
+/** Configuration for the mock remote service */
 export interface MockRemoteConfig {
 	/** Map of function name → handler for simulated server-side calls */
 	handlers?: Record<string, (...args: unknown[]) => unknown>;
 }
 
+/** Mock Remote service — simulates server-side function calls with configurable handlers. */
 export class MockRemoteService implements RemoteService {
 	private handlers: Record<string, (...args: unknown[]) => unknown>;
 
-	/** @param config - Opcionális handler map a szimulált szerver függvényekhez */
+	/** @param config - Optional handler map for simulated server functions */
 	constructor(config?: MockRemoteConfig) {
 		this.handlers = config?.handlers ?? {};
 	}
 
 	/**
-	 * Szerver hívás szimulálása — ha van regisztrált handler, azt hívja meg, egyébként `null`-t ad vissza.
-	 * @param functionName - Szerver függvény neve
-	 * @param params - Átadandó paraméterek
-	 * @returns A handler visszatérési értéke, vagy `null`
+	 * Simulate a server call — invokes the registered handler if one exists, otherwise returns `null`.
+	 * @param functionName - Server function name
+	 * @param params - Parameters to pass
+	 * @returns The handler's return value, or `null`
 	 */
 	async call<T = unknown>(
 		functionName: string,

@@ -1,8 +1,8 @@
 /**
  * Notification Service
  *
- * Értesítések küldése a notification center-be.
- * Jogosultság ellenőrzéssel.
+ * Send notifications to the notification center.
+ * Includes permission checking.
  */
 
 import type {
@@ -11,14 +11,15 @@ import type {
 } from '../../types/index.js';
 import { PluginErrorCode } from '../../types/index.js';
 
+/** Notification service — send notifications to the notification center with permission checking. */
 export class NotificationService implements INotificationService {
 	private readonly pluginId: string;
 	private readonly hasPermission: boolean;
 	private notificationFn: ((options: NotificationOptions) => Promise<void>) | null = null;
 
 	/**
-	 * @param pluginId - Plugin egyedi azonosítója
-	 * @param permissions - Plugin jogosultságok listája (a `notifications` jogosultság szükséges)
+	 * @param pluginId - Unique plugin identifier
+	 * @param permissions - List of permissions granted to the plugin (requires `notifications`)
 	 */
 	constructor(pluginId: string, permissions: string[]) {
 		this.pluginId = pluginId;
@@ -26,19 +27,19 @@ export class NotificationService implements INotificationService {
 	}
 
 	/**
-	 * Notification callback regisztrálása (az ElyOS core hívja meg dev módban).
-	 * @param fn - Értesítés küldő függvény
+	 * Register a notification handler (called by the ElyOS core in dev mode).
+	 * @param fn - Function that sends a notification
 	 */
 	setDevNotificationHandler(fn: (options: NotificationOptions) => Promise<void>): void {
 		this.notificationFn = fn;
 	}
 
 	/**
-	 * Értesítés küldése a notification center-be.
-	 * @param options - Értesítés adatai (userId, title, message, type)
-	 * @throws `PERMISSION_DENIED` ha a plugin nem rendelkezik `notifications` jogosultsággal
-	 * @throws `SERVER_ERROR` ha a szerver 5xx hibát ad vissza
-	 * @throws `NETWORK_ERROR` ha hálózati hiba történik
+	 * Send a notification to the notification center.
+	 * @param options - Notification data (userId, title, message, type)
+	 * @throws `PERMISSION_DENIED` if the plugin does not have the `notifications` permission
+	 * @throws `SERVER_ERROR` if the server returns a 5xx error
+	 * @throws `NETWORK_ERROR` if a network error occurs
 	 */
 	async send(options: NotificationOptions): Promise<void> {
 		if (!this.hasPermission) {
@@ -47,7 +48,7 @@ export class NotificationService implements INotificationService {
 			);
 		}
 
-		// Ha van regisztrált handler (dev mód), azt használjuk
+		// Use the registered handler if available (dev mode)
 		if (this.notificationFn) {
 			return this.notificationFn(options);
 		}

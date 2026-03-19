@@ -1,11 +1,12 @@
 /**
  * Mock Context Service
  *
- * Mock plugin kontextus és ablak vezérlők.
+ * Mock plugin context and window controls for dev mode.
  */
 
 import type { ContextService, UserInfo, WindowControls } from '../../types/index.js';
 
+/** Configuration for the mock context service */
 export interface MockContextConfig {
 	/** Plugin ID to use in mock context (default: `"dev-plugin"`) */
 	pluginId?: string;
@@ -17,19 +18,20 @@ export interface MockContextConfig {
 	permissions?: string[];
 }
 
+/** Mock Context service — simulates plugin context and window controls for standalone development. */
 export class MockContextService implements ContextService {
-	/** Plugin egyedi azonosítója */
+	/** Unique plugin identifier */
 	readonly pluginId: string;
-	/** Bejelentkezett felhasználó adatai (mock) */
+	/** Mock authenticated user data */
 	readonly user: UserInfo;
-	/** Plugin indításkor átadott paraméterek */
+	/** Parameters passed when the app was launched */
 	readonly params: Record<string, unknown>;
-	/** Plugin jogosultságok listája */
+	/** List of permissions granted to the plugin */
 	readonly permissions: string[];
-	/** Ablak vezérlők — console-ra logolnak */
+	/** Window controls — log to the console */
 	readonly window: WindowControls;
 
-	/** @param config - Opcionális mock kontextus konfiguráció */
+	/** @param config - Optional mock context configuration */
 	constructor(config?: MockContextConfig) {
 		this.pluginId = config?.pluginId ?? 'dev-plugin';
 		this.user = {

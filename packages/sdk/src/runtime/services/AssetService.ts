@@ -1,32 +1,33 @@
 /**
  * Asset Service
  *
- * Plugin asset fájlok URL generálása.
- * URL formátum: /api/plugins/{plugin_id}/assets/{assetPath}
+ * Generate URLs for plugin asset files.
+ * URL format: /api/plugins/{plugin_id}/assets/{assetPath}
  */
 
 import type { AssetService as IAssetService } from '../../types/index.js';
 
+/** Asset service — generates URLs for plugin asset files with path traversal protection. */
 export class AssetService implements IAssetService {
 	private readonly pluginId: string;
 
-	/** @param pluginId - Plugin egyedi azonosítója */
+	/** @param pluginId - Unique plugin identifier */
 	constructor(pluginId: string) {
 		this.pluginId = pluginId;
 	}
 
 	/**
-	 * Asset URL generálása
+	 * Generate an asset URL.
 	 *
-	 * @param assetPath - Asset fájl elérési útja (relatív a plugin assets/ könyvtárához)
-	 * @returns Teljes URL
+	 * @param assetPath - Asset file path (relative to the plugin's assets/ directory)
+	 * @returns Full URL
 	 */
 	getUrl(assetPath: string): string {
 		const sanitized = this.sanitizePath(assetPath);
 		return `/api/plugins/${this.pluginId}/assets/${sanitized}`;
 	}
 
-	/** Path sanitizálás (path traversal védelem) */
+	/** Sanitize path to prevent path traversal attacks */
 	private sanitizePath(path: string): string {
 		return path.replace(/\.\./g, '').replace(/^\/+/, '').replace(/\/+/g, '/');
 	}
