@@ -16,9 +16,9 @@ import type {
 
 /** UI service — toast notifications, dialogs, theme colors, and UI component access. */
 export class UIService implements IUIService {
-	/** @internal Registered toast display function, set by the ElyOS core */
+	/** Registered toast display function, set by the ElyOS core */
 	private toastFn: ((message: string, type: ToastType, duration: number) => void) | null = null;
-	/** @internal Registered dialog display function, set by the ElyOS core */
+	/** Registered dialog display function, set by the ElyOS core */
 	private dialogFn: ((options: DialogOptions) => Promise<DialogResult>) | null = null;
 
 	/**
@@ -114,7 +114,7 @@ export class UIService implements IUIService {
 		};
 	}
 
-	/** @internal Returns default empty theme colors for non-browser environments */
+	/** Returns default empty theme colors for non-browser environments */
 	private static defaultTheme(): ThemeColors {
 		return {
 			primary: '',

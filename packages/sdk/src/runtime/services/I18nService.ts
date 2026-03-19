@@ -9,17 +9,17 @@ import type { I18nService as II18nService } from '../../types/index.js';
 
 /** I18n service — plugin translation management, locale detection and switching. */
 export class I18nService implements II18nService {
-	/** @internal Plugin identifier used to namespace translation keys */
+	/** Plugin identifier used to namespace translation keys under `plugin:{pluginId}` */
 	private readonly pluginId: string;
-	/** @internal In-memory translation map for the current locale */
+	/** In-memory translation map for the current locale */
 	private translations: Map<string, string> = new Map();
-	/** @internal Cu
+	/** Currently active locale code (e.g. `"en"`, `"hu"`) */
 	private _locale: string = 'en';
-	/** @internal Promise that resolves when translations have finished loading */
+	/** Promise that resolves when translations have finished loading from the server */
 	private loadingPromise: Promise<void> | null = null;
-	/** @internal Listener for the ElyOS locale-change custom event */
+	/** Listener for the ElyOS locale-change custom event, stored for cleanup on destroy */
 	private storageListener: ((e: StorageEvent) => void) | null = null;
-	/** @internal Registered callbacks to invoke after each locale change */
+	/** Registered callbacks to invoke after each locale change */
 	private _onLocaleChangeCallbacks: Array<() => void> = [];
 
 	/**
@@ -44,7 +44,7 @@ export class I18nService implements II18nService {
 		this._onLocaleChangeCallbacks.push(callback);
 	}
 
-	/** @internal Listen for system-level locale changes (ElyOS CustomEvent) */
+	/** Listen for system-level locale changes (ElyOS CustomEvent) */
 	private listenForLocaleChanges(): void {
 		if (typeof window === 'undefined') return;
 
@@ -70,7 +70,7 @@ export class I18nService implements II18nService {
 		}
 	}
 
-	/** @internal Detect the current locale from the ElyOS `elyos_locale` cookie */
+	/** Detect the current locale from the ElyOS `elyos_locale` cookie */
 	private detectLocale(): void {
 		if (typeof document !== 'undefined') {
 			const match = document.cookie.match(/(?:^|;\s*)elyos_locale=([^;]+)/);
@@ -98,7 +98,7 @@ export class I18nService implements II18nService {
 		this.loadingPromise = Promise.resolve();
 	}
 
-	/** @internal Load translations from the server */
+	/** Load translations from the server for the current locale */
 	private async loadTranslations(): Promise<void> {
 		try {
 			const response = await fetch(

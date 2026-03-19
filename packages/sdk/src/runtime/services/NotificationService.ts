@@ -13,11 +13,11 @@ import { PluginErrorCode } from '../../types/index.js';
 
 /** Notification service — send notifications to the notification center with permission checking. */
 export class NotificationService implements INotificationService {
-	/** @internal Plugin identifier used in API requests */
+	/** Plugin identifier used in API requests */
 	private readonly pluginId: string;
-	/** @internal Whether the plugin has the `notifications` permission */
+	/** Whether the plugin has the `notifications` permission */
 	private readonly hasPermission: boolean;
-	/** @internal Optional dev-mode notification handler registered by the ElyOS core */
+	/** Optional dev-mode notification handler registered by the ElyOS core */
 	private notificationFn: ((options: NotificationOptions) => Promise<void>) | null = null;
 
 	/**

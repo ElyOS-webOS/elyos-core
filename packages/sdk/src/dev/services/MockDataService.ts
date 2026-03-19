@@ -14,7 +14,9 @@ export interface MockDataConfig {
 
 /** Mock Data service — in-memory and localStorage-based key-value storage for standalone development. */
 export class MockDataService implements DataService {
+	/** In-memory key-value store used for all get/set/delete operations */
 	private storage = new Map<string, unknown>();
+	/** Key prefix applied to all `localStorage` entries to avoid collisions */
 	private readonly prefix = 'elyos-mock-';
 
 	/** @param config - Optional initial data */

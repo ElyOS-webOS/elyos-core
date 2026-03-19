@@ -14,6 +14,7 @@ export interface MockRemoteConfig {
 
 /** Mock Remote service — simulates server-side function calls with configurable handlers. */
 export class MockRemoteService implements RemoteService {
+	/** Map of function name → handler for simulated server-side calls */
 	private handlers: Record<string, (...args: unknown[]) => unknown>;
 
 	/** @param config - Optional handler map for simulated server functions */

@@ -16,8 +16,11 @@ export interface MockI18nConfig {
 
 /** Mock I18n service — resolves translations from a configurable in-memory map. */
 export class MockI18nService implements I18nService {
+	/** Currently active locale code */
 	private _locale: string;
+	/** Translations map: `{ [locale]: { [key]: value } }` */
 	private translations: Record<string, Record<string, string>>;
+	/** Registered locale change callback */
 	private _onLocaleChange: (() => void) | null = null;
 
 	/** @param config - Optional locale and translations configuration */
