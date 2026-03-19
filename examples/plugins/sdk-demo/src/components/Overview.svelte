@@ -1,11 +1,11 @@
-<svelte:options customElement="hello-world-overview" />
+<svelte:options customElement="sdk-demo-overview" />
 
 <script module>
 	// Factory function export for dynamic loading
 	if (typeof window !== 'undefined') {
-		window.hello_world_Component_Overview = function () {
+		window.sdk_demo_Component_Overview = function () {
 			return {
-				tagName: 'hello-world-overview'
+				tagName: 'sdk-demo-overview'
 			};
 		};
 	}
@@ -15,7 +15,7 @@
 	import { Heart } from '@lucide/svelte';
 	import type {} from '@elyos/sdk/types';
 
-	let { pluginId = 'hello-world' }: { pluginId?: string } = $props();
+	let { pluginId = 'sdk-demo' }: { pluginId?: string } = $props();
 
 	// WebOS SDK elérése
 	let sdk = $derived.by(() => {

@@ -37,7 +37,7 @@ export default defineConfig({
 	build: {
 		lib: {
 			entry,
-			name: 'HelloWorldPlugin',
+			name: 'SdkDemoApp',
 			formats: ['iife']
 		},
 		rollupOptions: {

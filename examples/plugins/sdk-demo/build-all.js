@@ -13,7 +13,7 @@ import path from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-console.log('🔨 Building Hello World plugin...\n');
+console.log('🔨 Building SDK Demo app...\n');
 
 // 1. Build fő plugin
 console.log('📦 Building main plugin...');

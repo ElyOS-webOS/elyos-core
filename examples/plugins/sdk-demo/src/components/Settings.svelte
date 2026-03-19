@@ -1,11 +1,11 @@
-<svelte:options customElement="hello-world-settings" />
+<svelte:options customElement="sdk-demo-settings" />
 
 <script module>
 	// Factory function export for dynamic loading
 	if (typeof window !== 'undefined') {
-		window.hello_world_Component_Settings = function () {
+		window.sdk_demo_Component_Settings = function () {
 			return {
-				tagName: 'hello-world-settings'
+				tagName: 'sdk-demo-settings'
 			};
 		};
 	}
@@ -15,7 +15,7 @@
 	import { Settings as SettingsIcon } from '@lucide/svelte';
 	import type {} from '@elyos/sdk/types';
 
-	let { pluginId = 'hello-world' }: { pluginId?: string } = $props();
+	let { pluginId = 'sdk-demo' }: { pluginId?: string } = $props();
 
 	// WebOS SDK elérése
 	let sdk = $derived.by(() => {

@@ -1,11 +1,11 @@
-<svelte:options customElement="hello-world-demo" />
+<svelte:options customElement="sdk-demo-demo" />
 
 <script module>
 	// Factory function export for dynamic loading
 	if (typeof window !== 'undefined') {
-		window.hello_world_Component_HelloWorldDemo = function () {
+		window.sdk_demo_Component_HelloWorldDemo = function () {
 			return {
-				tagName: 'hello-world-demo'
+				tagName: 'sdk-demo-demo'
 			};
 		};
 	}
@@ -13,7 +13,7 @@
 
 <script lang="ts">
 	/**
-	 * Hello World Demo Component
+	 * SDK Demo Component
 	 *
 	 * Ez a komponens bemutatja a WebOS SDK összes funkcióját:
 	 * - UI Service (toast, komponensek)
@@ -21,7 +21,7 @@
 	 * - Data Service (adattárolás)
 	 * - I18n Service (fordítások)
 	 * - Notification Service (értesítések)
-	 * - Context Service (plugin kontextus)
+	 * - Context Service (alkalmazás kontextus)
 	 * - Asset Service (képek, ikonok)
 	 */
 
@@ -29,8 +29,7 @@
 	import { Heart } from '@lucide/svelte';
 	import type {} from '@elyos/sdk/types';
 
-	// Props from custom element attributes (kebab-case -> camelCase conversion by Svelte)
-	let { pluginId = 'hello-world' }: { pluginId?: string } = $props();
+	let { pluginId = 'sdk-demo' }: { pluginId?: string } = $props();
 
 	// WebOS SDK elérése plugin ID alapján - minden ablaknak saját SDK instance-a van
 	let sdk = $derived.by(() => {
@@ -190,7 +189,7 @@
 			<h2>{sdk?.i18n.t('plugin_info')}</h2>
 			<div class="info-grid">
 				<div class="info-item">
-					<strong>Plugin ID:</strong>
+					<strong>App ID:</strong>
 					{pluginId}
 				</div>
 				<div class="info-item">

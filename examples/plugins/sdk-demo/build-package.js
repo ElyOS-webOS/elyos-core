@@ -21,10 +21,10 @@ const __dirname = path.dirname(__filename);
 const PACKAGE_EXTENSION = process.env.PLUGIN_PACKAGE_EXTENSION || 'elyospkg';
 
 async function buildPackage() {
-	console.log('🔨 Building Hello World plugin package...\n');
+	console.log('🔨 Building SDK Demo app package...\n');
 
 	// Output fájl
-	const outputPath = path.join(__dirname, `hello-world.${PACKAGE_EXTENSION}`);
+	const outputPath = path.join(__dirname, `sdk-demo.${PACKAGE_EXTENSION}`);
 	const output = fs.createWriteStream(outputPath);
 	const archive = archiver('zip', {
 		zlib: { level: 9 } // Maximális tömörítés

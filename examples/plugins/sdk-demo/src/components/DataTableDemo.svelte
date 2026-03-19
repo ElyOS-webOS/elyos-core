@@ -1,11 +1,11 @@
-<svelte:options customElement={{ tag: 'hello-world-datatable', shadow: 'none' }} />
+<svelte:options customElement={{ tag: 'sdk-demo-datatable', shadow: 'none' }} />
 
 <script module>
 	// Factory function export for dynamic loading
 	if (typeof window !== 'undefined') {
-		(window as any).hello_world_Component_DataTableDemo = function () {
+		(window as any).sdk_demo_Component_DataTableDemo = function () {
 			return {
-				tagName: 'hello-world-datatable'
+				tagName: 'sdk-demo-datatable'
 			};
 		};
 	}
@@ -15,7 +15,7 @@
 	import { onMount, untrack } from 'svelte';
 	import type {} from '@elyos/sdk/types';
 
-	let { pluginId = 'hello-world' }: { pluginId?: string } = $props();
+	let { pluginId = 'sdk-demo' }: { pluginId?: string } = $props();
 
 	// SDK elérése
 	let sdk = $derived.by(() => {

@@ -14,19 +14,19 @@ if (typeof window !== 'undefined' && !window.webOS) {
 			locale: 'en',
 			translations: {
 				en: {
-					title: 'Hello World Plugin',
+					title: 'SDK Demo',
 					subtitle: 'ElyOS SDK Demo',
-					welcome: 'Welcome to the Hello World plugin!'
+					welcome: 'Welcome to the SDK Demo!'
 				},
 				hu: {
-					title: 'Hello World Plugin',
+					title: 'SDK Demo',
 					subtitle: 'ElyOS SDK Demo',
-					welcome: 'Üdvözöljük a Hello World pluginban!'
+					welcome: 'Üdvözöljük az SDK Demo alkalmazásban!'
 				}
 			}
 		},
 		context: {
-			pluginId: 'hello-world',
+			pluginId: 'sdk-demo',
 			user: { id: 'dev-user', name: 'Developer', email: 'dev@localhost', roles: [], groups: [] },
 			permissions: ['database', 'notifications', 'remote_functions']
 		}
@@ -36,12 +36,12 @@ if (typeof window !== 'undefined' && !window.webOS) {
 // Export a factory function that creates the component wrapper
 export default function createPlugin() {
 	return {
-		tagName: 'hello-world-plugin',
+		tagName: 'sdk-demo-plugin',
 		component: App
 	};
 }
 
 // Expose on window for IIFE usage
 if (typeof window !== 'undefined') {
-	(window as any).hello_world_Plugin = createPlugin;
+	(window as any).sdk_demo_Plugin = createPlugin;
 }

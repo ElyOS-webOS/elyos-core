@@ -1,12 +1,12 @@
 {
-	"id": "hello-world",
+	"id": "sdk-demo",
 	"name": {
-		"hu": "Hello World Plugin",
-		"en": "Hello World Plugin"
+		"hu": "SDK Demo",
+		"en": "SDK Demo"
 	},
 	"description": {
-		"hu": "Egy egyszerű példa plugin, amely bemutatja a WebOS SDK használatát",
-		"en": "A simple example plugin demonstrating WebOS SDK usage"
+		"hu": "Példa alkalmazás, amely bemutatja a WebOS SDK összes főbb funkcióját",
+		"en": "Example application demonstrating all main WebOS SDK features"
 	},
 	"version": "1.0.0",
 	"author": "WebOS Team <team@elyos.dev>",
@@ -28,7 +28,7 @@
 		"width": 1920,
 		"height": 1080
 	},
-	"keywords": ["example", "demo", "hello", "példa"],
+	"keywords": ["example", "demo", "sdk", "példa"],
 	"isPublic": true,
 	"sortOrder": 100,
 	"dependencies": {

@@ -1,7 +1,7 @@
 {
-	"name": "hello-world-plugin",
+	"name": "sdk-demo",
 	"version": "1.0.0",
-	"description": "Hello World plugin for ElyOS — demonstrates all SDK features",
+	"description": "SDK Demo application for ElyOS — demonstrates all SDK features",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
