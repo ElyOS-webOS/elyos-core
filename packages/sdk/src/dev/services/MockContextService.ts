@@ -7,9 +7,13 @@
 import type { ContextService, UserInfo, WindowControls } from '../../types/index.js';
 
 export interface MockContextConfig {
+	/** Plugin ID to use in mock context (default: `"dev-plugin"`) */
 	pluginId?: string;
+	/** Partial user info to override mock defaults */
 	user?: Partial<UserInfo>;
+	/** Parameters passed to the app on launch */
 	params?: Record<string, unknown>;
+	/** Permissions granted to the app (default: `["database", "notifications", "remote_functions"]`) */
 	permissions?: string[];
 }
 

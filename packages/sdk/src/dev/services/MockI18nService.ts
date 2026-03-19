@@ -7,7 +7,9 @@
 import type { I18nService } from '../../types/index.js';
 
 export interface MockI18nConfig {
+	/** Initial locale code (default: `"en"`) */
 	locale?: string;
+	/** Translations map: `{ [locale]: { [key]: value } }` */
 	translations?: Record<string, Record<string, string>>;
 }
 

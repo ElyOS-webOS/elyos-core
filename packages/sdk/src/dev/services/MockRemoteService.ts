@@ -7,6 +7,7 @@
 import type { RemoteService, CallOptions } from '../../types/index.js';
 
 export interface MockRemoteConfig {
+	/** Map of function name → handler for simulated server-side calls */
 	handlers?: Record<string, (...args: unknown[]) => unknown>;
 }
 

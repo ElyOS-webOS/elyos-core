@@ -7,6 +7,7 @@
 import type { AssetService } from '../../types/index.js';
 
 export interface MockAssetConfig {
+	/** Base URL prepended to all asset paths (default: `"/assets"`) */
 	baseUrl?: string;
 }
 

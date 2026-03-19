@@ -7,6 +7,7 @@
 import type { DataService, Transaction } from '../../types/index.js';
 
 export interface MockDataConfig {
+	/** Pre-populated key-value data loaded into the mock store on initialization */
 	initialData?: Record<string, unknown>;
 }
 
