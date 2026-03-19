@@ -10,7 +10,7 @@ import { PluginErrorCode } from '../../types/index.js';
 
 /** Data service — key-value storage and SQL queries, scoped to the plugin's own schema. */
 export class DataService implements IDataService {
-	/** @internal Plugin identifier used to scope all data operations */
+	/** Plugin identifier used to scope all data operations */
 	private readonly pluginId: string;
 
 	/** @param pluginId - Unique plugin identifier */

@@ -1,24 +1,30 @@
 /**
  * I18n Service
  *
- * Plugin fordítások kezelése.
- * Kulcsok automatikusan prefixelve plugin:{plugin_id} névtérrel.
+ * Plugin translation management.
+ * Keys are automatically namespaced under plugin:{plugin_id}.
  */
 
 import type { I18nService as II18nService } from '../../types/index.js';
 
-/** I18n service — plugin fordítások kezelése, locale detektálás és váltás. */
+/** I18n service — plugin translation management, locale detection and switching. */
 export class I18nService implements II18nService {
+	/** @internal Plugin identifier used to namespace translation keys */
 	private readonly pluginId: string;
+	/** @internal In-memory translation map for the current locale */
 	private translations: Map<string, string> = new Map();
+	/** @internal Cu
 	private _locale: string = 'en';
+	/** @internal Promise that resolves when translations have finished loading */
 	private loadingPromise: Promise<void> | null = null;
+	/** @internal Listener for the ElyOS locale-change custom event */
 	private storageListener: ((e: StorageEvent) => void) | null = null;
+	/** @internal Registered callbacks to invoke after each locale change */
 	private _onLocaleChangeCallbacks: Array<() => void> = [];
 
 	/**
-	 * @param pluginId - Plugin egyedi azonosítója
-	 * @param skipAutoLoad - Ha `true`, nem tölti be automatikusan a fordításokat (dev módhoz)
+	 * @param pluginId - Unique plugin identifier
+	 * @param skipAutoLoad - If `true`, skips automatic translation loading (for dev mode)
 	 */
 	constructor(pluginId: string, skipAutoLoad = false) {
 		this.pluginId = pluginId;
@@ -30,15 +36,15 @@ export class I18nService implements II18nService {
 	}
 
 	/**
-	 * Callback regisztrálása locale váltáskor (pl. Svelte `$state` frissítéshez).
-	 * Több callback is regisztrálható — mindegyik meghívódik a fordítások betöltése után.
-	 * @param callback - Meghívandó függvény locale váltás után
+	 * Register a callback to be called after each locale change.
+	 * Multiple callbacks can be registered — all are called after translations finish loading.
+	 * @param callback - Function to call after locale change
 	 */
 	onLocaleChange(callback: () => void): void {
 		this._onLocaleChangeCallbacks.push(callback);
 	}
 
-	/** Rendszer szintű locale váltás figyelése (ElyOS CustomEvent) */
+	/** @internal Listen for system-level locale changes (ElyOS CustomEvent) */
 	private listenForLocaleChanges(): void {
 		if (typeof window === 'undefined') return;
 
@@ -56,7 +62,7 @@ export class I18nService implements II18nService {
 		window.addEventListener('elyos:locale-change', this.storageListener as EventListener);
 	}
 
-	/** Listener eltávolítása — hívd meg a plugin unmount-jakor. */
+	/** Remove the locale change listener — call this when the plugin unmounts. */
 	destroy(): void {
 		if (this.storageListener && typeof window !== 'undefined') {
 			window.removeEventListener('elyos:locale-change', this.storageListener as EventListener);
@@ -64,7 +70,7 @@ export class I18nService implements II18nService {
 		}
 	}
 
-	/** Aktuális nyelv detektálása az ElyOS elyos_locale cookie-ból */
+	/** @internal Detect the current locale from the ElyOS `elyos_locale` cookie */
 	private detectLocale(): void {
 		if (typeof document !== 'undefined') {
 			const match = document.cookie.match(/(?:^|;\s*)elyos_locale=([^;]+)/);
@@ -79,20 +85,20 @@ export class I18nService implements II18nService {
 	}
 
 	/**
-	 * Fordítások közvetlen betöltése objektumból (dev módhoz).
-	 * Az ElyOS core hívja meg dev plugin betöltésekor.
-	 * @param translations - Fordítások kulcs-érték párokban
+	 * Load translations directly from an object (for dev mode).
+	 * Called by the ElyOS core when loading a dev plugin.
+	 * @param translations - Translation key-value pairs
 	 */
 	loadTranslationsFromObject(translations: Record<string, string>): void {
 		this.translations.clear();
 		for (const [key, value] of Object.entries(translations)) {
 			this.translations.set(key, value);
 		}
-		// Megakadályozzuk, hogy az API hívás felülírja a dev szerverről betöltött fordításokat
+		// Prevent the API call from overwriting translations loaded from the dev server
 		this.loadingPromise = Promise.resolve();
 	}
 
-	/** Fordítások betöltése a szerverről */
+	/** @internal Load translations from the server */
 	private async loadTranslations(): Promise<void> {
 		try {
 			const response = await fetch(
@@ -119,7 +125,7 @@ export class I18nService implements II18nService {
 		}
 	}
 
-	/** Várja meg a fordítások betöltését a szerverről. */
+	/** Wait for translations to finish loading from the server. */
 	async ready(): Promise<void> {
 		if (this.loadingPromise) {
 			await this.loadingPromise;
@@ -127,11 +133,11 @@ export class I18nService implements II18nService {
 	}
 
 	/**
-	 * Fordítási kulcs feloldása
+	 * Resolve a translation key.
 	 *
-	 * @param key - Fordítási kulcs (prefix nélkül, pl. "title")
-	 * @param params - Paraméterek interpolációhoz
-	 * @returns Fordított szöveg
+	 * @param key - Translation key (without prefix, e.g. `"title"`)
+	 * @param params - Parameters for interpolation
+	 * @returns Translated string
 	 */
 	t(key: string, params?: Record<string, string | number>): string {
 		let translation = this.translations.get(key);
@@ -150,14 +156,14 @@ export class I18nService implements II18nService {
 		return translation;
 	}
 
-	/** Aktuális nyelv kódja (pl. `"hu"`, `"en"`). */
+	/** Current locale code (e.g. `"hu"`, `"en"`). */
 	get locale(): string {
 		return this._locale;
 	}
 
 	/**
-	 * Nyelv váltása és fordítások újratöltése a szerverről.
-	 * @param newLocale - Az új nyelv kódja
+	 * Switch locale and reload translations from the server.
+	 * @param newLocale - New locale code
 	 */
 	async setLocale(newLocale: string): Promise<void> {
 		this._locale = newLocale;
