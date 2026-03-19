@@ -13,8 +13,11 @@ import { PluginErrorCode } from '../../types/index.js';
 
 /** Notification service — send notifications to the notification center with permission checking. */
 export class NotificationService implements INotificationService {
+	/** @internal */
 	private readonly pluginId: string;
+	/** @internal */
 	private readonly hasPermission: boolean;
+	/** @internal */
 	private notificationFn: ((options: NotificationOptions) => Promise<void>) | null = null;
 
 	/**

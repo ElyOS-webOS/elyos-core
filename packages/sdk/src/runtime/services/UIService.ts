@@ -16,7 +16,9 @@ import type {
 
 /** UI service — toast notifications, dialogs, theme colors, and UI component access. */
 export class UIService implements IUIService {
+	/** @internal */
 	private toastFn: ((message: string, type: ToastType, duration: number) => void) | null = null;
+	/** @internal */
 	private dialogFn: ((options: DialogOptions) => Promise<DialogResult>) | null = null;
 
 	/**
