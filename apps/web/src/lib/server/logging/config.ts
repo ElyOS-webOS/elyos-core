@@ -12,7 +12,9 @@ export interface LogConfig {
 	logDir: string;
 }
 
-export function parseLogTargets(raw: string): LogTarget[] {
+export function parseLogTargets(raw: string | undefined): LogTarget[] {
+	if (!raw) return ['console'];
+
 	const parsed = raw
 		.split(',')
 		.map((t) => t.trim().toLowerCase())
@@ -21,7 +23,9 @@ export function parseLogTargets(raw: string): LogTarget[] {
 	return parsed.length > 0 ? parsed : ['console'];
 }
 
-export function parseLogLevel(raw: string): LogLevel {
+export function parseLogLevel(raw: string | undefined): LogLevel {
+	if (!raw) return 'error';
+
 	const normalized = raw.trim().toLowerCase();
 	if (VALID_LEVELS.includes(normalized as LogLevel)) {
 		return normalized as LogLevel;
@@ -29,7 +33,11 @@ export function parseLogLevel(raw: string): LogLevel {
 	return 'error';
 }
 
-export function createLogConfig(envTargets: string, envLevel: string, envDir: string): LogConfig {
+export function createLogConfig(
+	envTargets: string | undefined,
+	envLevel: string | undefined,
+	envDir: string | undefined
+): LogConfig {
 	return {
 		targets: parseLogTargets(envTargets),
 		level: parseLogLevel(envLevel),

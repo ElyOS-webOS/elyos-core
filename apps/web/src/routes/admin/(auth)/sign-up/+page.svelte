@@ -5,9 +5,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import { useI18n } from '$lib/i18n/hooks';
-
 	import { getContext } from 'svelte';
-	import { useI18n } from '$lib/i18n/hooks';
 
 	const { t, store } = useI18n();
 

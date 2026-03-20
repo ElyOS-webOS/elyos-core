@@ -1,4 +1,4 @@
-<svelte:options customElement="hello-world-plugin" />
+<svelte:options customElement="sdk-demo-plugin" />
 
 <script lang="ts">
 	/**
@@ -9,7 +9,7 @@
 	 */
 
 	// Props from custom element attributes
-	let { pluginId = 'hello-world' }: { pluginId?: string } = $props();
+	let { pluginId = 'sdk-demo' }: { pluginId?: string } = $props();
 </script>
 
 <div class="plugin-placeholder">

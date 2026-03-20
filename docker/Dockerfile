@@ -83,7 +83,7 @@ COPY --from=builder --chown=elyos:nodejs /app/apps/web/package.json ./apps/web/
 COPY --from=builder --chown=elyos:nodejs /app/packages/database/package.json ./packages/database/
 COPY --from=builder --chown=elyos:nodejs /app/packages/sdk/package.json ./packages/sdk/
 COPY --from=builder --chown=elyos:nodejs /app/packages/create-elyos-app/package.json ./packages/create-elyos-app/
-COPY --from=builder --chown=elyos:nodejs /app/examples/plugins/hello-world/package.json ./examples/plugins/hello-world/
+COPY --from=builder --chown=elyos:nodejs /app/examples/plugins/sdk-demo/package.json ./examples/plugins/sdk-demo/
 COPY --from=builder --chown=elyos:nodejs /app/examples/plugins/todo-list/package.json ./examples/plugins/todo-list/
 COPY --from=builder --chown=elyos:nodejs /app/examples/plugins/weather/package.json ./examples/plugins/weather/
 
