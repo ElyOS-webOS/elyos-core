@@ -1,0 +1,96 @@
+# =============================================================================
+# ElyOS Core — Docker Image publikálás GitHub Container Registry-be
+# =============================================================================
+# Trigger:
+#   - Tag push (v*.*.*)
+#   - Manuális indítás (workflow_dispatch)
+#
+# Output:
+#   - ghcr.io/[owner]/elyos-core:latest (mindig az utolsó release)
+#   - ghcr.io/[owner]/elyos-core:0.1.0 (verzió tag)
+#   - ghcr.io/[owner]/elyos-core:0.1 (major.minor tag)
+#   - ghcr.io/[owner]/elyos-core:0 (major tag)
+#
+# Multi-platform build: linux/amd64, linux/arm64
+# =============================================================================
+
+name: Docker Image Publish
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/elyos-core
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      # ---------------------------------------------------------------------------
+      # 1. Checkout kód
+      # ---------------------------------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------------
+      # 2. Docker Buildx setup (multi-platform build-hez)
+      # ---------------------------------------------------------------------------
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # ---------------------------------------------------------------------------
+      # 3. Bejelentkezés GitHub Container Registry-be
+      # ---------------------------------------------------------------------------
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # ---------------------------------------------------------------------------
+      # 4. Docker metadata generálás (tag-ek, label-ek)
+      # ---------------------------------------------------------------------------
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            # latest tag minden release esetén
+            type=raw,value=latest
+            # version tag (v1.2.3 -> 1.2.3)
+            type=semver,pattern={{version}}
+            # major.minor tag (v1.2.3 -> 1.2)
+            type=semver,pattern={{major}}.{{minor}}
+            # major tag (v1.2.3 -> 1)
+            type=semver,pattern={{major}}
+
+      # ---------------------------------------------------------------------------
+      # 5. Build és push multi-platform image
+      # ---------------------------------------------------------------------------
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./docker/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # ---------------------------------------------------------------------------
+      # 6. Image digest kiírása (ellenőrzéshez)
+      # ---------------------------------------------------------------------------
+      - name: Output image digest
+        run: echo "Image digest: ${{ steps.meta.outputs.digest }}"

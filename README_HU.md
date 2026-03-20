@@ -39,6 +39,11 @@
   - [Gyakori parancsok](#gyakori-parancsok)
 - [Projekt struktúra](#projekt-struktúra)
 - [Docker](#docker)
+  - [Önálló futtatás](#önálló-futtatás)
+  - [Előre buildelt image használata GitHub Container Registry-ből](#előre-buildelve-image-használata-github-container-registry-ből)
+  - [Adatbázis inicializálás és reset](#adatbázis-inicializálás-és-reset)
+  - [Környezeti változók](#környezeti-változók)
+  - [Image build](#image-build)
 - [Plugin fejlesztés](#plugin-fejlesztés)
 - [Dokumentáció](#dokumentáció)
 - [Közreműködés](#közreműködés)
@@ -285,6 +290,86 @@ Ez elindítja a teljes rendszert három konténerben, sorban:
 
 Az alkalmazás elérhető lesz a `http://localhost:3000` címen (konfigurálható: `ELYOS_PORT`), a PostgreSQL az `5432`-es porton (konfigurálható: `POSTGRES_PORT`).
 
+### Előre buildelt image használata GitHub Container Registry-ből
+
+Ha nem szeretnéd helyben buildelni az image-et, használhatod a GitHub Container Registry-ben publikált verziót. Az image automatikusan buildelődik és publikálódik minden release esetén (verzió tag push).
+
+**Elérhető image-ek:**
+
+- `ghcr.io/elyos-webos/elyos-core:latest` — legfrissebb stabil release
+- `ghcr.io/elyos-webos/elyos-core:0.1.0` — konkrét verzió
+- `ghcr.io/elyos-webos/elyos-core:0.1` — major.minor verzió
+- `ghcr.io/elyos-webos/elyos-core:0` — major verzió
+
+**Használat Docker Compose-zal:**
+
+Hozz létre egy `docker-compose.yml` fájlt, vagy használd a mellékelt `docker/docker-compose.ghcr.yml` példát:
+
+```bash
+# Bun-nal (ha telepítve van)
+bun docker:up:ghcr
+
+# Vagy közvetlenül Docker Compose-zal
+docker compose -f docker/docker-compose.ghcr.yml up -d
+```
+
+Vagy hozz létre saját `docker-compose.yml` fájlt:
+
+```yaml
+services:
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: elyos
+      POSTGRES_PASSWORD: elyos123
+      POSTGRES_DB: elyos
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U elyos -d elyos']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db-init:
+    image: ghcr.io/elyos-webos/elyos-core:latest
+    command: ['bun', '--filter', '@elyos/database', 'db:init']
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: 'no'
+
+  app:
+    image: ghcr.io/elyos-webos/elyos-core:latest
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+    volumes:
+      - ./uploads:/app/uploads
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+```
+
+Majd indítsd el:
+
+```bash
+docker compose up -d
+```
+
+**Fontos:** A `.env` fájlban a `DATABASE_URL` értékének a Docker network-ön belüli postgres service-re kell mutatnia:
+
+```bash
+DATABASE_URL=postgresql://elyos:elyos123@postgres:5432/elyos
+```
+
 ### Adatbázis inicializálás és reset
 
 A `db-init` konténer (és a `bun db:init` script) **idempotens** — biztonságosan futtatható többször is, nem duplikál adatokat (upsert logika).
@@ -309,14 +394,11 @@ docker build -f docker/Dockerfile -t elyos/core:latest .
 
 ## Dokumentáció
 
-<!--
-- [Plugin fejlesztési útmutató](./docs/hu/PLUGIN_DEVELOPMENT.md) — pluginok készítése nulláról
-- [API referencia](./docs/hu/API_REFERENCE.md) — teljes SDK API dokumentáció
-- [Migrációs útmutató](./docs/hu/MIGRATION.md) — meglévő pluginok migrálása `@elyos/sdk`-ra -->
-
+- [Felhasználói dokumentáció](https://docs.elyos.hu) — teljes körű útmutató a felhasználók számára
+- [Fejlesztői dokumentáció](https://docs-dev.elyos.hu) — API referencia és fejlesztői útmutatók
+- [Alkalmazás fejlesztés](https://docs-dev.elyos.hu/hu/plugins/) — saját alkalmazások készítése ElyOS-hoz
 - [Közreműködési útmutató](./docs/hu/CONTRIBUTING.md) — fejlesztői beállítás, kódstílus, PR folyamat
 - [Hibaelhárítás](./docs/hu/TROUBLESHOOTING.md) — gyakori telepítési problémák és megoldásaik
-- [Felhasználói dokumentáció](https://docs.elyos.hu) — felhasználói leírás
 - [Felelősség kizárása](./docs/hu/DISCLAIMER.md) — felelősségkizárás és garancia
 
 ## Közreműködés

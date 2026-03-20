@@ -42,6 +42,11 @@
   - [Common Commands](#common-commands)
 - [Project Structure](#project-structure)
 - [Docker](#docker)
+  - [Self-hosting](#self-hosting)
+  - [Using pre-built images from GitHub Container Registry](#using-pre-built-images-from-github-container-registry)
+  - [Database initialization and reset](#database-initialization-and-reset)
+  - [Environment Variables](#environment-variables)
+  - [Building the image](#building-the-image)
 - [Plugin Development](#plugin-development)
 - [Documentation](#documentation)
 - [Contributing](#contributing)
@@ -282,6 +287,86 @@ This starts the full system in three containers, in order:
 
 The app will be available at `http://localhost:3000` (configurable via `ELYOS_PORT`), PostgreSQL on port `5432` (configurable via `POSTGRES_PORT`).
 
+### Using pre-built images from GitHub Container Registry
+
+If you don't want to build the image locally, you can use the published version from GitHub Container Registry. Images are automatically built and published on every release (version tag push).
+
+**Available images:**
+
+- `ghcr.io/elyos-webos/elyos-core:latest` — latest stable release
+- `ghcr.io/elyos-webos/elyos-core:0.1.0` — specific version
+- `ghcr.io/elyos-webos/elyos-core:0.1` — major.minor version
+- `ghcr.io/elyos-webos/elyos-core:0` — major version
+
+**Using with Docker Compose:**
+
+Use the included `docker/docker-compose.ghcr.yml` example:
+
+```bash
+# With Bun (if installed)
+bun docker:up:ghcr
+
+# Or directly with Docker Compose
+docker compose -f docker/docker-compose.ghcr.yml up -d
+```
+
+Or create your own `docker-compose.yml` file:
+
+```yaml
+services:
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: elyos
+      POSTGRES_PASSWORD: elyos123
+      POSTGRES_DB: elyos
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U elyos -d elyos']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db-init:
+    image: ghcr.io/elyos-webos/elyos-core:latest
+    command: ['bun', '--filter', '@elyos/database', 'db:init']
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: 'no'
+
+  app:
+    image: ghcr.io/elyos-webos/elyos-core:latest
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+    volumes:
+      - ./uploads:/app/uploads
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+```
+
+Then start it:
+
+```bash
+docker compose up -d
+```
+
+**Important:** In your `.env` file, the `DATABASE_URL` must point to the postgres service within the Docker network:
+
+```bash
+DATABASE_URL=postgresql://elyos:elyos123@postgres:5432/elyos
+```
+
 ### Database initialization and reset
 
 The `db-init` container (and the `bun db:init` script) is **idempotent** — safe to run multiple times without duplicating data (upsert logic).
@@ -312,14 +397,11 @@ ElyOS comes with a complete plugin ecosystem. Create plugins with the CLI, devel
 
 ## Documentation
 
-<!--
-- [Plugin Development Guide](./docs/PLUGIN_DEVELOPMENT.md) — build plugins from scratch
-- [API Reference](./docs/API_REFERENCE.md) — complete SDK API documentation
-- [Migration Guide](./docs/MIGRATION.md) — migrate existing plugins to `@elyos/sdk`-->
-
+- [User Documentation](https://docs.elyos.hu/en/) — comprehensive guide for users
+- [Developer Documentation](https://docs-dev.elyos.hu/en/) — API reference and developer guides
+- [Application Development](https://docs-dev.elyos.hu/en/plugins/) — building custom applications for ElyOS
 - [Contributing Guide](./docs/CONTRIBUTING.md) — development setup, code style, PR process
 - [Troubleshooting](./docs/TROUBLESHOOTING.md) — common setup issues and how to fix them
-- [User Documentation](https://docs.elyos.hu/en/) — user docs
 - [Disclaimer](./docs/hu/DISCLAIMER.md) — liability and warranty information
 
 ## Contributing
