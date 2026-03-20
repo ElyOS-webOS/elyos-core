@@ -65,13 +65,9 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            # latest tag minden release esetén
             type=raw,value=latest
-            # version tag (v1.2.3 -> 1.2.3)
             type=semver,pattern={{version}}
-            # major.minor tag (v1.2.3 -> 1.2)
             type=semver,pattern={{major}}.{{minor}}
-            # major tag (v1.2.3 -> 1)
             type=semver,pattern={{major}}
 
       # ---------------------------------------------------------------------------
@@ -94,4 +90,5 @@ jobs:
       # 6. Image digest kiírása (ellenőrzéshez)
       # ---------------------------------------------------------------------------
       - name: Output image digest
-        run: echo "Image digest: ${{ steps.build.outputs.digest }}"
+        run: |
+          echo "Image digest: ${{ steps.build.outputs.digest }}"
