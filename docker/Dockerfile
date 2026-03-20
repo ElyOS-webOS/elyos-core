@@ -22,7 +22,7 @@ COPY package.json bun.lock ./
 COPY apps/web/package.json ./apps/web/
 COPY packages/database/package.json ./packages/database/
 COPY packages/sdk/package.json ./packages/sdk/
-COPY packages/create-elyos-plugin/package.json ./packages/create-elyos-plugin/
+COPY packages/create-elyos-app/package.json ./packages/create-elyos-app/
 COPY examples/plugins/sdk-demo/package.json ./examples/plugins/sdk-demo/
 COPY examples/plugins/todo-list/package.json ./examples/plugins/todo-list/
 COPY examples/plugins/weather/package.json ./examples/plugins/weather/
@@ -52,7 +52,7 @@ COPY .env.example ./.env
 COPY apps/web ./apps/web
 COPY packages/database ./packages/database
 COPY packages/sdk ./packages/sdk
-COPY packages/create-elyos-plugin ./packages/create-elyos-plugin
+COPY packages/create-elyos-app ./packages/create-elyos-app
 COPY examples/plugins/sdk-demo ./examples/plugins/sdk-demo
 COPY examples/plugins/todo-list ./examples/plugins/todo-list
 COPY examples/plugins/weather ./examples/plugins/weather
@@ -82,7 +82,7 @@ COPY --from=builder --chown=elyos:nodejs /app/bun.lock ./
 COPY --from=builder --chown=elyos:nodejs /app/apps/web/package.json ./apps/web/
 COPY --from=builder --chown=elyos:nodejs /app/packages/database/package.json ./packages/database/
 COPY --from=builder --chown=elyos:nodejs /app/packages/sdk/package.json ./packages/sdk/
-COPY --from=builder --chown=elyos:nodejs /app/packages/create-elyos-plugin/package.json ./packages/create-elyos-plugin/
+COPY --from=builder --chown=elyos:nodejs /app/packages/create-elyos-app/package.json ./packages/create-elyos-app/
 COPY --from=builder --chown=elyos:nodejs /app/examples/plugins/hello-world/package.json ./examples/plugins/hello-world/
 COPY --from=builder --chown=elyos:nodejs /app/examples/plugins/todo-list/package.json ./examples/plugins/todo-list/
 COPY --from=builder --chown=elyos:nodejs /app/examples/plugins/weather/package.json ./examples/plugins/weather/
