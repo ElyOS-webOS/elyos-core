@@ -57,6 +57,9 @@ COPY examples/plugins/sdk-demo ./examples/plugins/sdk-demo
 COPY examples/plugins/todo-list ./examples/plugins/todo-list
 COPY examples/plugins/weather ./examples/plugins/weather
 
+# SDK build (szükséges a SvelteKit build-hez)
+RUN cd packages/sdk && bun run build
+
 # SvelteKit alkalmazás build (adapter-node kimenet: apps/web/build/)
 ENV NODE_ENV=production
 RUN bun run app:build
