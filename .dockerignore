@@ -1,3 +1,6 @@
+# IMPORTANT: Allow bun.lock explicitly
+!bun.lock
+
 # Dependencies
 node_modules
 **/node_modules
@@ -42,5 +45,5 @@ Thumbs.db
 
 # Misc
 *.log
-*.lock
-!bun.lock
+# *.lock removed - we need bun.lock
+# !bun.lock moved to top of file

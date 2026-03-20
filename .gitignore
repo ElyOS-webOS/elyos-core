@@ -22,7 +22,7 @@ dist
 .DS_Store
 
 # bun
-bun.lock
+# bun.lock
 
 tmp
 
