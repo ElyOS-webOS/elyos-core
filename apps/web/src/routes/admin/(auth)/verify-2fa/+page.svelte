@@ -3,19 +3,20 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
-	import { getContext, onMount } from 'svelte';
+	import { getContext } from 'svelte';
 	import { useI18n } from '$lib/i18n/hooks';
-	import { goto } from '$app/navigation';
 
-	const { t } = useI18n();
+	const { t, store } = useI18n();
 
 	const authDecor = getContext<{
 		setDecorText: (title: string, description: string) => void;
 		setAnimating: (value: boolean) => void;
 	}>('authDecor');
 
-	onMount(() => {
-		authDecor.setDecorText(t('auth.verify2fa.title'), t('auth.verify2fa.description'));
+	$effect(() => {
+		if (store.loadedNamespaces.has('auth')) {
+			authDecor.setDecorText(t('auth.verify2fa.title'), t('auth.verify2fa.description'));
+		}
 	});
 
 	let code = $state('');

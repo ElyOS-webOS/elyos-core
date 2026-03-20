@@ -5,20 +5,23 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import type { PageData } from './$types';
-	import { getContext, onMount } from 'svelte';
+	import { getContext } from 'svelte';
 	import { useI18n } from '$lib/i18n/hooks';
 
 	let { data }: { data: PageData } = $props();
 
-	const { t } = useI18n();
+	const { t, store } = useI18n();
 
 	const authDecor = getContext<{
 		setDecorText: (title: string, description: string) => void;
 		setAnimating: (value: boolean) => void;
 	}>('authDecor');
 
-	onMount(() => {
-		authDecor.setDecorText(t('auth.signIn.title'), t('auth.signIn.description'));
+	// Reaktívan frissítjük a decor szöveget amikor az auth namespace betöltődik
+	$effect(() => {
+		if (store.loadedNamespaces.has('auth')) {
+			authDecor.setDecorText(t('auth.signIn.title'), t('auth.signIn.description'));
+		}
 	});
 
 	let email = $state('');

@@ -4,10 +4,10 @@
 	import { Label } from '$lib/components/ui/label';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { getContext, onMount, onDestroy } from 'svelte';
+	import { getContext, onMount } from 'svelte';
 	import { useI18n } from '$lib/i18n/hooks';
 
-	const { t } = useI18n();
+	const { t, store } = useI18n();
 
 	let email = '';
 
@@ -15,9 +15,14 @@
 		setDecorText: (title: string, description: string) => void;
 	}>('authDecor');
 
+	$effect(() => {
+		if (store.loadedNamespaces.has('common')) {
+			authDecor.setDecorText(t('resend.title'), t('resend.description'));
+		}
+	});
+
 	// Pre-fill email from URL parameter
 	onMount(() => {
-		authDecor.setDecorText(t('resend.title'), t('resend.description'));
 		const emailParam = $page.url.searchParams.get('email');
 		if (emailParam) {
 			email = emailParam;

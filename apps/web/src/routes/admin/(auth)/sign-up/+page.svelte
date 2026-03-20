@@ -6,16 +6,19 @@
 	import { Label } from '$lib/components/ui/label';
 	import { useI18n } from '$lib/i18n/hooks';
 
-	import { getContext, onMount } from 'svelte';
+	import { getContext } from 'svelte';
+	import { useI18n } from '$lib/i18n/hooks';
 
-	const { t } = useI18n();
+	const { t, store } = useI18n();
 
 	const authDecor = getContext<{
 		setDecorText: (title: string, description: string) => void;
 	}>('authDecor');
 
-	onMount(() => {
-		authDecor.setDecorText(t('auth.signUp.title'), t('auth.signUp.description'));
+	$effect(() => {
+		if (store.loadedNamespaces.has('auth')) {
+			authDecor.setDecorText(t('auth.signUp.title'), t('auth.signUp.description'));
+		}
 	});
 
 	// Form state stores

@@ -15,9 +15,10 @@
 
 	let { children, data }: LayoutProps = $props();
 
+	const store = getTranslationStore();
+
 	// Támogatott nyelvek beállítása a szerverről jövő konfigurációval
 	if (browser) {
-		const store = getTranslationStore();
 		// eslint-disable-next-line svelte/valid-compile -- initial setup, not reactive
 		const supportedLocales = getSupportedLocales(data.supportedLocales);
 		store.setSupportedLocales(supportedLocales);
@@ -43,41 +44,45 @@
 </svelte:head>
 
 <I18nProvider namespaces={['common', 'auth']}>
-	<div class="auth">
-		{#if data.demoMode}
-			<div class="demo-banner flex w-[70%] max-w-[1000px] rounded-2xl shadow-2xl">
-				<TriangleAlert class="w-24" />
-				{data.demoNotice}
-				<TriangleAlert class="w-24" />
-			</div>
-		{/if}
-		<div
-			class="auth-container flex w-[70%] max-w-[1000px] overflow-hidden rounded-2xl shadow-2xl"
-			class:animating={isAnimating}
-		>
-			<!-- Bal oldal - Form -->
-			<div class="left-side flex w-full flex-col justify-between bg-white p-8 lg:w-2/5 lg:p-10">
-				<AuthLocaleSwitcher />
-				<div class="mt-8 grid gap-4">
-					<LogoVideo width={250} />
-					{@render children()}
+	{#if store.loadedNamespaces.has('auth') && store.loadedNamespaces.has('common')}
+		<div class="auth auth-fade-in">
+			{#if data.demoMode}
+				<div class="demo-banner flex w-[70%] max-w-[1000px] rounded-2xl shadow-2xl">
+					<TriangleAlert class="w-24" />
+					{data.demoNotice}
+					<TriangleAlert class="w-24" />
 				</div>
-			</div>
+			{/if}
+			<div
+				class="auth-container flex w-[70%] max-w-[1000px] overflow-hidden rounded-2xl shadow-2xl"
+				class:animating={isAnimating}
+			>
+				<!-- Bal oldal - Form -->
+				<div class="left-side flex w-full flex-col justify-between bg-white p-8 lg:w-2/5 lg:p-10">
+					<AuthLocaleSwitcher />
+					<div class="mt-8 grid gap-4">
+						<LogoVideo width={250} />
+						{@render children()}
+					</div>
+				</div>
 
-			<!-- Jobb oldal - Dekoratív háttér -->
-			<div class="right-side relative hidden overflow-hidden lg:block lg:w-3/5">
-				<Decor />
+				<!-- Jobb oldal - Dekoratív háttér -->
+				<div class="right-side relative hidden overflow-hidden lg:block lg:w-3/5">
+					<Decor />
 
-				<!-- Szöveg tartalom -->
-				<div
-					class="relative z-10 flex h-full flex-col items-center justify-center px-8 text-center"
-				>
-					<h1 class="mb-4 text-3xl font-light tracking-wide text-white">{decorTitle}</h1>
-					<p class="text-base text-gray-300">{decorDescription}</p>
+					<!-- Szöveg tartalom - csak akkor jelenítjük meg, ha van szöveg -->
+					{#if decorTitle}
+						<div
+							class="relative z-10 flex h-full flex-col items-center justify-center px-8 text-center"
+						>
+							<h1 class="mb-4 text-3xl font-light tracking-wide text-white">{decorTitle}</h1>
+							<p class="text-base text-gray-300">{decorDescription}</p>
+						</div>
+					{/if}
 				</div>
 			</div>
 		</div>
-	</div>
+	{/if}
 </I18nProvider>
 
 <style>
@@ -134,6 +139,19 @@
 
 	.right-side {
 		font-family: 'Quicksand Variable', serif;
+	}
+
+	.auth-fade-in {
+		animation: fadeIn 0.2s ease-in forwards;
+	}
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
 	}
 
 	.auth-container.animating {

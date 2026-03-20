@@ -8,16 +8,20 @@
 	import { getContext, onMount } from 'svelte';
 	import { useI18n } from '$lib/i18n/hooks';
 
-	const { t } = useI18n();
+	const { t, store } = useI18n();
 
 	const authDecor = getContext<{
 		setDecorText: (title: string, description: string) => void;
 		setAnimating: (value: boolean) => void;
 	}>('authDecor');
 
-	onMount(() => {
-		authDecor.setDecorText(t('auth.resetPassword.title'), t('auth.resetPassword.description'));
+	$effect(() => {
+		if (store.loadedNamespaces.has('auth')) {
+			authDecor.setDecorText(t('auth.resetPassword.title'), t('auth.resetPassword.description'));
+		}
+	});
 
+	onMount(() => {
 		// Check for token in URL
 		const tokenParam = $page.url.searchParams.get('token');
 		const errorParam = $page.url.searchParams.get('error');

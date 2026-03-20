@@ -4,17 +4,19 @@
 	import { Label } from '$lib/components/ui/label';
 	import { authClient } from '$lib/auth/client';
 	import { goto } from '$app/navigation';
-	import { getContext, onMount } from 'svelte';
+	import { getContext } from 'svelte';
 	import { useI18n } from '$lib/i18n/hooks';
 
-	const { t } = useI18n();
+	const { t, store } = useI18n();
 
 	const authDecor = getContext<{
 		setDecorText: (title: string, description: string) => void;
 	}>('authDecor');
 
-	onMount(() => {
-		authDecor.setDecorText(t('auth.forgotPassword.title'), t('auth.forgotPassword.description'));
+	$effect(() => {
+		if (store.loadedNamespaces.has('auth')) {
+			authDecor.setDecorText(t('auth.forgotPassword.title'), t('auth.forgotPassword.description'));
+		}
 	});
 
 	let email = $state('');
