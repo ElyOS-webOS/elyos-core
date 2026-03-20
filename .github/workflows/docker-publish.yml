@@ -78,6 +78,7 @@ jobs:
       # 5. Build és push multi-platform image
       # ---------------------------------------------------------------------------
       - name: Build and push Docker image
+        id: build
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -93,4 +94,4 @@ jobs:
       # 6. Image digest kiírása (ellenőrzéshez)
       # ---------------------------------------------------------------------------
       - name: Output image digest
-        run: echo "Image digest: ${{ steps.meta.outputs.digest }}"
+        run: echo "Image digest: ${{ steps.build.outputs.digest }}"
