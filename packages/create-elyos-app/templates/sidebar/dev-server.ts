@@ -8,7 +8,7 @@
 
 import { serve } from 'bun';
 import { readFile } from 'fs/promises';
-import { join, extname } from 'path';
+import { join, extname, resolve, normalize } from 'path';
 
 const PORT = parseInt(process.env.PORT ?? '5174', 10);
 const ROOT = import.meta.dir;
@@ -38,12 +38,20 @@ serve({
 			return new Response(null, { status: 204, headers: corsHeaders });
 		}
 
-		const searchPaths = [join(ROOT, 'dist', pathname), join(ROOT, pathname)];
+		// Normalize and sanitize the pathname to prevent path traversal
+		const safePath = normalize(pathname).replace(/^(\.\.(\/|\\|$))+/, '');
+		const searchPaths = [join(ROOT, 'dist', safePath), join(ROOT, safePath)];
 
 		for (const filePath of searchPaths) {
+			// Ensure the resolved path stays within ROOT
+			const resolvedPath = resolve(filePath);
+			if (!resolvedPath.startsWith(ROOT + '/') && resolvedPath !== ROOT) {
+				return new Response('Forbidden', { status: 403, headers: corsHeaders });
+			}
+
 			try {
-				const content = await readFile(filePath);
-				const ext = extname(filePath);
+				const content = await readFile(resolvedPath);
+				const ext = extname(resolvedPath);
 				return new Response(content, {
 					headers: {
 						'Content-Type': MIME[ext] ?? 'application/octet-stream',
