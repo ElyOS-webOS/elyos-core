@@ -1,8 +1,46 @@
-import { command } from '$app/server';
+import { command, query } from '$app/server';
 import * as v from 'valibot';
 import { logRepository } from '$lib/server/logging/repository';
 import { validatePaginationParams } from '$lib/server/utils/database';
 import type { LogLevel } from '$lib/server/logging/types';
+
+// --- Egyedi napló bejegyzés lekérése ---
+
+const fetchErrorLogSchema = v.object({
+	id: v.pipe(v.string(), v.minLength(1))
+});
+
+export const fetchErrorLog = command(fetchErrorLogSchema, async (input) => {
+	try {
+		const entry = await logRepository.findById(input.id);
+		if (!entry) {
+			return { success: false as const, error: 'Log entry not found' };
+		}
+		return { success: true as const, data: entry };
+	} catch (error) {
+		console.error('Error fetching error log:', error);
+		return { success: false as const, error: 'Failed to fetch error log' };
+	}
+});
+
+// --- Napló bejegyzés törlése ---
+
+const deleteErrorLogSchema = v.object({
+	id: v.pipe(v.string(), v.minLength(1))
+});
+
+export const deleteErrorLog = command(deleteErrorLogSchema, async (input) => {
+	try {
+		const deleted = await logRepository.deleteById(input.id);
+		if (!deleted) {
+			return { success: false as const, error: 'Log entry not found' };
+		}
+		return { success: true as const };
+	} catch (error) {
+		console.error('Error deleting error log:', error);
+		return { success: false as const, error: 'Failed to delete error log' };
+	}
+});
 
 const fetchErrorLogsSchema = v.object({
 	page: v.optional(v.pipe(v.number(), v.minValue(1)), 1),

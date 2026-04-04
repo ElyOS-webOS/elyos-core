@@ -38,6 +38,29 @@ INSERT INTO platform.translations (locale, namespace, key, value) VALUES
 ('hu', 'log', 'error.filters.reset', 'Visszaállítás')
 ON CONFLICT (locale, namespace, key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW();
 
+-- Hiba napló - műveletek
+INSERT INTO platform.translations (locale, namespace, key, value) VALUES
+('hu', 'log', 'error.actions.open', 'Részletek'),
+('hu', 'log', 'error.actions.delete', 'Törlés')
+ON CONFLICT (locale, namespace, key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW();
+
+-- Hiba napló - részletek nézet
+INSERT INTO platform.translations (locale, namespace, key, value) VALUES
+('hu', 'log', 'error.detail.title', 'Napló bejegyzés részletei'),
+('hu', 'log', 'error.detail.error', 'Nem sikerült betölteni a napló bejegyzést'),
+('hu', 'log', 'error.detail.method', 'HTTP metódus'),
+('hu', 'log', 'error.detail.routeId', 'Útvonal'),
+('hu', 'log', 'error.detail.userId', 'Felhasználó ID'),
+('hu', 'log', 'error.detail.userAgent', 'User Agent'),
+('hu', 'log', 'error.detail.stack', 'Stack trace'),
+('hu', 'log', 'error.detail.context', 'Kontextus'),
+('hu', 'log', 'error.detail.deleteTitle', 'Napló bejegyzés törlése'),
+('hu', 'log', 'error.detail.deleteDescription', 'Biztosan törölni szeretnéd ezt a napló bejegyzést? Ez a művelet nem vonható vissza.'),
+('hu', 'log', 'error.detail.deleteConfirm', 'Törlés'),
+('hu', 'log', 'error.detail.deleteSuccess', 'Napló bejegyzés sikeresen törölve'),
+('hu', 'log', 'error.detail.deleteError', 'Nem sikerült törölni a napló bejegyzést')
+ON CONFLICT (locale, namespace, key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW();
+
 -- Aktivitás panel (ActivityLog.svelte)
 INSERT INTO platform.translations (locale, namespace, key, value) VALUES
 ('hu', 'log', 'activity.title', 'Aktivitás napló')
@@ -74,6 +97,29 @@ INSERT INTO platform.translations (locale, namespace, key, value) VALUES
 ('en', 'log', 'error.filters.allLevels', 'All levels'),
 ('en', 'log', 'error.filters.sourcePlaceholder', 'Filter by source...'),
 ('en', 'log', 'error.filters.reset', 'Reset')
+ON CONFLICT (locale, namespace, key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW();
+
+-- Error log - actions
+INSERT INTO platform.translations (locale, namespace, key, value) VALUES
+('en', 'log', 'error.actions.open', 'Details'),
+('en', 'log', 'error.actions.delete', 'Delete')
+ON CONFLICT (locale, namespace, key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW();
+
+-- Error log - detail view
+INSERT INTO platform.translations (locale, namespace, key, value) VALUES
+('en', 'log', 'error.detail.title', 'Log entry details'),
+('en', 'log', 'error.detail.error', 'Failed to load log entry'),
+('en', 'log', 'error.detail.method', 'HTTP method'),
+('en', 'log', 'error.detail.routeId', 'Route'),
+('en', 'log', 'error.detail.userId', 'User ID'),
+('en', 'log', 'error.detail.userAgent', 'User Agent'),
+('en', 'log', 'error.detail.stack', 'Stack trace'),
+('en', 'log', 'error.detail.context', 'Context'),
+('en', 'log', 'error.detail.deleteTitle', 'Delete log entry'),
+('en', 'log', 'error.detail.deleteDescription', 'Are you sure you want to delete this log entry? This action cannot be undone.'),
+('en', 'log', 'error.detail.deleteConfirm', 'Delete'),
+('en', 'log', 'error.detail.deleteSuccess', 'Log entry deleted successfully'),
+('en', 'log', 'error.detail.deleteError', 'Failed to delete log entry')
 ON CONFLICT (locale, namespace, key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW();
 
 -- Activity panel (ActivityLog.svelte)

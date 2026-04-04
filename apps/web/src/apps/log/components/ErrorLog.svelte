@@ -4,13 +4,53 @@
 	import type { PaginationInfo, DataTableState } from '$lib/components/ui/data-table';
 	import { Input } from '$lib/components/ui/input';
 	import { Button } from '$lib/components/ui/button';
+	import { ConfirmDialog } from '$lib/components/ui';
 	import X from 'lucide-svelte/icons/x';
 	import { useI18n } from '$lib/i18n/hooks';
-	import { fetchErrorLogs } from '../error-logs.remote';
+	import { getAppShell } from '$lib/apps/appShell.svelte';
+	import { fetchErrorLogs, deleteErrorLog } from '../error-logs.remote';
 	import type { LogEntry } from '$lib/server/logging/types';
 	import { createColumns } from './errorLogColumns';
+	import { toast } from 'svelte-sonner';
 
 	const { t } = useI18n();
+	const shell = getAppShell();
+
+	function handleOpenEntry(entry: LogEntry) {
+		shell.navigateTo('ErrorLogDetail', { logId: entry.id }, '#error');
+	}
+
+	// Törlés megerősítő dialog
+	let deleteDialogOpen = $state(false);
+	let entryToDelete = $state<LogEntry | null>(null);
+
+	function handleDeleteEntry(entry: LogEntry) {
+		entryToDelete = entry;
+		deleteDialogOpen = true;
+	}
+
+	function cancelDelete() {
+		deleteDialogOpen = false;
+		entryToDelete = null;
+	}
+
+	async function confirmDelete() {
+		if (!entryToDelete) return;
+		try {
+			const result = await deleteErrorLog({ id: entryToDelete.id });
+			if (result.success) {
+				toast.success(t('log.error.detail.deleteSuccess'));
+				deleteDialogOpen = false;
+				entryToDelete = null;
+				await loadData();
+			} else {
+				toast.error(result.error || t('log.error.detail.deleteError'));
+			}
+		} catch (err) {
+			console.error('Failed to delete error log:', err);
+			toast.error(t('log.error.detail.deleteError'));
+		}
+	}
 
 	let data = $state<LogEntry[]>([]);
 	let loading = $state(false);
@@ -47,7 +87,9 @@
 	const columns = $derived(
 		createColumns({
 			t,
-			onSort: (id, desc) => dataTable.handleSort(id, desc)
+			onSort: (id, desc) => dataTable.handleSort(id, desc),
+			onOpen: handleOpenEntry,
+			onDelete: handleDeleteEntry
 		})
 	);
 
@@ -137,3 +179,15 @@
 		{/if}
 	{/snippet}
 </DataTable>
+
+<!-- Törlés megerősítő dialog -->
+<ConfirmDialog
+	bind:open={deleteDialogOpen}
+	title={t('log.error.detail.deleteTitle')}
+	description={t('log.error.detail.deleteDescription')}
+	confirmText={t('log.error.detail.deleteConfirm')}
+	cancelText={t('common.buttons.cancel')}
+	confirmVariant="destructive"
+	onConfirm={confirmDelete}
+	onCancel={cancelDelete}
+/>

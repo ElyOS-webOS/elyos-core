@@ -6,11 +6,18 @@ import {
 	renderSnippet
 } from '$lib/components/ui/data-table';
 import type { ColumnDeps } from '$lib/components/ui/data-table';
+import { createActionsColumn } from '$lib/components/ui/data-table';
 import type { LogEntry } from '$lib/server/logging/types';
 
+/** Error log oszlopdefiníciók függőségei. */
+export interface ErrorLogColumnDeps extends ColumnDeps {
+	onOpen: (entry: LogEntry) => void;
+	onDelete: (entry: LogEntry) => void;
+}
+
 /** Error log oszlopdefiníciók */
-export function createColumns(deps: ColumnDeps): ColumnDef<LogEntry, unknown>[] {
-	const { t, onSort } = deps;
+export function createColumns(deps: ErrorLogColumnDeps): ColumnDef<LogEntry, unknown>[] {
+	const { t, onSort, onOpen, onDelete } = deps;
 
 	return [
 		{
@@ -109,6 +116,19 @@ export function createColumns(deps: ColumnDeps): ColumnDef<LogEntry, unknown>[] 
 				}));
 				return renderSnippet(snippet, {});
 			}
-		}
+		},
+		createActionsColumn<LogEntry>((entry) => [
+			{
+				label: t('log.error.actions.open'),
+				onClick: () => onOpen(entry),
+				primary: true
+			},
+			{
+				label: t('log.error.actions.delete'),
+				onClick: () => onDelete(entry),
+				variant: 'destructive',
+				separator: true
+			}
+		])
 	];
 }

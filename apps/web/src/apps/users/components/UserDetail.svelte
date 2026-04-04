@@ -445,7 +445,7 @@
 		{#if user.createdAt}
 			<div class="detail-field">
 				<span class="detail-label">{t('users.users.columns.createdAt')}</span>
-				<span class="detail-value text-muted-foreground">
+				<span class="detail-value">
 					{new Date(user.createdAt).toLocaleDateString()}
 				</span>
 			</div>

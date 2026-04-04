@@ -121,6 +121,33 @@ export class LogRepository {
 		return result?.count ?? 0;
 	}
 
+	async findById(id: string): Promise<LogEntry | null> {
+		const [row] = await db.select().from(errorLogs).where(eq(errorLogs.id, id)).limit(1);
+
+		if (!row) return null;
+
+		return {
+			id: String(row.id),
+			level: String(row.level) as LogLevel,
+			message: String(row.message),
+			source: String(row.source),
+			timestamp: row.createdAt?.toISOString() ?? new Date().toISOString(),
+			stack: row.stack ? String(row.stack) : undefined,
+			context: (row.context as Record<string, unknown>) ?? undefined,
+			userId: row.userId ? String(row.userId) : undefined,
+			url: row.url ? String(row.url) : undefined,
+			method: row.method ? String(row.method) : undefined,
+			routeId: row.routeId ? String(row.routeId) : undefined,
+			userAgent: row.userAgent ? String(row.userAgent) : undefined
+		};
+	}
+
+	async deleteById(id: string): Promise<boolean> {
+		const result = await db.delete(errorLogs).where(eq(errorLogs.id, id));
+
+		return (result.rowCount ?? 0) > 0;
+	}
+
 	async countByLevel(timeRange?: TimeRange): Promise<Record<LogLevel, number>> {
 		const conditions = [];
 
