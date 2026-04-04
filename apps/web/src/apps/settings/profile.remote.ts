@@ -5,6 +5,7 @@ import {
 	type ProfileData,
 	type UpdateProfileResult
 } from '$lib/server/database/repositories';
+import { activityLogService } from '$lib/server/activity-log/service';
 
 /**
  * Profil frissítés validációs séma
@@ -161,6 +162,12 @@ export const updateProfile = command(
 
 		if (result.success) {
 			console.log('Profile updated:', result.user);
+			activityLogService.log({
+				actionKey: 'user.profile.updated',
+				userId: String(userId),
+				resourceType: 'user',
+				resourceId: String(userId)
+			});
 		}
 
 		return result;

@@ -63,7 +63,14 @@ ON CONFLICT (locale, namespace, key) DO UPDATE SET value = EXCLUDED.value, updat
 
 -- Aktivitás panel (ActivityLog.svelte)
 INSERT INTO platform.translations (locale, namespace, key, value) VALUES
-('hu', 'log', 'activity.title', 'Aktivitás napló')
+('hu', 'log', 'activity.title', 'Aktivitás napló'),
+('hu', 'log', 'activity.columns.action', 'Művelet'),
+('hu', 'log', 'activity.columns.userId', 'Felhasználó'),
+('hu', 'log', 'activity.columns.resource', 'Erőforrás'),
+('hu', 'log', 'activity.columns.createdAt', 'Időpont'),
+('hu', 'log', 'activity.filters.userIdPlaceholder', 'Felhasználó szűrése...'),
+('hu', 'log', 'activity.filters.actionKeyPlaceholder', 'Művelet szűrése...'),
+('hu', 'log', 'activity.loadError', 'Nem sikerült betölteni az aktivitás naplót')
 ON CONFLICT (locale, namespace, key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW();
 
 -- -----------------------------------------------------------------------------
@@ -124,5 +131,12 @@ ON CONFLICT (locale, namespace, key) DO UPDATE SET value = EXCLUDED.value, updat
 
 -- Activity panel (ActivityLog.svelte)
 INSERT INTO platform.translations (locale, namespace, key, value) VALUES
-('en', 'log', 'activity.title', 'Activity log')
+('en', 'log', 'activity.title', 'Activity log'),
+('en', 'log', 'activity.columns.action', 'Action'),
+('en', 'log', 'activity.columns.userId', 'User'),
+('en', 'log', 'activity.columns.resource', 'Resource'),
+('en', 'log', 'activity.columns.createdAt', 'Timestamp'),
+('en', 'log', 'activity.filters.userIdPlaceholder', 'Filter by user...'),
+('en', 'log', 'activity.filters.actionKeyPlaceholder', 'Filter by action...'),
+('en', 'log', 'activity.loadError', 'Failed to load activity log')
 ON CONFLICT (locale, namespace, key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW();

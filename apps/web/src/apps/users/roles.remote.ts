@@ -2,6 +2,7 @@ import { command } from '$app/server';
 import * as v from 'valibot';
 import { roleRepository } from '$lib/server/database/repositories';
 import { validatePaginationParams } from '$lib/server/utils/database';
+import { activityLogService } from '$lib/server/activity-log/service';
 
 const createRoleSchema = v.object({
 	name: v.pipe(v.string(), v.minLength(1)),
@@ -25,6 +26,14 @@ export const createRole = command(createRoleSchema, async (input) => {
 			: undefined;
 
 		const role = await roleRepository.create({ name: nameObj, description: descObj });
+
+		activityLogService.log({
+			actionKey: 'role.created',
+			resourceType: 'role',
+			resourceId: String(role.id),
+			context: { name: input.name }
+		});
+
 		return { success: true as const, data: role };
 	} catch (error) {
 		console.error('Error creating role:', error);
@@ -234,6 +243,13 @@ export const addPermissionToRole = command(addPermissionToRoleSchema, async (inp
 	try {
 		await roleRepository.addPermissionToRole(input.permissionId, input.roleId);
 
+		activityLogService.log({
+			actionKey: 'role.permission.added',
+			resourceType: 'role',
+			resourceId: String(input.roleId),
+			context: { permissionId: input.permissionId }
+		});
+
 		return {
 			success: true as const
 		};
@@ -254,6 +270,13 @@ const removePermissionFromRoleSchema = v.object({
 export const removePermissionFromRole = command(removePermissionFromRoleSchema, async (input) => {
 	try {
 		await roleRepository.removePermissionFromRole(input.permissionId, input.roleId);
+
+		activityLogService.log({
+			actionKey: 'role.permission.removed',
+			resourceType: 'role',
+			resourceId: String(input.roleId),
+			context: { permissionId: input.permissionId }
+		});
 
 		return {
 			success: true as const
@@ -341,6 +364,13 @@ const deleteRoleSchema = v.object({
 export const deleteRole = command(deleteRoleSchema, async (input) => {
 	try {
 		await roleRepository.delete(input.roleId);
+
+		activityLogService.log({
+			actionKey: 'role.deleted',
+			resourceType: 'role',
+			resourceId: String(input.roleId)
+		});
+
 		return { success: true as const };
 	} catch (error) {
 		console.error('Error deleting role:', error);

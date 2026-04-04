@@ -20,6 +20,7 @@ import {
 	PLUGIN_MAX_SIZE_MB,
 	PLUGIN_TEMP_DIR
 } from '$lib/server/plugins/config';
+import { activityLogService } from '$lib/server/activity-log/service';
 
 const TEMP_DIR = PLUGIN_TEMP_DIR;
 const MAX_FILE_SIZE = PLUGIN_MAX_SIZE;
@@ -117,6 +118,14 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		await fs.unlink(tempFilePath).catch(() => {});
 
 		// 10. Success response
+		activityLogService.log({
+			actionKey: 'plugin.installed',
+			userId: locals.user.id,
+			resourceType: 'plugin',
+			resourceId: installResult.pluginId,
+			context: { filename: file.name }
+		});
+
 		return json({
 			success: true,
 			pluginId: installResult.pluginId,

@@ -1,6 +1,3 @@
-/**
- * Remote functions for plugin management.
- */
 import { command, query, getRequestEvent } from '$app/server';
 import * as v from 'valibot';
 import db from '$lib/server/database';
@@ -8,6 +5,7 @@ import { apps } from '@elyos/database/schemas';
 import { eq, and, desc, asc, sql, like, or } from 'drizzle-orm';
 import { getPluginDir, removeDir } from '$lib/server/plugins/utils/filesystem';
 import { permissionRepository } from '$lib/server/database/repositories';
+import { activityLogService } from '$lib/server/activity-log/service';
 
 // Schemas
 const pluginIdSchema = v.object({
@@ -328,6 +326,14 @@ export const uninstallPlugin = command(pluginIdSchema, async ({ pluginId }) => {
 		await db.delete(apps).where(eq(apps.appId, pluginId));
 
 		console.log(`[PluginManager] Plugin ${pluginId} uninstalled successfully`);
+
+		activityLogService.log({
+			actionKey: 'plugin.uninstalled',
+			userId: locals.user.id,
+			resourceType: 'plugin',
+			resourceId: pluginId,
+			context: { name: plugin.appId, version: plugin.version }
+		});
 
 		return {
 			success: true

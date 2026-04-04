@@ -1,8 +1,9 @@
-import { command } from '$app/server';
+import { command, getRequestEvent } from '$app/server';
 import * as v from 'valibot';
 import { userRepository, groupRepository, roleRepository } from '$lib/server/database/repositories';
 import type { UserListItem } from '$lib/server/database/repositories';
 import { validatePaginationParams } from '$lib/server/utils/database';
+import { activityLogService } from '$lib/server/activity-log/service';
 
 const fetchUsersSchema = v.object({
 	page: v.optional(v.pipe(v.number(), v.minValue(1)), 1),
@@ -147,6 +148,13 @@ export const addUserToGroup = command(addUserToGroupSchema, async (input) => {
 	try {
 		await groupRepository.addUserToGroup(input.userId, input.groupId);
 
+		activityLogService.log({
+			actionKey: 'user.group.added',
+			resourceType: 'user',
+			resourceId: String(input.userId),
+			context: { groupId: input.groupId }
+		});
+
 		return {
 			success: true as const
 		};
@@ -169,6 +177,13 @@ export type RemoveUserFromGroupInput = v.InferOutput<typeof removeUserFromGroupS
 export const removeUserFromGroup = command(removeUserFromGroupSchema, async (input) => {
 	try {
 		await groupRepository.removeUserFromGroup(input.userId, input.groupId);
+
+		activityLogService.log({
+			actionKey: 'user.group.removed',
+			resourceType: 'user',
+			resourceId: String(input.userId),
+			context: { groupId: input.groupId }
+		});
 
 		return {
 			success: true as const
@@ -193,6 +208,13 @@ export const addUserToRole = command(addUserToRoleSchema, async (input) => {
 	try {
 		await roleRepository.addUserToRole(input.userId, input.roleId);
 
+		activityLogService.log({
+			actionKey: 'user.role.assigned',
+			resourceType: 'user',
+			resourceId: String(input.userId),
+			context: { roleId: input.roleId }
+		});
+
 		return {
 			success: true as const
 		};
@@ -215,6 +237,13 @@ export type RemoveUserFromRoleInput = v.InferOutput<typeof removeUserFromRoleSch
 export const removeUserFromRole = command(removeUserFromRoleSchema, async (input) => {
 	try {
 		await roleRepository.removeUserFromRole(input.userId, input.roleId);
+
+		activityLogService.log({
+			actionKey: 'user.role.removed',
+			resourceType: 'user',
+			resourceId: String(input.userId),
+			context: { roleId: input.roleId }
+		});
 
 		return {
 			success: true as const
@@ -245,6 +274,12 @@ export const setUserActiveStatus = command(setUserActiveStatusSchema, async (inp
 				error: result.error || 'Failed to update user active status'
 			};
 		}
+
+		activityLogService.log({
+			actionKey: input.isActive ? 'user.activated' : 'user.deactivated',
+			resourceType: 'user',
+			resourceId: String(input.userId)
+		});
 
 		return {
 			success: true as const

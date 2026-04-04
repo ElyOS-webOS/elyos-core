@@ -21,6 +21,7 @@ export * from './files/schema';
 
 // Logging
 export { errorLogs } from './logging/error_logs';
+export { activityLogs } from './logging/activity_logs';
 
 // Notifications
 export * from './notifications/notifications';
