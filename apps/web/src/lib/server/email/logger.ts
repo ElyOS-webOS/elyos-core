@@ -409,6 +409,7 @@ export class EmailLogger {
 	 * @param data
 	 */
 	private log(level: 'debug' | 'info' | 'warn' | 'error', message: string, data?: unknown): void {
+		if (level === 'debug') return;
 		// Use console for now, could be enhanced with proper logging library
 		const timestamp = new Date().toISOString();
 		const logData = data ? ` ${JSON.stringify(data)}` : '';

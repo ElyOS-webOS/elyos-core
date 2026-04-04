@@ -494,6 +494,7 @@ export class EmailInitializationService {
 	 * Logging utility.
 	 */
 	private log(level: 'info' | 'warn' | 'error', message: string, data?: unknown): void {
+		if (level === 'info') return;
 		const timestamp = new Date().toISOString();
 		const logData = data ? ` ${JSON.stringify(data)}` : '';
 		console[level](`[${timestamp}] [EmailInitializationService] ${message}${logData}`);

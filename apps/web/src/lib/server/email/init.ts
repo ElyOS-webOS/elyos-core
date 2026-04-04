@@ -343,6 +343,7 @@ export function getEnvironmentSpecificConfig(): {
  * @param message Log message
  */
 function log(level: 'info' | 'warn' | 'error', message: string): void {
+	if (level === 'info') return;
 	const timestamp = new Date().toISOString();
 	console[level](`[${timestamp}] [EmailService] ${message}`);
 }

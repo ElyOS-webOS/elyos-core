@@ -36,8 +36,6 @@
 				fallbackLocale: 'hu'
 			});
 
-			console.log('[Client] I18n service initialized with locale:', locale);
-
 			// Preload common namespaces
 			await Promise.all([
 				i18nService.loadNamespace('common'),
@@ -45,7 +43,6 @@
 				i18nService.loadNamespace('validation')
 			]);
 
-			console.log('[Client] Common namespaces preloaded');
 			i18nReady = true;
 		} catch (error) {
 			console.error('[Client] Failed to initialize i18n:', error);

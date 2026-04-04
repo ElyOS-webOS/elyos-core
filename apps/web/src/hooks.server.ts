@@ -58,6 +58,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 /**
  * Fő request kezelő logika — a CORS wrapper hívja.
+ * @param {Parameters<Handle>[0]['event']} event - A SvelteKit szerver esemény.
+ * @param {Parameters<Handle>[0]['resolve']} resolve - A SvelteKit resolve függvény.
+ * @returns {Promise<Response>} A szerver válasza.
  */
 async function handleRequest(
 	event: Parameters<Handle>[0]['event'],
@@ -68,7 +71,6 @@ async function handleRequest(
 		const globalIo = (global as any).io;
 		if (globalIo) {
 			initializeSocketIO(globalIo);
-			console.info('[Server] Socket.IO initialized from global.io');
 		}
 		socketIOInitialized = true;
 	}
@@ -101,7 +103,6 @@ async function handleRequest(
 				defaultLocale,
 				fallbackLocale: defaultLocale
 			});
-			console.info(`[Server] I18n service initialized with locale: ${defaultLocale}`);
 		} catch (error) {
 			console.error('[Server] I18n service initialization error:', error);
 		}
