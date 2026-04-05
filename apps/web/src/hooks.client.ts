@@ -1,5 +1,14 @@
 import type { HandleClientError } from '@sveltejs/kit';
 import { clientErrorReporter } from '$lib/logging/client-reporter';
+import { initClientMonitoring, captureException } from '$lib/monitoring';
+
+// GlitchTip inicializálása kliens indításkor.
+// Kikapcsolható: MONITORING_ENABLED=false vagy PUBLIC_GLITCHTIP_DSN elhagyásával.
+const dsn = (import.meta as any).env?.PUBLIC_ERROR_TRACKING_DSN as string | undefined;
+const monitoringEnabled = (import.meta as any).env?.PUBLIC_MONITORING_ENABLED !== 'false';
+if (monitoringEnabled && dsn) {
+	initClientMonitoring(dsn, true);
+}
 
 const FETCH_TIMEOUT = 15_000; // 15 másodperc
 
@@ -15,6 +24,9 @@ export const handleError: HandleClientError = async ({ error, status, message })
 			originalMessage: message
 		}
 	});
+
+	// GlitchTip-re is elküldjük
+	await captureException(error, { status, originalMessage: message });
 
 	return {
 		message: 'Unexpected Error'

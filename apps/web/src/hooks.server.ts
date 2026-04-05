@@ -16,6 +16,14 @@ import { env } from '$lib/env';
 import { logger } from '$lib/server/logging';
 import { ensureDatabaseHealth } from '$lib/server/database/health';
 import { initializeSocketIO } from '$lib/server/socket';
+import { initServerMonitoring, captureServerException } from '$lib/monitoring/server';
+
+// GlitchTip inicializálása szerver indításkor
+// Kikapcsolható: PUBLIC_MONITORING_ENABLED=false
+const monitoringEnabled = process.env.PUBLIC_MONITORING_ENABLED !== 'false';
+if (monitoringEnabled && process.env.ERROR_TRACKING_DSN) {
+	initServerMonitoring(process.env.ERROR_TRACKING_DSN, true, process.env.npm_package_version);
+}
 
 // Initialize services on server startup
 let emailServiceInitialized = false;
@@ -281,6 +289,13 @@ export const handleError: HandleServerError = async ({ error, event, status, mes
 			originalMessage: message,
 			isDatabaseError
 		}
+	});
+
+	// GlitchTip-re is elküldjük a hibát
+	captureServerException(error, {
+		url: event.url.pathname,
+		method: event.request.method,
+		status: isDatabaseError ? 503 : status
 	});
 
 	return {

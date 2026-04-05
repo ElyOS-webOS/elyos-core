@@ -189,6 +189,27 @@ INSERT INTO platform.apps (
         true,
         false,
         15
+    ),
+    -- Map app (utilities category) - Public
+    (
+        'map',
+        '{"hu": "Térkép", "en": "Map"}'::jsonb,
+        '{"hu": "Interaktív térkép és útvonaltervező", "en": "Interactive map and route planner"}'::jsonb,
+        '1.0.0',
+        'Map',
+        'icon',
+        'utilities',
+        '[]'::jsonb,
+        true,
+        '{"width": 1000, "height": 650}'::jsonb,
+        '{"width": 700, "height": 450}'::jsonb,
+        NULL,
+        'System',
+        '["térkép", "útvonal", "navigáció", "map", "route", "navigation", "gps"]'::jsonb,
+        NULL,
+        true,
+        true,
+        75
     )
 ON CONFLICT (app_id) DO UPDATE SET
     name = EXCLUDED.name,

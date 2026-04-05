@@ -141,6 +141,11 @@ export const seedConfig: Record<string, SeedDefinition> = {
 		dependsOn: ['locales'],
 		description: 'Help app translations'
 	},
+	translations_map: {
+		file: 'platform/translations_map.sql',
+		dependsOn: ['locales'],
+		description: 'Map app translations'
+	},
 	translations_activity: {
 		file: 'platform/translations_activity.sql',
 		dependsOn: ['locales'],
