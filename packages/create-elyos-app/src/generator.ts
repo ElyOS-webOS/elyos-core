@@ -185,7 +185,7 @@ function writePackageJson(dir: string, config: PluginConfig): void {
 			...(isSidebar ? { 'build:all': 'bun build-all.js' } : {})
 		},
 		dependencies: {
-			'@elyos/sdk': '^0.1.0',
+			'@elyos-dev/sdk': '^0.1.0',
 			svelte: '^5.0.0',
 			'@lucide/svelte': '^0.561.0'
 		},
@@ -412,7 +412,7 @@ import App from './App.svelte';
 
 async function initDevSDK() {
 \tif (typeof window !== 'undefined' && !window.webOS) {
-\t\tconst { MockWebOSSDK } = await import('@elyos/sdk/dev');
+\t\tconst { MockWebOSSDK } = await import('@elyos-dev/sdk/dev');
 \t\tMockWebOSSDK.initialize({${blankI18n ? `\n${i18nInit}\n\t\t` : ''}});
 \t}
 }

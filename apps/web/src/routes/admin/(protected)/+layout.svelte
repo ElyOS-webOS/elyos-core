@@ -18,7 +18,7 @@
 	import { getChatStore } from '$apps/chat/stores/chatStore.svelte';
 	import PluginDialog from '$lib/components/core/PluginDialog.svelte';
 	import { setGlobalDialogHandler } from '$lib/stores/windowStore.svelte';
-	import type { DialogOptions, DialogResult } from '@elyos/sdk';
+	import type { DialogOptions, DialogResult } from '@elyos-dev/sdk';
 	// @ts-ignore - no type declarations available
 	import '@fontsource-variable/quicksand';
 

@@ -1,22 +1,22 @@
 /**
  * WebOS SDK Export
  *
- * Központi export fájl — az @elyos/sdk package-ből re-exportálja az SDK-t.
+ * Központi export fájl — az @elyos-dev/sdk package-ből re-exportálja az SDK-t.
  * Ez a fájl biztosítja a backward compatibility-t a $lib/sdk importokhoz.
  */
 
-export { WebOSSDK } from '@elyos/sdk';
+export { WebOSSDK } from '@elyos-dev/sdk';
 
 // Service-ek exportálása
-export { UIService } from '@elyos/sdk';
-export { RemoteService } from '@elyos/sdk';
-export { DataService } from '@elyos/sdk';
-export { I18nService } from '@elyos/sdk';
-export { NotificationService } from '@elyos/sdk';
-export { ContextService } from '@elyos/sdk';
-export { AssetService } from '@elyos/sdk';
+export { UIService } from '@elyos-dev/sdk';
+export { RemoteService } from '@elyos-dev/sdk';
+export { DataService } from '@elyos-dev/sdk';
+export { I18nService } from '@elyos-dev/sdk';
+export { NotificationService } from '@elyos-dev/sdk';
+export { ContextService } from '@elyos-dev/sdk';
+export { AssetService } from '@elyos-dev/sdk';
 
-// Típusok re-exportálása az @elyos/sdk-ból
+// Típusok re-exportálása az @elyos-dev/sdk-ból
 export type {
 	UserInfo,
 	WindowControls,
@@ -30,4 +30,4 @@ export type {
 	WebOSComponents,
 	WebOSSDKInterface,
 	MockSDKConfig
-} from '@elyos/sdk';
+} from '@elyos-dev/sdk';

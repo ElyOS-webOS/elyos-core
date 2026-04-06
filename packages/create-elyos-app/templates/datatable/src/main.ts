@@ -10,7 +10,7 @@ import App from './App.svelte';
 // Standalone fejlesztéshez: Mock SDK inicializálás
 async function initDevSDK() {
 	if (typeof window !== 'undefined' && !window.webOS) {
-		const { MockWebOSSDK } = await import('@elyos/sdk/dev');
+		const { MockWebOSSDK } = await import('@elyos-dev/sdk/dev');
 		MockWebOSSDK.initialize({
 			i18n: {
 				locale: 'en',

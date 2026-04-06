@@ -7,7 +7,7 @@ import App from './App.svelte';
 
 async function initDevSDK() {
 	if (typeof window !== 'undefined' && !window.webOS) {
-		const { MockWebOSSDK } = await import('@elyos/sdk/dev');
+		const { MockWebOSSDK } = await import('@elyos-dev/sdk/dev');
 		MockWebOSSDK.initialize();
 	}
 }
