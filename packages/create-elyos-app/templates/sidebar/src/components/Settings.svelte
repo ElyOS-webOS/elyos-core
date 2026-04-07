@@ -13,26 +13,22 @@
 
 	let { pluginId = '__PLUGIN_ID__' }: { pluginId?: string } = $props();
 
-	let sdk = $derived.by(() => {
-		const instances = (window as any).__webOS_instances;
-		return instances?.get(pluginId) || (window as any).webOS;
-	});
-
-	let translationsLoaded = $state(false);
+	let tr = $state<Record<string, string>>({});
+	let loaded = $state(false);
 
 	$effect(() => {
-		if (sdk?.i18n) {
-			const checkLoaded = async () => {
-				await sdk.i18n.ready();
-				translationsLoaded = true;
+		const instances = (window as any).__webOS_instances;
+		const i18n = (instances?.get(pluginId) || (window as any).webOS)?.i18n;
+		if (!i18n) return;
+		i18n.ready().then(() => {
+			tr = {
+				title: i18n.t('settings.title'),
+				name: i18n.t('settings.name'),
+				save: i18n.t('settings.save')
 			};
-			checkLoaded();
-		}
+			loaded = true;
+		});
 	});
-
-	function t(key: string): string {
-		return sdk?.i18n?.t(key) ?? key;
-	}
 
 	let name = $state('');
 
@@ -42,23 +38,23 @@
 			return;
 		}
 		await sdk?.data.set('user-name', name);
-		sdk?.ui.toast(t('settings.save') + ' ✓', 'success');
+		sdk?.ui.toast((tr.save ?? 'settings.save') + ' ✓', 'success');
 	}
 
 </script>
 
-{#if !translationsLoaded}
+{#if !loaded}
 	<div style="padding: 2rem; text-align: center;">Loading...</div>
 {:else}
 	<section>
-		<h2>{t('settings.title')}</h2>
+		<h2>{tr.title}</h2>
 
 		<div class="setting-item">
 			<label>
-				{t('settings.name')}
+				{tr.name}
 				<input type="text" bind:value={name} />
 			</label>
-			<button onclick={saveName}>{t('settings.save')}</button>
+			<button onclick={saveName}>{tr.save}</button>
 		</div>
 	</section>
 {/if}

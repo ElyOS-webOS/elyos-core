@@ -37,7 +37,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 		const origin = event.request.headers.get('origin');
 		if (
 			origin &&
-			(origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:'))
+			(origin.startsWith('http://localhost:') ||
+				origin.startsWith('http://127.0.0.1:') ||
+				origin.startsWith('http://host.docker.internal:'))
 		) {
 			// Preflight (OPTIONS) kérések kezelése
 			if (event.request.method === 'OPTIONS') {

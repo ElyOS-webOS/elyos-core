@@ -111,7 +111,7 @@ COPY --from=builder --chown=elyos:nodejs /app/packages/database/tsconfig.json ./
 # Csak production függőségek telepítése (dev dependencies nélkül)
 RUN bun install --production --frozen-lockfile
 
-# Varlock a node_modules/.bin-ben elérhető a production install után (apps/web/package.json dependencies)
+# Varlock az apps/web/node_modules/.bin-ben elérhető (apps/web workspace dependency)
 
 # Környezeti változók
 ENV NODE_ENV=production
@@ -129,4 +129,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
 USER elyos
 
 # Alkalmazás indítása Varlock-on keresztül (secrets betöltése indításkor, majd Express + Socket.IO szerver)
-CMD ["./node_modules/.bin/varlock", "run", "--", "bun", "run", "apps/web/server.js"]
+CMD ["./apps/web/node_modules/.bin/varlock", "run", "--", "bun", "run", "apps/web/server.js"]

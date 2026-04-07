@@ -16,10 +16,14 @@ import { permissionRepository } from '$lib/server/database/repositories';
 
 /**
  * Ellenőrzi, hogy az URL localhost-ra mutat-e.
- * Csak http://localhost: és http://127.0.0.1: prefixek engedélyezettek.
+ * Engedélyezett: http://localhost:, http://127.0.0.1:, http://host.docker.internal:
  */
 function isLocalhostUrl(url: string): boolean {
-	return url.startsWith('http://localhost:') || url.startsWith('http://127.0.0.1:');
+	return (
+		url.startsWith('http://localhost:') ||
+		url.startsWith('http://127.0.0.1:') ||
+		url.startsWith('http://host.docker.internal:')
+	);
 }
 
 /**
@@ -141,11 +145,14 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
 		// 8. Dev plugin metaadatok összeállítása
 		const baseUrl = url.replace(/\/$/, '');
+		// A böngésző nem tudja feloldani a host.docker.internal DNS nevet,
+		// ezért a kliensnek localhost-ot adunk vissza
+		const clientBaseUrl = baseUrl.replace('host.docker.internal', 'localhost');
 		const plugin = {
 			...manifest,
-			entry: `${baseUrl}/${manifest.entry}`,
+			entry: `${clientBaseUrl}/${manifest.entry}`,
 			devMode: true,
-			devUrl: baseUrl,
+			devUrl: clientBaseUrl,
 			appType: 'plugin'
 		};
 

@@ -29,7 +29,7 @@ services:
       dockerfile: Dockerfile
     container_name: elyos-postgres
     env_file:
-      - ../.env
+      - ../.env.local
     volumes:
       - elyos-data:/var/lib/postgresql
     ports:
@@ -55,7 +55,7 @@ services:
     command: >
       sh -c 'bun --filter @elyos/database db:init ${RESET:+-- --reset}'
     env_file:
-      - ../.env
+      - ../.env.local
     environment:
       - RESET=${RESET:-}
       - DATABASE_URL=postgresql://${POSTGRES_USER:-elyos}:${POSTGRES_PASSWORD:-elyos123}@postgres:5432/${POSTGRES_DB:-elyos}
@@ -78,7 +78,7 @@ services:
       - '${ELYOS_PORT:-3000}:3000'
     env_file:
       # Csak a bootstrap credentials — minden más secret Infisical-ból érkezik Varlock-on keresztül
-      - ../.env
+      - ../.env.local
     environment:
       - INFISICAL_CLIENT_ID=${INFISICAL_CLIENT_ID}
       - INFISICAL_CLIENT_SECRET=${INFISICAL_CLIENT_SECRET}
@@ -89,6 +89,7 @@ services:
       - elyos-network
     volumes:
       - ../apps/web/uploads:/app/uploads
+      - ../.env.local:/app/.env:ro
     restart: unless-stopped
 
 # Megnevezett kötet a PostgreSQL adatok perzisztálásához

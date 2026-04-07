@@ -627,6 +627,10 @@ export class WindowManager {
 				(window_obj as any).isPluginWithLayout = true;
 				window_obj.component = PluginLayoutWrapper.default as any;
 				window_obj.isLoading = false;
+				// Betöltés után fókuszáljuk az ablakot
+				this.windows.forEach((w) => (w.isActive = false));
+				window_obj.isActive = true;
+				window_obj.zIndex = this.getNextZIndex();
 				this.windows = [...this.windows];
 
 				console.log(`[DevPlugin] Layout módban betöltve: ${pluginId} (${devUrl})`);
@@ -674,6 +678,10 @@ export class WindowManager {
 			};
 			window_obj.component = null as any;
 			window_obj.isLoading = false;
+			// Betöltés után fókuszáljuk az ablakot
+			this.windows.forEach((w) => (w.isActive = false));
+			window_obj.isActive = true;
+			window_obj.zIndex = this.getNextZIndex();
 			this.windows = [...this.windows];
 
 			console.log(`[DevPlugin] Betöltve: ${pluginId} → <${tagName}> (${devUrl})`);

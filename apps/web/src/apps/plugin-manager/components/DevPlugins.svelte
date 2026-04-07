@@ -46,7 +46,11 @@
 		const existingIndex = devPlugins.findIndex((p) => p.id === pluginData.id);
 		if (existingIndex >= 0) {
 			devPlugins[existingIndex] = { ...pluginData, loadedAt: new Date() };
-			toast.info(`Plugin "${getPluginDisplayName(pluginData)}" frissítve`);
+			toast.info(
+				t('plugin-manager.devPlugins.loader.updatedSuccess', {
+					name: getPluginDisplayName(pluginData)
+				})
+			);
 		} else {
 			devPlugins = [...devPlugins, { ...pluginData, loadedAt: new Date() }];
 		}
