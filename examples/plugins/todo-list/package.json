@@ -9,7 +9,7 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
-		"@elyos/sdk": "workspace:*",
+		"@elyos-dev/sdk": "workspace:*",
 		"svelte": "^5.0.0"
 	},
 	"devDependencies": {

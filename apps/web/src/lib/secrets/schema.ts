@@ -20,8 +20,6 @@ import * as fc from 'fast-check';
  * Ezeknek jelen kell lenniük és érvényes értékkel kell rendelkezniük.
  */
 export const REQUIRED_KEYS = [
-	'INFISICAL_CLIENT_ID',
-	'INFISICAL_CLIENT_SECRET',
 	'NODE_ENV',
 	'DATABASE_URL',
 	'APP_URL',
