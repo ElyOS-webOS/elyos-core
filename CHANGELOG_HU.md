@@ -7,6 +7,19 @@ Az összes lényeges változás ebben a projektben dokumentálva van.
 A formátum a [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) alapján készült,
 és ez a projekt a [Semantic Versioning](https://semver.org/spec/v2.0.0.html) szabályait követi.
 
+## [0.1.5] - 2026-04-07
+
+### Javítva
+
+- Dev plugin betöltő: `host.docker.internal` URL-ek engedélyezése Docker-ben futó ElyOS esetén
+- Dev plugin betöltő: a böngésző `localhost` URL-t kap (konvertálva `host.docker.internal`-ről), így a plugin mindkét oldalról helyesen töltődik be
+- Dev plugin ablak betöltés után fókuszt kap
+- Dev plugin betöltő UI szövegek teljes lokalizációja (i18n kulcsok, Docker hint hozzáadva)
+
+### Hozzáadva
+
+- Új fordítási kulcsok a Dev Plugin Loader panelhez (hu/en)
+
 ## [0.1.0] - 2026-03-07
 
 ### Hozzáadva

@@ -7,6 +7,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.5] - 2026-04-07
+
+### Fixed
+
+- Dev plugin loader: allow `host.docker.internal` URLs for Docker-hosted ElyOS instances
+- Dev plugin loader: browser receives `localhost` URL (converted from `host.docker.internal`) so the plugin loads correctly from both server and client side
+- Dev plugin window now gets focus after async loading completes
+- Dev plugin loader UI strings are now fully localized (i18n keys, Docker hint added)
+
+### Added
+
+- New translation keys for the Dev Plugin Loader panel (hu/en)
+
 ## [0.1.0] - 2026-03-07
 
 ### Added
