@@ -1,6 +1,12 @@
 <svelte:options customElement="__PLUGIN_ID__-overview" />
 
 <script module>
+	declare global {
+		interface Window {
+			__PLUGIN_ID_UNDERSCORE___Component_Overview: () => { tagName: string };
+		}
+	}
+
 	if (typeof window !== 'undefined') {
 		window.__PLUGIN_ID_UNDERSCORE___Component_Overview = function () {
 			return { tagName: '__PLUGIN_ID__-overview' };
