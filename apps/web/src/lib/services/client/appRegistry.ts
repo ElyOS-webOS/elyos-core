@@ -175,6 +175,7 @@ export class ClientAppRegistryService implements ClientAppRegistry {
 				error instanceof Error ? error : undefined
 			);
 
+			console.error('[AppRegistry] getApps underlying error:', error);
 			this.error = registryError;
 			throw registryError;
 		}
@@ -189,7 +190,7 @@ export class ClientAppRegistryService implements ClientAppRegistry {
 	 */
 	async getAppsByCategory(category: string): Promise<AppMetadata[]> {
 		try {
-			const result = await withTimeout(getUserAppsByCategory({ category }));
+			const result = await withTimeout(getUserAppsByCategory({ category }).run());
 
 			if (result.success && result.apps) {
 				return result.apps;
@@ -222,7 +223,7 @@ export class ClientAppRegistryService implements ClientAppRegistry {
 		}
 
 		try {
-			const result = await withTimeout(searchUserApps({ query }));
+			const result = await withTimeout(searchUserApps({ query }).run());
 
 			if (result.success && result.apps) {
 				return result.apps;

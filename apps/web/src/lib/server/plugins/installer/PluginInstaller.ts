@@ -8,7 +8,7 @@ import type { InstallResult, PluginManifest } from '@elyos/database';
 import { PluginErrorCode } from '@elyos/database';
 import { getPluginDir, ensureDir, removeDir, safeWriteFile, copyDir } from '../utils/filesystem';
 import { zipValidator } from '../validation/ZipValidator';
-import db from '$lib/server/database';
+import db, { client as pool } from '$lib/server/database';
 import { apps, pluginLogs } from '@elyos/database';
 import { eq, like, sql } from 'drizzle-orm';
 import AdmZip from 'adm-zip';
@@ -406,10 +406,10 @@ export class PluginInstaller {
 			const schemaName = this.sanitizeSchemaName(pluginId);
 
 			// Séma létrehozása
-			await db.execute(`CREATE SCHEMA IF NOT EXISTS ${schemaName}`);
+			await pool.query(`CREATE SCHEMA IF NOT EXISTS ${schemaName}`);
 
 			// Alapértelmezett kv_store tábla
-			await db.execute(`
+			await pool.query(`
 				CREATE TABLE IF NOT EXISTS ${schemaName}.kv_store (
 					key VARCHAR(255) PRIMARY KEY,
 					value JSONB NOT NULL,
@@ -419,7 +419,7 @@ export class PluginInstaller {
 			`);
 
 			// Migrációk nyilvántartó táblája
-			await db.execute(`
+			await pool.query(`
 				CREATE TABLE IF NOT EXISTS ${schemaName}.migrations (
 					id SERIAL PRIMARY KEY,
 					filename VARCHAR(255) NOT NULL UNIQUE,
@@ -459,7 +459,7 @@ export class PluginInstaller {
 		if (files.length === 0) return;
 
 		// Már lefutott migrációk lekérése
-		const applied = await db.execute(`SELECT filename FROM ${schemaName}.migrations`);
+		const applied = await pool.query(`SELECT filename FROM ${schemaName}.migrations`);
 		const appliedSet = new Set(
 			(applied.rows as Array<{ filename: string }>).map((r) => r.filename)
 		);
@@ -493,17 +493,17 @@ export class PluginInstaller {
 
 			console.log(`[PluginInstaller] Running migration: ${file}`);
 
-			// SQL végrehajtása — szintaktikai vagy egyéb DB hiba esetén telepítés sikertelen
+			// SQL végrehajtása — pool.query natívan kezeli a multi-statement SQL-t
 			try {
-				await db.execute(prefixedSql);
+				await pool.query(prefixedSql);
 			} catch (err) {
 				throw new Error(
-					`Migration sikertelen: ${file} — ${err instanceof Error ? err.message : 'Ismeretlen adatbázis hiba'}`
+					`Migration sikertelen: ${file} — ${err instanceof Error ? err.message : 'Ismeretlen adatbázis hiba'}\nFailed query: ${prefixedSql}`
 				);
 			}
 
 			// Migrációt feljegyezzük
-			await db.execute(`INSERT INTO ${schemaName}.migrations (filename) VALUES ('${file}')`);
+			await pool.query(`INSERT INTO ${schemaName}.migrations (filename) VALUES ('${file}')`);
 
 			console.log(`[PluginInstaller] Migration applied: ${file}`);
 		}
@@ -520,16 +520,20 @@ export class PluginInstaller {
 		}
 		return sql
 			.replace(
-				/CREATE\s+TABLE\s+IF\s+NOT\s+EXISTS\s+([a-z_][a-z0-9_]*)/gi,
+				/CREATE\s+TABLE\s+IF\s+NOT\s+EXISTS\s+(?![\w]+\.)([a-z_][a-z0-9_]*)/gi,
 				`CREATE TABLE IF NOT EXISTS ${schemaName}.$1`
 			)
-			.replace(/CREATE\s+TABLE\s+([a-z_][a-z0-9_]*)/gi, `CREATE TABLE ${schemaName}.$1`)
 			.replace(
-				/CREATE\s+INDEX\s+([a-z_][a-z0-9_]*)\s+ON\s+([a-z_][a-z0-9_]*)/gi,
+				/CREATE\s+TABLE\s+(?!IF\s+NOT\s+EXISTS\s)(?![\w]+\.)([a-z_][a-z0-9_]*)/gi,
+				`CREATE TABLE ${schemaName}.$1`
+			)
+			.replace(/REFERENCES\s+(?![\w]+\.)([a-z_][a-z0-9_]*)\s*\(/gi, `REFERENCES ${schemaName}.$1 (`)
+			.replace(
+				/CREATE\s+INDEX\s+([a-z_][a-z0-9_]*)\s+ON\s+(?![\w]+\.)([a-z_][a-z0-9_]*)/gi,
 				`CREATE INDEX $1 ON ${schemaName}.$2`
 			)
 			.replace(
-				/CREATE\s+UNIQUE\s+INDEX\s+([a-z_][a-z0-9_]*)\s+ON\s+([a-z_][a-z0-9_]*)/gi,
+				/CREATE\s+UNIQUE\s+INDEX\s+([a-z_][a-z0-9_]*)\s+ON\s+(?![\w]+\.)([a-z_][a-z0-9_]*)/gi,
 				`CREATE UNIQUE INDEX $1 ON ${schemaName}.$2`
 			);
 	}
@@ -542,7 +546,7 @@ export class PluginInstaller {
 	private sanitizeSchemaName(pluginId: string): string {
 		// Kötőjeleket aláhúzásra cseréljük, minden mást eltávolítunk
 		const sanitized = pluginId.replace(/-/g, '_').replace(/[^a-z0-9_]/g, '');
-		return `plugin_${sanitized}`;
+		return `app__${sanitized}`;
 	}
 
 	/**
@@ -594,7 +598,7 @@ export class PluginInstaller {
 
 			// 4. Plugin séma törlése
 			const schemaName = this.sanitizeSchemaName(pluginId);
-			await db.execute(`DROP SCHEMA IF EXISTS ${schemaName} CASCADE`);
+			await pool.query(`DROP SCHEMA IF EXISTS ${schemaName} CASCADE`);
 			console.log(`[PluginInstaller] Removed plugin schema`);
 
 			// 5. Email template-ek törlése

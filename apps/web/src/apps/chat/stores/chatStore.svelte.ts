@@ -254,7 +254,7 @@ class ChatStore {
 	async loadConversations() {
 		try {
 			const { getConversations } = await import('../chat.remote');
-			const result = await getConversations();
+			const result = await getConversations({});
 
 			if (result.success) {
 				this.state.conversations = result.conversations;
@@ -350,7 +350,7 @@ class ChatStore {
 	async loadUnreadCount() {
 		try {
 			const { getUnreadCount } = await import('../chat.remote');
-			const result = await getUnreadCount();
+			const result = await getUnreadCount({});
 
 			if (result.success) {
 				this.state.unreadCount = result.count;
@@ -384,7 +384,7 @@ class ChatStore {
 	async loadOnlineUsers() {
 		try {
 			const { getOnlineUsers } = await import('../chat.remote');
-			const result = await getOnlineUsers();
+			const result = await getOnlineUsers({});
 
 			if (result.success) {
 				console.log('[ChatStore] Loaded online users from API:', result.userIds);

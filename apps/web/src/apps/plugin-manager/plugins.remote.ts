@@ -1,4 +1,4 @@
-import { command, query, getRequestEvent } from '$app/server';
+import { command, getRequestEvent } from '$app/server';
 import * as v from 'valibot';
 import db from '$lib/server/database';
 import { apps } from '@elyos/database/schemas';
@@ -76,7 +76,7 @@ interface PluginDetailResponse {
 /**
  * Get list of installed plugins with pagination and filtering.
  */
-export const fetchPlugins = query(
+export const fetchPlugins = command(
 	pluginListSchema,
 	async ({ page = 1, pageSize = 20, sortBy = 'name', sortOrder = 'asc', search, status }) => {
 		const event = getRequestEvent();
@@ -210,7 +210,7 @@ export const fetchPlugins = query(
 /**
  * Get detailed information about a specific plugin.
  */
-export const fetchPluginDetail = query(pluginIdSchema, async ({ pluginId }) => {
+export const fetchPluginDetail = command(pluginIdSchema, async ({ pluginId }) => {
 	const event = getRequestEvent();
 	const { locals } = event;
 

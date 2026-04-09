@@ -1,12 +1,14 @@
-import { command, query, getRequestEvent } from '$app/server';
+import { command, getRequestEvent } from '$app/server';
 import * as v from 'valibot';
 import { chatRepository } from '$lib/server/database/repositories/chatRepository';
 import db from '$lib/server/database';
 import { ne } from 'drizzle-orm';
 import { users } from '@elyos/database/schemas';
 
+const emptySchema = v.object({});
+
 // Get all users for chat (excluding current user)
-export const getChatUsers = query(async () => {
+export const getChatUsers = command(emptySchema, async () => {
 	const event = getRequestEvent();
 	const { locals } = event;
 
@@ -44,7 +46,7 @@ export const getChatUsers = query(async () => {
 });
 
 // Get user's conversations
-export const getConversations = query(async () => {
+export const getConversations = command(emptySchema, async () => {
 	const event = getRequestEvent();
 	const { locals } = event;
 
@@ -183,7 +185,7 @@ export const markMessagesAsRead = command(markAsReadSchema, async ({ conversatio
 });
 
 // Get unread count
-export const getUnreadCount = query(async () => {
+export const getUnreadCount = command(emptySchema, async () => {
 	const event = getRequestEvent();
 	const { locals } = event;
 
@@ -203,7 +205,7 @@ export const getUnreadCount = query(async () => {
 });
 
 // Get online users (from Socket.IO in production)
-export const getOnlineUsers = query(async () => {
+export const getOnlineUsers = command(emptySchema, async () => {
 	const event = getRequestEvent();
 	const { locals } = event;
 
@@ -229,7 +231,7 @@ export const getOnlineUsers = query(async () => {
 });
 
 // Get current user ID
-export const getCurrentUserId = query(async () => {
+export const getCurrentUserId = command(emptySchema, async () => {
 	const event = getRequestEvent();
 	const { locals } = event;
 
