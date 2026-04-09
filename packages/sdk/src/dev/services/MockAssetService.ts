@@ -29,6 +29,7 @@ export interface MockAssetConfig {
 
 /** Mock Asset service — generates asset URLs using a configurable base URL for standalone development. */
 export class MockAssetService implements AssetService {
+	/** Base URL prepended to all generated asset paths */
 	private readonly baseUrl: string;
 
 	/** @param config - Optional base URL configuration (default: `/assets`) */

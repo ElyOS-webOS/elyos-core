@@ -28,6 +28,7 @@ export { MockI18nService } from './services/MockI18nService.js';
 export { MockNotificationService } from './services/MockNotificationService.js';
 export { MockContextService } from './services/MockContextService.js';
 export { MockAssetService } from './services/MockAssetService.js';
+export { MockSharedLibrariesService } from './services/MockSharedLibrariesService.js';
 
 export type { MockRemoteConfig } from './services/MockRemoteService.js';
 export type { MockDataConfig } from './services/MockDataService.js';
