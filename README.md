@@ -13,6 +13,7 @@
   <a href="https://www.npmjs.com/package/@elyos-dev/sdk"><img src="https://img.shields.io/npm/v/@elyos-dev/sdk?label=%40elyos-dev%2Fsdk&color=blue" alt="SDK npm version" /></a>
   <a href="https://www.npmjs.com/package/@elyos-dev/create-app"><img src="https://img.shields.io/npm/v/@elyos-dev/create-app?label=%40elyos-dev%2Fcreate-app&color=blue" alt="CLI npm version" /></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="License" /></a>
+  <a href="https://ko-fi.com/H2H11XIQDF"><img src="https://img.shields.io/badge/Support-Ko--fi-FF5E5B?logo=ko-fi&logoColor=white" alt="Support on Ko-fi" /></a>
 
 </p>
 
@@ -449,6 +450,14 @@ ElyOS comes with a complete plugin ecosystem. Create plugins with the CLI, devel
 We welcome contributions of all kinds — bug fixes, new features, documentation improvements, and plugin examples.
 
 Please read the [Contributing Guide](./docs/CONTRIBUTING.md) before submitting a pull request.
+
+## Support
+
+I'm a software developer from Hungary with several years of experience, building ElyOS in my spare time (solo, for now) – together with an AI who also needs to be fed. 🤑
+
+If you find it useful or simply like what I'm doing, even a small contribution helps me keep going.
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/H2H11XIQDF)
 
 ## Disclaimer
 

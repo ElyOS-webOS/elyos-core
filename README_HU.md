@@ -13,6 +13,7 @@
   <a href="https://www.npmjs.com/package/@elyos-dev/sdk"><img src="https://img.shields.io/npm/v/@elyos-dev/sdk?label=%40elyos-dev%2Fsdk&color=blue" alt="SDK npm version" /></a>
     <a href="https://www.npmjs.com/package/@elyos-dev/create-app"><img src="https://img.shields.io/npm/v/@elyos-dev/create-app?label=%40elyos-dev%2Fcreate-app&color=blue" alt="CLI npm version" /></a>
     <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="License" /></a>
+  <a href="https://ko-fi.com/H2H11XIQDF"><img src="https://img.shields.io/badge/Support-Ko--fi-FF5E5B?logo=ko-fi&logoColor=white" alt="Támogass Ko-fi-on" /></a>
 </p>
 
 <p align="center">
@@ -406,6 +407,14 @@ docker build -f docker/Dockerfile -t elyos/core:latest .
 Minden típusú hozzájárulást szívesen fogadunk — hibajavítások, új funkciók, dokumentációs fejlesztések és plugin példák egyaránt.
 
 Kérjük, olvasd el a [Közreműködési útmutatót](./docs/hu/CONTRIBUTING.md) a pull request beküldése előtt.
+
+## Támogatás
+
+Több éves tapasztalattal rendelkező szoftverfejlesztő vagyok Magyarországról, és az ElyOS-t szabadidőmben fejlesztem (egyelőre egyedül) – egy AI-jal közösen, akit szintén etetni kell. 🤑
+
+Ha hasznosnak találod, vagy csak tetszik, amit csinálok, egy kávé árával is sokat segíthetsz abban, hogy folytathassam.
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/H2H11XIQDF)
 
 ## Felelősség kizárása
 
