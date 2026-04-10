@@ -62,12 +62,12 @@ export const POST: RequestHandler = async ({ params, request }) => {
 		}
 
 		// Kulcs-érték pár lekérdezése
-		// Property 17: Adatok plugin_{plugin_id} sémában tárolva
+		// Property 17: Adatok app__{plugin_id} sémában tárolva
 		const schemaName = pluginId.replace(/-/g, '_');
 
 		// Use Drizzle sql template with proper escaping
 		const result = await db.execute(
-			sql`SELECT value FROM ${sql.raw(`plugin_${schemaName}.kv_store`)} WHERE key = ${key}`
+			sql`SELECT value FROM ${sql.raw(`app__${schemaName}.kv_store`)} WHERE key = ${key}`
 		);
 
 		const rows = result.rows as Array<{ value: unknown }>;

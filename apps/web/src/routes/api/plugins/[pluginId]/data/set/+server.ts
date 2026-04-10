@@ -60,13 +60,13 @@ export const POST: RequestHandler = async ({ params, request }) => {
 		}
 
 		// Kulcs-érték pár tárolása (upsert)
-		// Property 17: Adatok plugin_{plugin_id} sémában tárolva
+		// Property 17: Adatok app__{plugin_id} sémában tárolva
 		const schemaName = pluginId.replace(/-/g, '_');
 
 		// Use sql template with proper JSONB handling
 		await db.execute(
 			sql`
-			INSERT INTO ${sql.raw(`plugin_${schemaName}.kv_store`)} (key, value, updated_at)
+			INSERT INTO ${sql.raw(`app__${schemaName}.kv_store`)} (key, value, updated_at)
 			VALUES (${key}, ${sql`${JSON.stringify(value)}::jsonb`}, NOW())
 			ON CONFLICT (key)
 			DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()

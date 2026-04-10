@@ -64,9 +64,7 @@ export const POST: RequestHandler = async ({ params, request }) => {
 		// Kulcs-érték pár törlése
 		const schemaName = pluginId.replace(/-/g, '_');
 
-		await db.execute(
-			sql`DELETE FROM ${sql.raw(`plugin_${schemaName}.kv_store`)} WHERE key = ${key}`
-		);
+		await db.execute(sql`DELETE FROM ${sql.raw(`app__${schemaName}.kv_store`)} WHERE key = ${key}`);
 
 		return json({
 			success: true,

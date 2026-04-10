@@ -15,7 +15,7 @@ export const DEPENDENCY_WHITELIST = [
 
 	// Lucide Icons
 	{ name: 'lucide-svelte', versionPattern: /^\^?0\.\d+\.\d+$/ },
-	{ name: '@lucide/svelte', versionPattern: /^\^?0\.\d+\.\d+$/ },
+	{ name: '@lucide/svelte', versionPattern: /^\^?[01]\.\d+\.\d+$/ },
 
 	// Elyos packages (minden verzió engedélyezett)
 	{ name: '@elyos/*', versionPattern: /.*/ }

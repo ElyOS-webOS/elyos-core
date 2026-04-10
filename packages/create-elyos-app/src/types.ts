@@ -2,19 +2,21 @@
  * CLI type definitions
  */
 
+export type PluginFeature =
+	| 'sidebar'
+	| 'database'
+	| 'remote_functions'
+	| 'datatable'
+	| 'notifications'
+	| 'i18n';
+
 export interface PluginConfig {
 	pluginId: string;
 	displayName: string;
 	description: string;
 	author: string;
-	template: 'basic' | 'advanced' | 'datatable' | 'sidebar' | 'starter';
-	permissions: string[];
+	features: PluginFeature[];
 	install: boolean;
-	// starter template opciók
-	blankSidebar?: boolean;
-	blankRemote?: boolean;
-	blankI18n?: boolean;
-	blankMigrations?: boolean;
 }
 
 export interface PluginManifest {

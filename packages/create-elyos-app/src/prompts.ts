@@ -3,7 +3,8 @@
  */
 
 import prompts from 'prompts';
-import type { PluginConfig } from './types.js';
+import type { PluginConfig, PluginFeature } from './types.js';
+import { normalizeFeatures } from './generator.js';
 
 function validateAppId(value: string): boolean | string {
 	if (!value) return 'App ID is required';
@@ -24,7 +25,7 @@ function toTitleCase(str: string): string {
 
 export async function runInteractiveWizard(
 	initialName?: string,
-	options?: { template?: string; install?: boolean }
+	options?: { features?: PluginFeature[]; install?: boolean }
 ): Promise<PluginConfig> {
 	const questions: prompts.PromptObject[] = [];
 
@@ -61,36 +62,52 @@ export async function runInteractiveWizard(
 		}
 	);
 
-	if (!options?.template) {
+	// Feature multiselect — skip if features already provided via CLI flag
+	if (!options?.features) {
 		questions.push({
-			type: 'select',
-			name: 'template',
-			message: 'Template:',
+			type: 'multiselect',
+			name: 'features',
+			message: 'Features:',
 			choices: [
 				{
-					title: 'Starter',
-					value: 'starter',
-					description: 'Clean slate — only SDK, you choose what to add'
+					title: 'Sidebar',
+					value: 'sidebar',
+					selected: false,
+					description: 'Sidebar menu navigation (menu.json + components/)'
 				},
-				{ title: 'Basic', value: 'basic', description: 'Simple app with UI' },
-				{ title: 'Advanced', value: 'advanced', description: 'With server functions' },
-				{ title: 'Sidebar', value: 'sidebar', description: 'With sidebar menu (layout mode)' },
-				{ title: 'DataTable', value: 'datatable', description: 'CRUD with DataTable' }
-			],
-			initial: 0
+				{
+					title: 'Database',
+					value: 'database',
+					selected: false,
+					description: 'PostgreSQL database with migrations'
+				},
+				{
+					title: 'Remote Functions',
+					value: 'remote_functions',
+					selected: false,
+					description: 'Server-side functions (server/functions.ts)'
+				},
+				{
+					title: 'DataTable',
+					value: 'datatable',
+					selected: false,
+					description: 'CRUD data table component'
+				},
+				{
+					title: 'Notifications',
+					value: 'notifications',
+					selected: false,
+					description: 'System notification support'
+				},
+				{
+					title: 'i18n',
+					value: 'i18n',
+					selected: true,
+					description: 'Internationalization (locales/)'
+				}
+			]
 		});
 	}
-
-	questions.push({
-		type: 'multiselect',
-		name: 'permissions',
-		message: 'Permissions:',
-		choices: [
-			{ title: 'Database', value: 'database', selected: true },
-			{ title: 'Notifications', value: 'notifications' },
-			{ title: 'Remote Functions', value: 'remote_functions', selected: true }
-		]
-	});
 
 	const answers = await prompts(questions, {
 		onCancel: () => {
@@ -98,80 +115,16 @@ export async function runInteractiveWizard(
 		}
 	});
 
-	const selectedTemplate = (options?.template ??
-		answers.template ??
-		'starter') as PluginConfig['template'];
-
-	// starter template: follow-up kérdések
-	let blankSidebar = false;
-	let blankRemote = false;
-	let blankI18n = false;
-	let blankMigrations = false;
-
-	if (selectedTemplate === 'starter') {
-		const blankAnswers = await prompts(
-			[
-				{
-					type: 'toggle',
-					name: 'sidebar',
-					message: 'Add sidebar navigation? (menu.json + components/)',
-					initial: false,
-					active: 'yes',
-					inactive: 'no'
-				},
-				{
-					type: 'toggle',
-					name: 'remote',
-					message: 'Add server functions? (server/functions.ts)',
-					initial: false,
-					active: 'yes',
-					inactive: 'no'
-				},
-				{
-					type: 'toggle',
-					name: 'migrations',
-					message: 'Add database migrations? (migrations/001_init.sql)',
-					initial: false,
-					active: 'yes',
-					inactive: 'no'
-				},
-				{
-					type: 'toggle',
-					name: 'i18n',
-					message: 'Add i18n translations? (locales/)',
-					initial: true,
-					active: 'yes',
-					inactive: 'no'
-				}
-			],
-			{
-				onCancel: () => {
-					throw new Error('cancelled');
-				}
-			}
-		);
-		blankSidebar = blankAnswers.sidebar ?? false;
-		blankRemote = blankAnswers.remote ?? false;
-		blankI18n = blankAnswers.i18n ?? true;
-		blankMigrations = blankAnswers.migrations ?? false;
-
-		// Ha migrations kell, a database permission automatikusan bekerül
-		if (blankMigrations && !answers.permissions?.includes('database')) {
-			answers.permissions = [...(answers.permissions ?? []), 'database'];
-		}
-	}
+	const selectedFeatures: PluginFeature[] = normalizeFeatures(
+		options?.features ?? (answers.features as PluginFeature[]) ?? []
+	);
 
 	return {
 		pluginId: initialName ?? answers.pluginId,
 		displayName: answers.displayName || toTitleCase(initialName ?? answers.pluginId ?? ''),
 		description: answers.description || '',
 		author: answers.author || '',
-		template: selectedTemplate,
-		permissions: answers.permissions ?? ['database', 'remote_functions'],
-		install: options?.install !== false,
-		blankSidebar,
-		blankRemote,
-		blankI18n,
-		blankMigrations
+		features: selectedFeatures,
+		install: options?.install !== false
 	};
 }

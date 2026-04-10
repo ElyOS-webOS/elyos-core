@@ -43,6 +43,12 @@ export default defineConfig(({ command }) => ({
 	plugins: [
 		syncManifest(),
 		svelte({
+			onwarn(warning, handler) {
+				// Suppress known non-issues in plugin builds
+				if (warning.code === 'options_missing_custom_element') return;
+				if (warning.code === 'state_referenced_locally') return;
+				handler(warning);
+			},
 			compilerOptions: {
 				runes: true,
 				...(command === 'build'

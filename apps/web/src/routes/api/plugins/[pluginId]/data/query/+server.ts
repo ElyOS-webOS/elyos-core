@@ -81,7 +81,8 @@ export const POST: RequestHandler = async ({ params, request }) => {
 		}
 
 		// Más sémák elérésének tiltása (Property 18)
-		if (lowerQuery.includes('plugin_') && !lowerQuery.includes(`plugin_${pluginId}`)) {
+		const ownSchema = `app__${pluginId.replace(/-/g, '_')}`;
+		if (lowerQuery.includes('app__') && !lowerQuery.includes(ownSchema)) {
 			throw error(
 				403,
 				`${PluginErrorCode.PERMISSION_DENIED}: Access to other plugin schemas is not allowed`
@@ -101,7 +102,7 @@ export const POST: RequestHandler = async ({ params, request }) => {
 
 		// Query végrehajtása a plugin sémájában
 		// Automatikusan hozzáadjuk a séma prefixet, ha nincs megadva
-		const schemaName = `plugin_${pluginId.replace(/-/g, '_')}`;
+		const schemaName = `app__${pluginId.replace(/-/g, '_')}`;
 		let finalQuery = querySQL;
 		const lowerQueryCheck = querySQL.toLowerCase();
 
