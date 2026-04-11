@@ -485,6 +485,39 @@ export class WindowManager {
 				configurable: true
 			});
 
+			// Remote service override — dev plugin esetén a dev szerverre proxy-zunk
+			// A core remote endpoint nem találja a plugint (nincs DB bejegyzés)
+			const devRemoteService = {
+				async call<T = unknown>(
+					functionName: string,
+					params?: Record<string, unknown>
+				): Promise<T> {
+					try {
+						const response = await fetch(`${devUrl}/api/remote/${functionName}`, {
+							method: 'POST',
+							headers: { 'Content-Type': 'application/json' },
+							body: JSON.stringify({ params: params ?? {} }),
+							mode: 'cors',
+							credentials: 'omit'
+						});
+						if (!response.ok) {
+							throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+						}
+						const data = (await response.json()) as { success: boolean; result: T; error?: string };
+						if (!data.success) throw new Error(data.error ?? 'Remote call failed');
+						return data.result;
+					} catch (err) {
+						console.error(`[DevPlugin] Remote call failed: ${functionName}`, err);
+						throw err;
+					}
+				}
+			};
+			Object.defineProperty(sdk, 'remote', {
+				value: devRemoteService,
+				writable: false,
+				configurable: true
+			});
+
 			// Toast handler regisztrálása
 			const { toast: showToast } = await import('svelte-sonner');
 			sdk.ui._setToastHandler((message, type, duration) => {

@@ -194,6 +194,15 @@ MIT
 
 ## Changelog
 
+### [0.2.1] - 2026-04-12
+
+- **Added**: `SimpleDataTable` component (`@elyos-dev/sdk/dev/components/SimpleDataTable.svelte`) — standalone DataTable without TanStack Table, with pagination, sorting, toolbar snippet, and action buttons
+- **Added**: `SimpleRowActions` component (`@elyos-dev/sdk/dev/components/SimpleRowActions.svelte`) — primary button + dropdown for secondary actions
+- **Added**: `MockWebOSSDK.initialize(config, extraComponents?)` — new `extraComponents` parameter for synchronous component registration before app mount
+- **Added**: `WebOSComponents` interface typed fields for `DataTable`, `DataTableColumnHeader`, `renderComponent`, `renderSnippet`, `createActionsColumn`, `Input`, `Button`
+- **Added**: `MockUIService.components` now includes `createActionsColumn`, `renderComponent`, `renderSnippet`, `DataTableColumnHeader` mock implementations by default
+- **Added**: SDK package exports for `./dev/components/SimpleDataTable.svelte` and `./dev/components/SimpleRowActions.svelte`
+
 ### [0.2.0] - 2026-04-11
 
 - **Changed**: Version bump to align all ElyOS packages at `0.2.0` — no breaking changes, fully compatible with `0.1.x`

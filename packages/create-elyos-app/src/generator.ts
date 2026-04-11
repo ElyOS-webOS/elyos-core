@@ -1354,7 +1354,7 @@ function writeMenuJson(dir: string, config: PluginConfig): void {
 function generateOverviewSvelte(config: PluginConfig): string {
 	const idUnderscore = config.pluginId.replace(/-/g, '_');
 	const tagName = `${config.pluginId}-overview`;
-	const moduleBlock = `<script module>
+	const moduleBlock = `<script module lang="ts">
 \tif (typeof window !== 'undefined') {
 \t\t(window as any).${idUnderscore}_Component_Overview = function () {
 \t\t\treturn { tagName: '${tagName}' };
@@ -1422,7 +1422,7 @@ ${moduleBlock}
 function generateSettingsSvelte(config: PluginConfig): string {
 	const idUnderscore = config.pluginId.replace(/-/g, '_');
 	const tagName = `${config.pluginId}-settings`;
-	const moduleBlock = `<script module>
+	const moduleBlock = `<script module lang="ts">
 \tif (typeof window !== 'undefined') {
 \t\t(window as any).${idUnderscore}_Component_Settings = function () {
 \t\t\treturn { tagName: '${tagName}' };
@@ -1575,7 +1575,7 @@ function generateDatatableSvelte(config: PluginConfig): string {
 
 	return `<svelte:options customElement={{ tag: '${config.pluginId}-datatable', shadow: 'none' }} />
 
-<script module>
+<script module lang="ts">
 \tif (typeof window !== 'undefined') {
 \t\t(window as any).${config.pluginId.replace(/-/g, '_')}_Component_Datatable = function () {
 \t\t\treturn { tagName: '${config.pluginId}-datatable' };
@@ -1703,15 +1703,17 @@ ${
 \t{#if columns.length > 0}
 \t\t{#if CoreDataTable}
 \t\t\t<!-- Core módban: valódi DataTable -->
-\t\t\t<!-- svelte-ignore svelte_component_deprecated -->
-\t\t\t<svelte:component
-\t\t\t\tthis={CoreDataTable}
-\t\t\t\t{columns}
-\t\t\t\t{data}
-\t\t\t\tpagination={paginationInfo}
-\t\t\t\t{loading}
-\t\t\t\tonStateChange={handleStateChange}
-\t\t\t/>
+\t\t\t{#key data}
+\t\t\t\t<!-- svelte-ignore svelte_component_deprecated -->
+\t\t\t\t<svelte:component
+\t\t\t\t\tthis={CoreDataTable}
+\t\t\t\t\t{columns}
+\t\t\t\t\t{data}
+\t\t\t\t\tpagination={paginationInfo}
+\t\t\t\t\t{loading}
+\t\t\t\t\tonStateChange={handleStateChange}
+\t\t\t\t/>
+\t\t\t{/key}
 \t\t{:else}
 \t\t\t<!-- Standalone módban: SimpleDataTable közvetlenül -->
 \t\t\t<SimpleDataTable
@@ -1835,7 +1837,7 @@ function generateNotificationsSvelte(config: PluginConfig): string {
 
 	return `<svelte:options customElement={{ tag: '${config.pluginId}-notifications', shadow: 'none' }} />
 
-<script module>
+<script module lang="ts">
 \tif (typeof window !== 'undefined') {
 \t\t(window as any).${config.pluginId.replace(/-/g, '_')}_Component_Notifications = function () {
 \t\t\treturn { tagName: '${config.pluginId}-notifications' };
@@ -1896,7 +1898,7 @@ function generateRemoteSvelte(config: PluginConfig): string {
 
 	return `<svelte:options customElement={{ tag: '${config.pluginId}-remote', shadow: 'none' }} />
 
-<script module>
+<script module lang="ts">
 \tif (typeof window !== 'undefined') {
 \t\t(window as any).${config.pluginId.replace(/-/g, '_')}_Component_Remote = function () {
 \t\t\treturn { tagName: '${config.pluginId}-remote' };
@@ -2220,7 +2222,7 @@ function writePackageJson(dir: string, config: PluginConfig): void {
 				: {})
 		},
 		dependencies: {
-			'@elyos-dev/sdk': '^0.2.0',
+			'@elyos-dev/sdk': '^0.2.1',
 			svelte: '^5.0.0',
 			'@lucide/svelte': '^1.0.0'
 		},

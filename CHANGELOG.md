@@ -7,7 +7,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.0] - 2026-04-11
+## [0.2.1] - 2026-04-12
+
+### Fixed
+
+- **Dev plugin loader**: default URL changed from `http://localhost:5174` to `http://localhost:5175` (the remote dev server port)
+- **Dev plugin remote calls**: remote function calls from dev plugins now proxy to the dev server (`devUrl`) instead of the core API endpoint (which has no DB entry for dev plugins)
+
+### Added (`@elyos-dev/sdk@0.2.1`)
+
+- **`SimpleDataTable` component**: standalone-mode DataTable without TanStack Table dependency — supports pagination, sorting, toolbar snippet, and action buttons
+- **`SimpleRowActions` component**: primary button + dropdown for secondary actions — simulates the core `DataTableRowActions` component in standalone mode
+- **`MockWebOSSDK.initialize()`**: now accepts `extraComponents` parameter — pass `{ DataTable: SimpleDataTable }` to register the standalone table before app mount
+- **`WebOSComponents` interface**: typed fields for `DataTable`, `DataTableColumnHeader`, `renderComponent`, `renderSnippet`, `createActionsColumn`, `Input`, `Button`
+- **`MockUIService`**: `components` now includes `createActionsColumn`, `renderComponent`, `renderSnippet`, `DataTableColumnHeader` mock implementations out of the box
+- **SDK exports**: `SimpleDataTable.svelte` and `SimpleRowActions.svelte` exported via `@elyos-dev/sdk/dev/components/SimpleDataTable.svelte`
+
+### Added (`@elyos-dev/create-app@0.2.2`)
+
+- **DataTable standalone support**: generated `Datatable.svelte` now imports `SimpleDataTable` directly and uses it in standalone mode; in core mode the real `DataTable` is used via `svelte:component`
+- **`getItems` server function**: generated `server/functions.ts` now exports `getItems` with server-side pagination and sorting
+- **`loadData` via `remote.call`**: data loading uses `sdk.remote.call('getItems', ...)` instead of `sdk.data.query()` — works in both standalone and core modes
+- **`handleStateChange` triggers reload**: pagination and sorting changes now call `loadData()` automatically
+- **`<script module lang="ts">`**: fixed esbuild parse error on first `dev:full` start — all component module blocks now declare TypeScript language
 
 ### Fixed
 

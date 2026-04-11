@@ -5,7 +5,16 @@ All notable changes to this package are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.0] - 2026-04-11
+## [0.2.1] - 2026-04-12
+
+### Added
+
+- **`SimpleDataTable` component** (`@elyos-dev/sdk/dev/components/SimpleDataTable.svelte`): standalone DataTable without TanStack Table — pagination, sorting, toolbar snippet, action buttons, `{@html}` cell rendering
+- **`SimpleRowActions` component** (`@elyos-dev/sdk/dev/components/SimpleRowActions.svelte`): primary button + dropdown for secondary actions — simulates core `DataTableRowActions`
+- **`MockWebOSSDK.initialize(config, extraComponents?)`**: new `extraComponents` parameter — pass `{ DataTable: SimpleDataTable }` to register the standalone table synchronously before app mount
+- **`WebOSComponents` interface**: typed fields for `DataTable`, `DataTableColumnHeader`, `renderComponent`, `renderSnippet`, `createActionsColumn`, `Input`, `Button`
+- **`MockUIService` components**: `createActionsColumn`, `renderComponent`, `renderSnippet`, `DataTableColumnHeader` mock implementations included by default
+- **SDK package exports**: `./dev/components/SimpleDataTable.svelte` and `./dev/components/SimpleRowActions.svelte` explicit export entries
 
 ### Changed
 

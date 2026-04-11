@@ -14,7 +14,7 @@
 	const { t } = useI18n();
 
 	// Állapotkezelés
-	let url = $state('http://localhost:5174');
+	let url = $state('http://localhost:5175');
 	let loading = $state(false);
 
 	/**

@@ -151,6 +151,16 @@ MIT
 
 ## Changelog
 
+### [0.2.2] - 2026-04-12
+
+- **Added**: `SimpleDataTable` standalone support — generated `Datatable.svelte` uses `SimpleDataTable` directly in standalone mode; real `DataTable` in core mode
+- **Added**: `getItems` server function with server-side pagination and sorting
+- **Added**: `loadData` uses `sdk.remote.call('getItems', ...)` — works in both standalone and core modes
+- **Added**: `handleStateChange` now triggers `loadData()` — pagination and sorting reload data automatically
+- **Fix**: `<script module lang="ts">` — fixed esbuild parse error on first `dev:full` start
+- **Fix**: `jsonb` value display — `value#>>'{}'` strips surrounding quotes from jsonb string values
+- **Fix**: generated SDK dependency bumped to `^0.2.1`
+
 ### [0.2.1] - 2026-04-11
 
 - **Added**: wizard `description` and `author` fields now have pre-filled defaults — pressing Enter accepts without typing

@@ -7,7 +7,29 @@ Az összes lényeges változás ebben a projektben dokumentálva van.
 A formátum a [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) alapján készült,
 és ez a projekt a [Semantic Versioning](https://semver.org/spec/v2.0.0.html) szabályait követi.
 
-## [0.2.0] - 2026-04-11
+## [0.2.1] - 2026-04-12
+
+### Javítva
+
+- **Dev plugin betöltő**: az alapértelmezett URL `http://localhost:5174`-ről `http://localhost:5175`-re változott (a remote dev szerver portja)
+- **Dev plugin remote hívások**: a dev pluginok remote function hívásai mostantól a dev szerverre (`devUrl`) proxy-zódnak a core API endpoint helyett (amelynek nincs DB bejegyzése dev pluginokhoz)
+
+### Hozzáadva (`@elyos-dev/sdk@0.2.1`)
+
+- **`SimpleDataTable` komponens**: standalone módú DataTable TanStack Table függőség nélkül — lapozás, rendezés, toolbar snippet és action gombok támogatásával
+- **`SimpleRowActions` komponens**: primary gomb + dropdown a másodlagos akciókhoz — szimulálja a core `DataTableRowActions` komponenst standalone módban
+- **`MockWebOSSDK.initialize()`**: mostantól fogad `extraComponents` paramétert — átadható `{ DataTable: SimpleDataTable }` az app mountolása előtt
+- **`WebOSComponents` interface**: típusos mezők `DataTable`, `DataTableColumnHeader`, `renderComponent`, `renderSnippet`, `createActionsColumn`, `Input`, `Button` számára
+- **`MockUIService`**: a `components` mostantól tartalmazza a `createActionsColumn`, `renderComponent`, `renderSnippet`, `DataTableColumnHeader` mock implementációkat
+- **SDK exportok**: `SimpleDataTable.svelte` és `SimpleRowActions.svelte` elérhető `@elyos-dev/sdk/dev/components/SimpleDataTable.svelte` útvonalon
+
+### Hozzáadva (`@elyos-dev/create-app@0.2.2`)
+
+- **DataTable standalone támogatás**: a generált `Datatable.svelte` mostantól közvetlenül importálja a `SimpleDataTable`-t és standalone módban használja; core módban a valódi `DataTable` fut `svelte:component`-ként
+- **`getItems` szerver függvény**: a generált `server/functions.ts` mostantól exportálja a `getItems` függvényt szerver oldali lapozással és rendezéssel
+- **`loadData` `remote.call`-on keresztül**: az adatbetöltés `sdk.remote.call('getItems', ...)` hívást használ `sdk.data.query()` helyett — standalone és core módban egyaránt működik
+- **`handleStateChange` újratölt**: a lapozás és rendezés változásai mostantól automatikusan meghívják a `loadData()`-t
+- **`<script module lang="ts">`**: javítva az esbuild parse hiba az első `dev:full` indításkor — minden komponens module blokk mostantól TypeScript nyelvet deklarál
 
 ### Javítva
 

@@ -5,7 +5,19 @@ All notable changes to this package are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.1] - 2026-04-11
+## [0.2.2] - 2026-04-12
+
+### Added
+
+- **DataTable standalone support**: generated `Datatable.svelte` imports `SimpleDataTable` directly for standalone mode; in core mode the real `DataTable` runs via `svelte:component`
+- **`getItems` server function**: generated `server/functions.ts` exports `getItems` with server-side pagination and sorting (`page`, `pageSize`, `sortBy`, `sortOrder`)
+- **`loadData` via `remote.call`**: data loading uses `sdk.remote.call('getItems', ...)` instead of `sdk.data.query()` — works in both standalone and core modes
+- **`handleStateChange` triggers reload**: pagination and sorting changes now automatically call `loadData()`
+- **`<script module lang="ts">`**: fixed esbuild parse error on first `dev:full` start — all component module blocks now declare TypeScript language
+
+### Fixed
+
+- **`jsonb` value display**: `getItems` uses `value#>>'{}'` instead of `value::text` to strip surrounding quotes from jsonb string values
 
 ### Added
 
