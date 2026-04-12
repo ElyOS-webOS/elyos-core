@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <a href="https://elyos.hu">Weboldal</a> · <a href="https://docs.elyos.hu">Dokumentáció (felhasználói)</a> · <!-- <a href="./docs/hu/PLUGIN_DEVELOPMENT.md">Plugin fejlesztés</a> ·--> <a href="./docs/hu/CONTRIBUTING.md">Közreműködés</a> · <a href="./docs/hu/TROUBLESHOOTING.md">Hibaelhárítás</a> · <a href="./README.md">🇬🇧 English</a>
+  <a href="https://elyos.hu">Weboldal</a> · <a href="https://docs.elyos.hu">Dokumentáció (felhasználói)</a> · <!-- <a href="./docs/hu/PLUGIN_DEVELOPMENT.md">Plugin fejlesztés</a> ·--> <a href="./docs/hu/CONTRIBUTING.md">Közreműködés</a> · <a href="./docs/hu/TROUBLESHOOTING.md">Hibaelhárítás</a> · <a href="./CHANGELOG_HU.md">Változásnapló</a> · <a href="./README.md">🇬🇧 English</a>
 </p>
 
 ---

@@ -7,6 +7,12 @@ Az összes lényeges változás ebben a projektben dokumentálva van.
 A formátum a [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) alapján készült,
 és ez a projekt a [Semantic Versioning](https://semver.org/spec/v2.0.0.html) szabályait követi.
 
+## [0.2.2] - 2026-04-12
+
+### Javítva
+
+- **Start menü bezárása kívüli kattintásra**: a start menü paneljén kívülre kattintva mostantól helyesen bezáródik — megkerültük a bits-ui `DismissibleLayer` egy korlátját, amely kizárta a `ContextMenu.Trigger` elemeken (az asztali munkaterületen) történő kattintásokat a kívüli kattintás detektálásából
+
 ## [0.2.1] - 2026-04-12
 
 ### Javítva

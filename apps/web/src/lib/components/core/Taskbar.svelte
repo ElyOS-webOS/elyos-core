@@ -55,6 +55,27 @@
 	let startMenuOpen = $state(false);
 	let isDraggingFromStartMenu = $state(false);
 
+	// Kívüli kattintás figyelés: ha a start menü nyitva van és kívülre kattintanak, zárjuk be
+	$effect(() => {
+		if (!browser || !startMenuOpen) return;
+
+		const handlePointerDown = (e: PointerEvent) => {
+			if (isDraggingFromStartMenu) return;
+			const target = e.target as Node;
+			const content = document.querySelector('[data-startmenu-content]');
+			const trigger = document.querySelector('[data-startmenu-trigger]');
+			if (!content?.contains(target) && !trigger?.contains(target)) {
+				startMenuOpen = false;
+			}
+		};
+
+		document.addEventListener('pointerdown', handlePointerDown, { capture: true });
+
+		return () => {
+			document.removeEventListener('pointerdown', handlePointerDown, { capture: true });
+		};
+	});
+
 	// Drag figyelés: ha a start menüből húznak ki valamit, ne zárjuk be a popover-t
 	$effect(() => {
 		if (!browser) return;
@@ -210,7 +231,10 @@
 							startMenuOpen = v;
 						}}
 					>
-						<Popover.Trigger class="btn-startmenu btn-click-effect border-gradient">
+						<Popover.Trigger
+							class="btn-startmenu btn-click-effect border-gradient"
+							data-startmenu-trigger
+						>
 							<ContextMenu.Root>
 								<ContextMenu.Trigger>
 									<Menu size={24} />
@@ -222,7 +246,10 @@
 								</ContextMenu.Content>
 							</ContextMenu.Root>
 						</Popover.Trigger>
-						<Popover.Content class="z-1000 mx-2 my-2 flex w-(--startmenu-width) items-stretch"
+						<Popover.Content
+							class="z-1000 mx-2 my-2 flex w-(--startmenu-width) items-stretch"
+							onInteractOutside={(e) => e.preventDefault()}
+							data-startmenu-content
 							><StartMenu bind:open={startMenuOpen} /></Popover.Content
 						>
 					</Popover.Root>
