@@ -1,22 +1,22 @@
-# @elyos-dev/create-app
+# @racona/cli
 
-CLI tool to scaffold [ElyOS](https://elyos.hu) app projects. Generates a complete project structure with SDK integration, build configuration, and localization — ready to develop in seconds.
+CLI tool to scaffold [Racona](https://racona.hu) app projects. Generates a complete project structure with SDK integration, build configuration, and localization — ready to develop in seconds.
 
-<a href="https://www.npmjs.com/package/@elyos-dev/create-app"><img src="https://img.shields.io/npm/v/@elyos-dev/create-app?color=blue" alt="npm version" /></a>
+<a href="https://www.npmjs.com/package/@racona/cli"><img src="https://img.shields.io/npm/v/@racona/cli?color=blue" alt="npm version" /></a>
 <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="License" /></a>
-<a href="https://ko-fi.com/H2H11XIQDF"><img src="https://img.shields.io/badge/Support-Ko--fi-FF5E5B?logo=ko-fi&logoColor=white" alt="Support on Ko-fi" /></a>
+<a href="https://ko-fi.com/racona"><img src="https://img.shields.io/badge/Support-Ko--fi-FF5E5B?logo=ko-fi&logoColor=white" alt="Support on Ko-fi" /></a>
 
 ## Usage
 
 ```bash
 # Interactive wizard
-bunx @elyos-dev/create-app
+bunx @racona/cli
 
 # With a name
-bunx @elyos-dev/create-app my-app
+bunx @racona/cli my-app
 
 # Skip dependency installation
-bunx @elyos-dev/create-app my-app --no-install
+bunx @racona/cli my-app --no-install
 ```
 
 ## Feature-based scaffolding
@@ -39,7 +39,7 @@ Instead of fixed templates, the CLI lets you compose your project from individua
 When run without flags, the CLI walks you through an interactive setup:
 
 1. **App ID** — kebab-case identifier (e.g. `my-app`)
-2. **Display Name** — human-readable name shown in ElyOS
+2. **Display Name** — human-readable name shown in Racona
 3. **Description** — short description
 4. **Author** — your name and email
 5. **Features** — pick what you need (see table above)
@@ -87,12 +87,12 @@ my-app/
 
 When `datatable` + `database` + `remote_functions` are all enabled, the generated `Datatable.svelte` includes:
 
-- A data table loaded via `sdk.data.query()`
+- A data table loaded via `sdk.remote.call('getItems', ...)`
 - An **insert form** below the table (`name` + `value` fields), styled with core CSS variables
 - **Row actions**: Duplicate (primary) and Delete (secondary, destructive) — delete uses `sdk.ui.dialog()` confirm modal
 - Full i18n support — all strings use `t()` with translation keys in `locales/`
 
-The generated `server/functions.ts` exports `example`, `insertItem`, `deleteItem`, and `duplicateItem` — all scoped to the plugin's own `app__<id>` database schema.
+The generated `server/functions.ts` exports `getItems`, `insertItem`, `deleteItem`, and `duplicateItem` — all scoped to the plugin's own `app__<id>` database schema.
 
 ## Database Feature
 
@@ -119,29 +119,29 @@ bun dev
 # Build for production
 bun run build
 
-# Test inside ElyOS (requires Docker)
-# 1. Start ElyOS: docker compose up -d
+# Test inside Racona (requires Docker)
+# 1. Start Racona: docker compose up -d
 # 2. Open Plugin Manager → Dev Plugins tab
-# 3. Enter: http://localhost:5174
+# 3. Enter: http://localhost:5175
 ```
 
 ## Generated Files
 
 ### `manifest.json`
 
-Plugin metadata used by ElyOS to register and display your app. Includes name, description, permissions (auto-computed from selected features), window size constraints, supported locales, and more.
+Plugin metadata used by Racona to register and display your app. Includes name, description, permissions (auto-computed from selected features), window size constraints, supported locales, and more.
 
 ### `package.json`
 
-Pre-configured with `@elyos-dev/sdk` as a dependency and Vite build scripts. Includes `db:up`, `dev:server`, `dev:full` scripts when `database` is enabled.
+Pre-configured with `@racona/sdk` as a dependency and Vite build scripts. Includes `db:up`, `dev:server`, `dev:full` scripts when `database` is enabled.
 
 ### `vite.config.ts`
 
-Configured to build your plugin as an IIFE bundle (`dist/index.iife.js`) compatible with ElyOS's plugin loader.
+Configured to build your plugin as an IIFE bundle (`dist/index.iife.js`) compatible with Racona's plugin loader.
 
 ## Further Reading
 
-- [ElyOS Documentation for developers](https://docs.elyos.hu)
+- [Racona Developer Documentation](https://docs.racona.hu)
 
 ## License
 
@@ -151,6 +151,12 @@ MIT
 
 ## Changelog
 
+### [0.3.0] - 2026-04-14
+
+- **Changed**: Package renamed from `@elyos-dev/create-app` to `@racona/cli`
+- **Changed**: Binary renamed from `create-elyos-app` to `create-racona-app`
+- **Changed**: Generated `package.json` SDK dependency updated to `@racona/sdk: ^0.3.0`
+
 ### [0.2.2] - 2026-04-12
 
 - **Added**: `SimpleDataTable` standalone support — generated `Datatable.svelte` uses `SimpleDataTable` directly in standalone mode; real `DataTable` in core mode
@@ -159,12 +165,6 @@ MIT
 - **Added**: `handleStateChange` now triggers `loadData()` — pagination and sorting reload data automatically
 - **Fix**: `<script module lang="ts">` — fixed esbuild parse error on first `dev:full` start
 - **Fix**: `jsonb` value display — `value#>>'{}'` strips surrounding quotes from jsonb string values
-- **Fix**: generated SDK dependency bumped to `^0.2.1`
-
-### [0.2.1] - 2026-04-11
-
-- **Added**: wizard `description` and `author` fields now have pre-filled defaults — pressing Enter accepts without typing
-- **Added**: feature choice descriptions cleaned up, parenthetical technical details removed
 
 ### [0.2.0] - 2026-04-11
 
@@ -174,17 +174,6 @@ MIT
 - **Added**: datatable feature — insert form, Duplicate/Delete row actions (`createActionsColumn`), full i18n
 - **Added**: generated `server/functions.ts` exports `insertItem`, `deleteItem`, `duplicateItem` with correct `app__` schema prefix
 - **Added**: all component templates use `btn-primary` CSS variable-based styling
-- **Fix**: generated SDK dependency bumped to `^0.2.0`
-
-### [0.1.11] - 2026-04-10
-
-- **Docs**: changelog added to README (visible on npmjs.com)
-- **Fix**: `@elyos-dev/sdk` bumped to `^0.1.23` in generated `package.json`
-
-### [0.1.10] - 2026-04-10
-
-- **Fix**: `@lucide/svelte` bumped from `^0.561.0` to `^1.0.0` in generated `package.json`
-- **Fix**: `@elyos-dev/sdk` bumped from `^0.1.16` to `^0.1.22` in generated `package.json`
 
 ### [0.1.7] - 2026-04-08
 
@@ -194,4 +183,4 @@ MIT
 
 ### [0.1.0] - 2026-03-07
 
-- Initial release — interactive CLI scaffolding for ElyOS plugins
+- Initial release — interactive CLI scaffolding for Racona plugins

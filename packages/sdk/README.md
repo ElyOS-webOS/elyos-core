@@ -1,37 +1,37 @@
-# @elyos-dev/sdk
+# @racona/sdk
 
-The official SDK for building [ElyOS](https://elyos.hu) apps. Provides runtime services (injected by ElyOS), a mock SDK for standalone development, and full TypeScript type definitions.
+The official SDK for building [Racona](https://racona.hu) apps. Provides runtime services (injected by Racona), a mock SDK for standalone development, and full TypeScript type definitions.
 
-<a href="https://www.npmjs.com/package/@elyos-dev/sdk"><img src="https://img.shields.io/npm/v/@elyos-dev/sdk?color=blue" alt="npm version" /></a>
-<a href="https://jsr.io/@elyos-dev/sdk"><img src="https://jsr.io/badges/@elyos-dev/sdk" alt="JSR" /></a>
+<a href="https://www.npmjs.com/package/@racona/sdk"><img src="https://img.shields.io/npm/v/@racona/sdk?color=blue" alt="npm version" /></a>
+<a href="https://jsr.io/@racona/sdk"><img src="https://jsr.io/badges/@racona/sdk" alt="JSR" /></a>
 <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="License" /></a>
-<a href="https://ko-fi.com/H2H11XIQDF"><img src="https://img.shields.io/badge/Support-Ko--fi-FF5E5B?logo=ko-fi&logoColor=white" alt="Support on Ko-fi" /></a>
+<a href="https://ko-fi.com/racona"><img src="https://img.shields.io/badge/Support-Ko--fi-FF5E5B?logo=ko-fi&logoColor=white" alt="Support on Ko-fi" /></a>
 
 ## Installation
 
 ```bash
 # npm / bun
-bun add @elyos-dev/sdk
+bun add @racona/sdk
 
 # JSR (Deno / Bun / Node)
-bunx jsr add @elyos-dev/sdk
+bunx jsr add @racona/sdk
 # or
-deno add jsr:@elyos-dev/sdk
+deno add jsr:@racona/sdk
 ```
 
 ## Package Exports
 
-| Export                 | Description                                  |
-| ---------------------- | -------------------------------------------- |
-| `@elyos-dev/sdk`       | Runtime SDK (injected by ElyOS at load time) |
-| `@elyos-dev/sdk/dev`   | Mock SDK for standalone development          |
-| `@elyos-dev/sdk/types` | TypeScript type definitions only             |
+| Export              | Description                                   |
+| ------------------- | --------------------------------------------- |
+| `@racona/sdk`       | Runtime SDK (injected by Racona at load time) |
+| `@racona/sdk/dev`   | Mock SDK for standalone development           |
+| `@racona/sdk/types` | TypeScript type definitions only              |
 
 ## Quick Start
 
-### Runtime Mode (inside ElyOS)
+### Runtime Mode (inside Racona)
 
-When your app runs inside ElyOS, the SDK is automatically injected into `window.webOS`:
+When your app runs inside Racona, the SDK is automatically injected into `window.webOS`:
 
 ```ts
 const sdk = window.webOS!;
@@ -44,11 +44,11 @@ console.log(`Logged in as ${user.name}`);
 
 ### Development Mode (standalone)
 
-For local development without a running ElyOS instance, use the mock SDK:
+For local development without a running Racona instance, use the mock SDK:
 
 ```ts
 // src/main.ts
-import { MockWebOSSDK } from '@elyos-dev/sdk/dev';
+import { MockWebOSSDK } from '@racona/sdk/dev';
 
 if (!window.webOS) {
 	MockWebOSSDK.initialize({
@@ -80,7 +80,7 @@ The mock SDK simulates all services locally:
 ### Types Only
 
 ```ts
-import type { WebOSSDKInterface, UIService, DataService } from '@elyos-dev/sdk/types';
+import type { WebOSSDKInterface, UIService, DataService } from '@racona/sdk/types';
 ```
 
 ## API Overview
@@ -91,7 +91,7 @@ import type { WebOSSDKInterface, UIService, DataService } from '@elyos-dev/sdk/t
 sdk.ui.toast('Saved!', 'success', 3000);
 const result = await sdk.ui.dialog({ title: 'Confirm', message: 'Delete?', type: 'confirm' });
 const theme = sdk.ui.theme; // Current theme colors
-const components = sdk.ui.components; // ElyOS UI components
+const components = sdk.ui.components; // Racona UI components
 ```
 
 ### `data` — Data Service
@@ -160,7 +160,7 @@ const imageUrl = sdk.assets.getUrl('images/banner.png');
 
 ## TypeScript Support
 
-All service interfaces are exported from `@elyos-dev/sdk/types`:
+All service interfaces are exported from `@racona/sdk/types`:
 
 ```ts
 import type {
@@ -179,12 +179,12 @@ import type {
 	ToastType,
 	MockSDKConfig,
 	PluginErrorCode
-} from '@elyos-dev/sdk/types';
+} from '@racona/sdk/types';
 ```
 
 ## Further Reading
 
-For user documentation, visit [docs.elyos.hu](https://docs.elyos.hu).
+For documentation, visit [docs.racona.hu](https://docs.racona.hu).
 
 ## License
 
@@ -194,10 +194,15 @@ MIT
 
 ## Changelog
 
+### [0.3.0] - 2026-04-14
+
+- **Changed**: Package renamed from `@elyos-dev/sdk` to `@racona/sdk`
+- **Changed**: All import paths updated from `@elyos-dev/sdk` to `@racona/sdk`
+
 ### [0.2.1] - 2026-04-12
 
-- **Added**: `SimpleDataTable` component (`@elyos-dev/sdk/dev/components/SimpleDataTable.svelte`) — standalone DataTable without TanStack Table, with pagination, sorting, toolbar snippet, and action buttons
-- **Added**: `SimpleRowActions` component (`@elyos-dev/sdk/dev/components/SimpleRowActions.svelte`) — primary button + dropdown for secondary actions
+- **Added**: `SimpleDataTable` component (`@racona/sdk/dev/components/SimpleDataTable.svelte`) — standalone DataTable without TanStack Table, with pagination, sorting, toolbar snippet, and action buttons
+- **Added**: `SimpleRowActions` component (`@racona/sdk/dev/components/SimpleRowActions.svelte`) — primary button + dropdown for secondary actions
 - **Added**: `MockWebOSSDK.initialize(config, extraComponents?)` — new `extraComponents` parameter for synchronous component registration before app mount
 - **Added**: `WebOSComponents` interface typed fields for `DataTable`, `DataTableColumnHeader`, `renderComponent`, `renderSnippet`, `createActionsColumn`, `Input`, `Button`
 - **Added**: `MockUIService.components` now includes `createActionsColumn`, `renderComponent`, `renderSnippet`, `DataTableColumnHeader` mock implementations by default
@@ -205,11 +210,7 @@ MIT
 
 ### [0.2.0] - 2026-04-11
 
-- **Changed**: Version bump to align all ElyOS packages at `0.2.0` — no breaking changes, fully compatible with `0.1.x`
-
-### [0.1.23] - 2026-04-10
-
-- **Docs**: changelog added to README (visible on npmjs.com and jsr.io)
+- **Changed**: Version bump to align all Racona packages at `0.2.0` — no breaking changes, fully compatible with `0.1.x`
 
 ### [0.1.22] - 2026-04-10
 
@@ -220,16 +221,6 @@ MIT
 - **Added**: `DialogOptions.confirmLabel` — custom label for the confirm button
 - **Added**: `DialogOptions.confirmVariant` — visual variant (`default` | `destructive`) for the confirm button
 - **Added**: `DialogOptions`, `DialogResult`, `ActionBarItem` exported from main entry point
-
-### [0.1.21] - 2026-04-09
-
-- **Fix**: JSDoc coverage improvements, explicit constructors, explicit return types
-- **Fix**: `MockSharedLibrariesService` exported from `@elyos-dev/sdk/dev`
-- **Fix**: Removed undocumentable `I`-prefixed type aliases from main entry (JSR compatibility)
-
-### [0.1.16] - 2026-03-20
-
-- **Fix**: Package name restored to `@elyos-dev/sdk`; all internal imports updated
 
 ### [0.1.1] - 2026-03-08
 
