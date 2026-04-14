@@ -286,7 +286,7 @@ export async function generateProject(config: PluginConfig): Promise<void> {
 		} catch {
 			console.log(pc.yellow('  ⚠ bun install failed'));
 			console.log(pc.dim('    Set the correct path in package.json:'));
-			console.log(pc.dim('    "@elyos-dev/sdk": "^0.1.0"'));
+			console.log(pc.dim('    "@racona/sdk": "^0.1.0"'));
 			console.log(pc.dim('    Then run: bun install'));
 		}
 	}
@@ -700,7 +700,7 @@ ${notifFn}${remoteFn}
 	{:else}
 		<div class="dev-notice">
 			<p class="dev-notice-title">⚠ Not available in standalone mode</p>
-			<p>The DataTable component is only available when the plugin is installed in ElyOS (<code>sdk.components.DataTable</code>).</p>
+			<p>The DataTable component is only available when the plugin is installed in Racona (<code>sdk.components.DataTable</code>).</p>
 			<p>Once installed, data will be loaded via the <code>sdk.data</code> service.</p>
 		</div>
 	{/if}${notifBlock}${remoteBlock}
@@ -878,11 +878,11 @@ function generateMainTs(config: PluginConfig): string {
 
 	return `import { mount } from 'svelte';
 import App from './App.svelte';
-import SimpleDataTable from '@elyos-dev/sdk/dev/components/SimpleDataTable.svelte';
+import SimpleDataTable from '@racona/sdk/dev/components/SimpleDataTable.svelte';
 
 async function initDevSDK() {
 \tif (typeof window !== 'undefined' && !(window as any).webOS) {
-\t\tconst { MockWebOSSDK } = await import('@elyos-dev/sdk/dev');
+\t\tconst { MockWebOSSDK } = await import('@racona/sdk/dev');
 ${localeBlock}
 \t\tMockWebOSSDK.initialize(${sdkInitArgs}, { DataTable: SimpleDataTable });
 ${remoteBlock}\t}
@@ -1219,7 +1219,7 @@ function generatePluginTs(config: PluginConfig): string {
 	const idUnderscore = config.pluginId.replace(/-/g, '_');
 	return `/**
  * Plugin IIFE build entry point.
- * ElyOS tölti be ezt a bundle-t Web Component-ként.
+ * Racona tölti be ezt a bundle-t Web Component-ként.
  */
 import { mount } from 'svelte';
 import App from './App.svelte';
@@ -1585,7 +1585,7 @@ function generateDatatableSvelte(config: PluginConfig): string {
 
 <script lang="ts">
 \timport { onMount, createRawSnippet } from 'svelte';
-\timport SimpleDataTable from '@elyos-dev/sdk/dev/components/SimpleDataTable.svelte';
+\timport SimpleDataTable from '@racona/sdk/dev/components/SimpleDataTable.svelte';
 ${i18nBlock}
 \tlet { pluginId = 'my-plugin' }: { pluginId?: string } = $props();
 \tconst sdk = $derived(
@@ -1970,7 +1970,7 @@ function writeDatabaseFiles(dir: string, config: PluginConfig): void {
 		join(dir, 'migrations', '001_init.sql'),
 		`-- ${config.pluginId} kezdeti séma
 -- A táblaneveket a telepítő automatikusan prefixeli a plugin sémájával (plugin__${pluginIdUnderscore})
--- Nem kell séma prefixet írni — az ElyOS installer automatikusan hozzáadja.
+-- Nem kell séma prefixet írni — az Racona installer automatikusan hozzáadja.
 
 CREATE TABLE IF NOT EXISTS items (
     id SERIAL PRIMARY KEY,
@@ -1990,7 +1990,7 @@ CREATE INDEX idx_items_created_at ON items (created_at);
 		join(dir, 'migrations', 'dev', '000_auth_seed.sql'),
 		`-- Dev környezet: minimális auth séma
 -- Éles rendszerben az auth sémát a better-auth kezeli.
--- Ez a fájl NEM kerül bele az éles .elyospkg csomagba (migrations/dev/ almappa).
+-- Ez a fájl NEM kerül bele az éles .raconapkg csomagba (migrations/dev/ almappa).
 CREATE SCHEMA IF NOT EXISTS auth;
 
 CREATE TABLE IF NOT EXISTS auth.users (
@@ -2222,7 +2222,7 @@ function writePackageJson(dir: string, config: PluginConfig): void {
 				: {})
 		},
 		dependencies: {
-			'@racona/sdk': '^0.3.0',
+			'@racona/sdk': '^0.3.2',
 			svelte: '^5.0.0',
 			'@lucide/svelte': '^1.0.0'
 		},
@@ -2289,7 +2289,7 @@ bun dev
 		join(dir, 'README.md'),
 		`# ${config.displayName}
 
-${config.description || 'ElyOS plugin.'}
+${config.description || 'Racona plugin.'}
 
 ## Development
 

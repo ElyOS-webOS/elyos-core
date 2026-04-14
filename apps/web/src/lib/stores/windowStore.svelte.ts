@@ -303,7 +303,7 @@ export class WindowManager {
 	) {
 		try {
 			// WebOS SDK inicializálása
-			const { WebOSSDK } = await import('@elyos-dev/sdk');
+			const { WebOSSDK } = await import('@racona/sdk');
 			const PluginLayoutWrapper = await import('$lib/components/shared/PluginLayoutWrapper.svelte');
 
 			// DataTable komponensek importálása
@@ -399,7 +399,7 @@ export class WindowManager {
 			const manifest = await manifestResponse.json();
 
 			// WebOS SDK inicializálása a dev plugin számára
-			const { WebOSSDK } = await import('@elyos-dev/sdk');
+			const { WebOSSDK } = await import('@racona/sdk');
 			const { AppLayout } = await import('$lib/components/shared');
 			const { createAppShell } = await import('$lib/apps/appShell.svelte');
 			const {
@@ -749,7 +749,7 @@ export class WindowManager {
 	) {
 		try {
 			// WebOS SDK inicializálása a plugin számára
-			const { WebOSSDK } = await import('@elyos-dev/sdk');
+			const { WebOSSDK } = await import('@racona/sdk');
 			const { AppLayout } = await import('$lib/components/shared');
 			const { createAppShell } = await import('$lib/apps/appShell.svelte');
 
@@ -1186,7 +1186,7 @@ export function getWindowManager(): WindowManager {
 
 // ─── Globális dialog handler ─────────────────────────────────────────────────
 
-import type { DialogOptions, DialogResult } from '@elyos-dev/sdk';
+import type { DialogOptions, DialogResult } from '@racona/sdk';
 
 /** Globális dialog handler — a +layout.svelte regisztrálja, a plugin betöltők használják */
 let globalDialogHandler: ((options: DialogOptions) => Promise<DialogResult>) | null = null;

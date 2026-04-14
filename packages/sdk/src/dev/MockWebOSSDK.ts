@@ -9,8 +9,8 @@
  *
  * @example
  * ```ts
- * import SimpleDataTable from '@elyos-dev/sdk/dev/components/SimpleDataTable.svelte';
- * import { MockWebOSSDK } from '@elyos-dev/sdk/dev';
+ * import SimpleDataTable from '@racona/sdk/dev/components/SimpleDataTable.svelte';
+ * import { MockWebOSSDK } from '@racona/sdk/dev';
  *
  * if (!window.webOS) {
  *   MockWebOSSDK.initialize(
@@ -81,7 +81,7 @@ export class MockWebOSSDK implements WebOSSDKInterface {
 	 *
 	 * @example
 	 * ```ts
-	 * import SimpleDataTable from '@elyos-dev/sdk/dev/components/SimpleDataTable.svelte';
+	 * import SimpleDataTable from '@racona/sdk/dev/components/SimpleDataTable.svelte';
 	 *
 	 * MockWebOSSDK.initialize(
 	 *   { i18n: { locale: 'hu', translations } },

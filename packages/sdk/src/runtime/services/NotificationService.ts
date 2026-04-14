@@ -17,7 +17,7 @@ export class NotificationService implements INotificationService {
 	private readonly pluginId: string;
 	/** Whether the plugin has the `notifications` permission */
 	private readonly hasPermission: boolean;
-	/** Optional dev-mode notification handler registered by the ElyOS core */
+	/** Optional dev-mode notification handler registered by the Racona core */
 	private notificationFn: ((options: NotificationOptions) => Promise<void>) | null = null;
 
 	/**
@@ -30,7 +30,7 @@ export class NotificationService implements INotificationService {
 	}
 
 	/**
-	 * Register a notification handler (called by the ElyOS core in dev mode).
+	 * Register a notification handler (called by the Racona core in dev mode).
 	 * @param fn - Function that sends a notification
 	 */
 	setDevNotificationHandler(fn: (options: NotificationOptions) => Promise<void>): void {

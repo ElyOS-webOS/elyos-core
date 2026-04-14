@@ -1,7 +1,7 @@
 /**
  * WebOS SDK — Runtime SDK
  *
- * Injected into plugins by the ElyOS core.
+ * Injected into plugins by the Racona core.
  * Aggregates all services into a single object.
  */
 
@@ -15,7 +15,7 @@ import { ContextService } from './services/ContextService.js';
 import { AssetService } from './services/AssetService.js';
 import { SharedLibrariesService } from './services/SharedLibrariesService.js';
 
-/** WebOS SDK — injected into plugins by the ElyOS core, aggregates all services. */
+/** WebOS SDK — injected into plugins by the Racona core, aggregates all services. */
 export class WebOSSDK implements WebOSSDKInterface {
 	/** UI service — toasts, dialogs, theme */
 	readonly ui: UIService;
@@ -33,7 +33,7 @@ export class WebOSSDK implements WebOSSDKInterface {
 	readonly assets: AssetService;
 	/** Shared Libraries service — access to core libraries */
 	readonly libs: SharedLibrariesService;
-	/** ElyOS UI components */
+	/** Racona UI components */
 	readonly components: WebOSComponents;
 
 	/**
@@ -44,7 +44,7 @@ export class WebOSSDK implements WebOSSDKInterface {
 	 * @param params - Parameters passed when the app was launched
 	 * @param permissions - List of permissions granted to the plugin
 	 * @param windowElement - Optional Window reference (for iframe-based plugins)
-	 * @param components - ElyOS UI components
+	 * @param components - Racona UI components
 	 * @param devMode - Dev mode flag (skips automatic translation loading)
 	 */
 	constructor(
@@ -76,7 +76,7 @@ export class WebOSSDK implements WebOSSDKInterface {
 	 * @param params - Parameters passed when the app was launched
 	 * @param permissions - List of permissions granted to the plugin
 	 * @param windowElement - Optional Window reference (for iframe-based plugins)
-	 * @param components - ElyOS UI components
+	 * @param components - Racona UI components
 	 * @param devMode - Dev mode flag
 	 * @returns The initialized SDK instance
 	 */

@@ -7,14 +7,28 @@ Az összes lényeges változás ebben a projektben dokumentálva van.
 A formátum a [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) alapján készült,
 és ez a projekt a [Semantic Versioning](https://semver.org/spec/v2.0.0.html) szabályait követi.
 
+## [0.3.2] - 2026-04-15
+
+### Változtatva
+
+- Brand név és dokumentáció frissítések
+
+### Változtatva (`@racona/sdk@0.3.2`)
+
+- Brand név és dokumentáció frissítések
+
+### Változtatva (`@racona/cli@0.3.2`)
+
+- Brand név és dokumentáció frissítések
+
 ## [0.3.0] - 2026-04-14
 
 ### Változtatva — Racona brand-átállás (2026-04-14)
 
-- **Projekt átnevezve**: ElyOS → Racona
+- **Projekt átnevezve**: Racona → Racona
 - **`create-elyos-app`** → **`@racona/cli`** — CLI eszköz plugin generáláshoz
 - **`@elyos/sdk`** / **`@elyos-dev/sdk`** → **`@racona/sdk`** — plugin SDK
-- Minden UI szöveg, dokumentáció és konfigurációs hivatkozás frissítve ElyOS-ról Raconára
+- Minden UI szöveg, dokumentáció és konfigurációs hivatkozás frissítve Racona-ról Raconára
 - Domain frissítve: `elyos.hu` → `racona.hu` (301-es átirányítások érvényben)
 
 ## [0.2.2] - 2026-04-12
@@ -136,7 +150,7 @@ A formátum a [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) alapján 
 
 ### Javítva
 
-- Dev plugin betöltő: `host.docker.internal` URL-ek engedélyezése Docker-ben futó ElyOS esetén
+- Dev plugin betöltő: `host.docker.internal` URL-ek engedélyezése Docker-ben futó Racona esetén
 - Dev plugin betöltő: a böngésző `localhost` URL-t kap (konvertálva `host.docker.internal`-ről), így a plugin mindkét oldalról helyesen töltődik be
 - Dev plugin ablak betöltés után fókuszt kap
 - Dev plugin betöltő UI szövegek teljes lokalizációja (i18n kulcsok, Docker hint hozzáadva)
@@ -149,7 +163,7 @@ A formátum a [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) alapján 
 
 ### Hozzáadva
 
-- Az ElyOS első nyilvános kiadása
+- A Racona első nyilvános kiadása
 - Teljes asztali környezet a böngészőben ablakkezeléssel, tálcával és start menüvel
 - Beépített alkalmazások: Beállítások, Felhasználók, Napló, Plugin kezelő, Chat, Értesítések, Súgó
 - Plugin rendszer WebOS SDK-val harmadik féltől származó alkalmazások fejlesztéséhez _(fejlesztés alatt)_

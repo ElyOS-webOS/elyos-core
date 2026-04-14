@@ -9,7 +9,7 @@
 	const shell = getAppShell();
 
 	// Plugin config - hardcoded for now (can be fetched from API if needed)
-	const PLUGIN_EXTENSION = '.elyospkg';
+	const PLUGIN_EXTENSION = '.raconapkg';
 	const MAX_SIZE_MB = 10;
 
 	// State

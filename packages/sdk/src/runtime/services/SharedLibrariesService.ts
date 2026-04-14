@@ -1,7 +1,7 @@
 /**
  * Shared Libraries Service
  *
- * Provides access to libraries installed in the ElyOS core.
+ * Provides access to libraries installed in the Racona core.
  * This prevents plugins from bundling large dependencies, reducing bundle size
  * and ensuring version consistency across all plugins.
  *
@@ -17,7 +17,7 @@
 
 import type { SharedLibrariesService as ISharedLibrariesService } from '../../types/index.js';
 
-/** Shared Libraries service — access to libraries installed in the ElyOS core */
+/** Shared Libraries service — access to libraries installed in the Racona core */
 export class SharedLibrariesService implements ISharedLibrariesService {
 	/** Creates a new SharedLibrariesService instance. */
 	constructor() {}
@@ -32,7 +32,7 @@ export class SharedLibrariesService implements ISharedLibrariesService {
 	get(libraryName: string): any {
 		if (typeof window === 'undefined') return undefined;
 
-		const libs = (window as any).__ELYOS_SHARED_LIBS__;
+		const libs = (window as any).__RACONA_SHARED_LIBS__;
 		return libs?.[libraryName];
 	}
 
@@ -54,7 +54,7 @@ export class SharedLibrariesService implements ISharedLibrariesService {
 	list(): string[] {
 		if (typeof window === 'undefined') return [];
 
-		const libs = (window as any).__ELYOS_SHARED_LIBS__;
+		const libs = (window as any).__RACONA_SHARED_LIBS__;
 		return libs ? Object.keys(libs) : [];
 	}
 

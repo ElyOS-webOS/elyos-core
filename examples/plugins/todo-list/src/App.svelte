@@ -8,7 +8,7 @@
 	 * I18nService (translations), and ContextService usage.
 	 */
 	import { onMount } from 'svelte';
-	import type {} from '@elyos/sdk/types';
+	import type {} from '@racona/sdk/types';
 
 	let { pluginId = 'todo-list' }: { pluginId?: string } = $props();
 

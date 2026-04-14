@@ -1,6 +1,6 @@
 # Weather Plugin
 
-A weather plugin for ElyOS demonstrating RemoteService API integration and DataService for favorites.
+A weather plugin for Racona demonstrating RemoteService API integration and DataService for favorites.
 
 ## What It Demonstrates
 
@@ -46,19 +46,19 @@ bun dev
 
 The MockWebOSSDK is initialized with custom remote handlers that return mock weather data for 8 cities. Favorites are persisted to localStorage.
 
-### ElyOS Mode (Docker)
+### Racona Mode (Docker)
 
 ```bash
-# Start ElyOS
+# Start Racona
 docker compose up -d
 
 # Start plugin dev server
 bun dev
 
-# In ElyOS: Plugin Manager → Load Dev Plugin → http://localhost:5173
+# In Racona: Plugin Manager → Load Dev Plugin → http://localhost:5173
 ```
 
-In ElyOS mode, `sdk.remote.call('getWeather', ...)` calls the actual server-side function defined in `server/functions.ts` (not included in this example — you'd add it for production use).
+In Racona mode, `sdk.remote.call('getWeather', ...)` calls the actual server-side function defined in `server/functions.ts` (not included in this example — you'd add it for production use).
 
 ## Build
 

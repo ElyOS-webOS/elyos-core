@@ -13,7 +13,7 @@
 
 <script lang="ts">
 	import { onMount, untrack } from 'svelte';
-	import type {} from '@elyos/sdk/types';
+	import type {} from '@racona/sdk/types';
 
 	let { pluginId = 'sdk-demo' }: { pluginId?: string } = $props();
 

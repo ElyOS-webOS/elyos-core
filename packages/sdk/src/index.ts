@@ -1,13 +1,13 @@
 /**
  * @module
- * Runtime SDK for ElyOS apps.
+ * Runtime SDK for Racona apps.
  *
- * When your app runs inside ElyOS, the SDK is automatically injected into `window.webOS`.
+ * When your app runs inside Racona, the SDK is automatically injected into `window.webOS`.
  * Import this module to access the runtime services and TypeScript types.
  *
  * @example
  * ```ts
- * import { WebOSSDK } from '@elyos-dev/sdk';
+ * import { WebOSSDK } from '@racona/sdk';
  *
  * const sdk = window.webOS!;
  * sdk.ui.toast('Hello from my app!', 'success');

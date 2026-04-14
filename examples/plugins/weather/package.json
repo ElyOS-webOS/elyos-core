@@ -1,7 +1,7 @@
 {
 	"name": "weather-plugin",
 	"version": "1.0.0",
-	"description": "Weather plugin for ElyOS — demonstrates RemoteService API integration",
+	"description": "Weather plugin for Racona — demonstrates RemoteService API integration",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
@@ -9,7 +9,7 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
-		"@elyos-dev/sdk": "workspace:*",
+		"@racona/sdk": "workspace:*",
 		"svelte": "^5.0.0"
 	},
 	"devDependencies": {

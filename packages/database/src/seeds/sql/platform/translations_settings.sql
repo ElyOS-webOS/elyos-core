@@ -229,7 +229,7 @@ INSERT INTO platform.translations (locale, namespace, key, value) VALUES
 ('hu', 'settings', 'about.version', 'Verzió'),
 ('hu', 'settings', 'about.description', 'Modern webes asztali környezet a hatékony munkavégzéshez.'),
 ('hu', 'settings', 'about.changelog', 'Verzió előzmények'),
-('hu', 'settings', 'about.copyright', '© {year} ElyOS')
+('hu', 'settings', 'about.copyright', '© {year} Racona')
 ON CONFLICT (locale, namespace, key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW();
 
 -- Profil beállítások (ProfileSettings.svelte)
@@ -475,7 +475,7 @@ INSERT INTO platform.translations (locale, namespace, key, value) VALUES
 ('en', 'settings', 'about.version', 'Version'),
 ('en', 'settings', 'about.description', 'Modern web desktop environment for efficient work.'),
 ('en', 'settings', 'about.changelog', 'Version History'),
-('en', 'settings', 'about.copyright', '© {year} ElyOS')
+('en', 'settings', 'about.copyright', '© {year} Racona')
 ON CONFLICT (locale, namespace, key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW();
 
 -- Profil beállítások (ProfileSettings.svelte)

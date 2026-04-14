@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@elyos/core",
+	"name": "@racona/core",
 	"private": true,
 	"version": "0.1.0",
 	"type": "module",
@@ -90,7 +90,7 @@
 	"dependencies": {
 		"@better-auth/drizzle-adapter": "^1.6.0",
 		"@racona/database": "workspace:*",
-		"@elyos-dev/sdk": "workspace:*",
+		"@racona/sdk": "workspace:*",
 		"@sentry/node": "^10.47.0",
 		"@sentry/sveltekit": "^10.47.0",
 		"@tanstack/table-core": "^8.21.3",

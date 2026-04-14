@@ -27,7 +27,7 @@
 
 	import { onMount } from 'svelte';
 	import { Heart } from '@lucide/svelte';
-	import type {} from '@elyos/sdk/types';
+	import type {} from '@racona/sdk/types';
 
 	let { pluginId = 'sdk-demo' }: { pluginId?: string } = $props();
 

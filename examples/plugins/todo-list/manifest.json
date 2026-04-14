@@ -5,11 +5,11 @@
 		"en": "Todo List"
 	},
 	"description": {
-		"hu": "Egyszerű teendőlista plugin — CRUD műveletek az ElyOS SDK DataService használatával",
-		"en": "Simple todo list plugin — CRUD operations using the ElyOS SDK DataService"
+		"hu": "Egyszerű teendőlista plugin — CRUD műveletek az Racona SDK DataService használatával",
+		"en": "Simple todo list plugin — CRUD operations using the Racona SDK DataService"
 	},
 	"version": "1.0.0",
-	"author": "ElyOS Team <team@elyos.dev>",
+	"author": "Racona Team <team@racona.dev>",
 	"entry": "dist/index.iife.js",
 	"icon": "icon.svg",
 	"iconStyle": "cover",

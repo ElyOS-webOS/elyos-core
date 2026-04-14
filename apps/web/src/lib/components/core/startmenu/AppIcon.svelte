@@ -14,7 +14,7 @@ Start menüben megjelenő ikonokat mutatja.
 	function handleDragStart(e: DragEvent) {
 		if (!e.dataTransfer) return;
 		e.dataTransfer.effectAllowed = 'copy';
-		e.dataTransfer.setData('application/x-elyos-app', app.appName);
+		e.dataTransfer.setData('application/x-racona-app', app.appName);
 		e.dataTransfer.setData('text/plain', app.title);
 	}
 </script>

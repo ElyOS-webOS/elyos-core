@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-<a href="https://github.com/ElyOS-webOS/elyos-core/releases"><img src="https://img.shields.io/github/package-json/v/ElyOS-webOS/elyos-core" alt="Verzió" /></a>
+<a href="https://github.com/Racona-webOS/racona-core/releases"><img src="https://img.shields.io/github/package-json/v/Racona-webOS/racona-core" alt="Verzió" /></a>
   <a href="https://www.npmjs.com/package/@racona/sdk"><img src="https://img.shields.io/npm/v/@racona/sdk?label=%40racona%2Fsdk&color=blue" alt="SDK npm version" /></a>
     <a href="https://www.npmjs.com/package/@racona/cli"><img src="https://img.shields.io/npm/v/@racona/cli?label=%40racona%2Fcli&color=blue" alt="CLI npm version" /></a>
     <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="License" /></a>
@@ -140,7 +140,7 @@ A teljes környezeti változó referenciáért és a Varlock konfigurációs ré
 
 A lokális fejlesztői környezet Infisical-lal való beállításához:
 
-1. **Kérj Infisical hozzáférést** — fordulj a csapat adminisztrátorához, és kérj Machine Identity-t az `elyos-core` projekthez a `development` környezetben.
+1. **Kérj Infisical hozzáférést** — fordulj a csapat adminisztrátorához, és kérj Machine Identity-t az `racona-core` projekthez a `development` környezetben.
 2. **Kapd meg a bootstrap credentials-t** — kapsz egy `INFISICAL_CLIENT_ID`-t és `INFISICAL_CLIENT_SECRET`-et.
 3. **Konfiguráld a `.env` fájlt:**
    ```bash
@@ -167,8 +167,8 @@ Ez a módszer egy teljesen önálló, futtatható rendszert hoz létre Docker ko
 
 ```bash
 # Repository klónozása
-git clone https://github.com/ElyOS-webOS/elyos-core
-cd elyos-core
+git clone https://github.com/Racona-webOS/racona-core
+cd racona-core
 
 # Környezeti változók másolása és konfigurálása (lásd fenti szakasz)
 cp .env.example .env
@@ -184,8 +184,8 @@ open http://localhost:3000
 
 ```bash
 # Repository klónozása
-git clone https://github.com/ElyOS-webOS/elyos-core
-cd elyos-core
+git clone https://github.com/Racona-webOS/racona-core
+cd racona-core
 
 # Környezeti változók másolása és konfigurálása (lásd fenti szakasz)
 cp .env.example .env
@@ -253,7 +253,7 @@ bun format            # Kód formázása
 ## Projekt struktúra
 
 ```
-elyos-core/
+racona-core/
 ├── apps/web/                     # Fő SvelteKit alkalmazás
 │   └── src/
 │       ├── routes/               # Fájlalapú routing
@@ -262,7 +262,7 @@ elyos-core/
 ├── packages/
 │   ├── database/                 # Drizzle ORM sémák, migrációk, seed-ek
 │   ├── sdk/                      # @racona/sdk — plugin SDK (npm)
-│   └── create-elyos-app/      # CLI eszköz plugin generáláshoz (npm)
+│   └── create-racona-app/      # CLI eszköz plugin generáláshoz (npm)
 ├── examples/plugins/             # Példa plugin implementációk
 ├── docker/                       # Dockerfile és docker-compose.yml
 ├── docs/                         # Dokumentáció
@@ -289,7 +289,7 @@ Ez elindítja a teljes rendszert három konténerben, sorban:
 2. **db-init** — egyszeri inicializálás: Drizzle migrációk + seed adatok betöltése (csak akkor indul, ha a postgres egészséges)
 3. **racona** — maga az alkalmazás (csak akkor indul, ha a db-init sikeresen lefutott)
 
-Az alkalmazás elérhető lesz a `http://localhost:3000` címen (konfigurálható: `ELYOS_PORT`), a PostgreSQL az `5432`-es porton (konfigurálható: `POSTGRES_PORT`).
+Az alkalmazás elérhető lesz a `http://localhost:3000` címen (konfigurálható: `RACONA_PORT`), a PostgreSQL az `5432`-es porton (konfigurálható: `POSTGRES_PORT`).
 
 ### Előre buildelt image használata GitHub Container Registry-ből
 
@@ -297,10 +297,10 @@ Ha nem szeretnéd helyben buildelni az image-et, használhatod a GitHub Containe
 
 **Elérhető image-ek:**
 
-- `ghcr.io/elyos-webos/elyos-core:latest` — legfrissebb stabil release
-- `ghcr.io/elyos-webos/elyos-core:0.1.0` — konkrét verzió
-- `ghcr.io/elyos-webos/elyos-core:0.1` — major.minor verzió
-- `ghcr.io/elyos-webos/elyos-core:0` — major verzió
+- `ghcr.io/racona-webos/racona-core:latest` — legfrissebb stabil release
+- `ghcr.io/racona-webos/racona-core:0.1.0` — konkrét verzió
+- `ghcr.io/racona-webos/racona-core:0.1` — major.minor verzió
+- `ghcr.io/racona-webos/racona-core:0` — major verzió
 
 **Használat Docker Compose-zal:**
 
@@ -321,20 +321,20 @@ services:
   postgres:
     image: postgres:18-alpine
     environment:
-      POSTGRES_USER: elyos
-      POSTGRES_PASSWORD: elyos123
-      POSTGRES_DB: elyos
+      POSTGRES_USER: racona
+      POSTGRES_PASSWORD: racona123
+      POSTGRES_DB: racona
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U elyos -d elyos']
+      test: ['CMD-SHELL', 'pg_isready -U racona -d racona']
       interval: 10s
       timeout: 5s
       retries: 5
 
   db-init:
-    image: ghcr.io/elyos-webos/elyos-core:latest
-    command: ['bun', '--filter', '@elyos/database', 'db:init']
+    image: ghcr.io/racona-webos/racona-core:latest
+    command: ['bun', '--filter', '@racona/database', 'db:init']
     env_file:
       - .env
     depends_on:
@@ -343,7 +343,7 @@ services:
     restart: 'no'
 
   app:
-    image: ghcr.io/elyos-webos/elyos-core:latest
+    image: ghcr.io/racona-webos/racona-core:latest
     ports:
       - '3000:3000'
     env_file:
@@ -368,7 +368,7 @@ docker compose up -d
 **Fontos:** A `.env` fájlban a `DATABASE_URL` értékének a Docker network-ön belüli postgres service-re kell mutatnia:
 
 ```bash
-DATABASE_URL=postgresql://elyos:elyos123@postgres:5432/elyos
+DATABASE_URL=postgresql://racona:racona123@postgres:5432/racona
 ```
 
 ### Adatbázis inicializálás és reset
@@ -390,7 +390,7 @@ Az összes konfigurációs lehetőségért lásd a [`.env.example`](./.env.examp
 ### Image build
 
 ```bash
-docker build -f docker/Dockerfile -t elyos/core:latest .
+docker build -f docker/Dockerfile -t racona/core:latest .
 ```
 
 ## Dokumentáció

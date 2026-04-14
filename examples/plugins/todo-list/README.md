@@ -1,6 +1,6 @@
 # Todo List Plugin
 
-A simple CRUD todo list plugin for ElyOS demonstrating DataService key-value storage operations.
+A simple CRUD todo list plugin for Racona demonstrating DataService key-value storage operations.
 
 ## What It Demonstrates
 
@@ -47,16 +47,16 @@ bun dev
 
 Todos are persisted to localStorage via MockWebOSSDK's MockDataService.
 
-### ElyOS Mode (Docker)
+### Racona Mode (Docker)
 
 ```bash
-# Start ElyOS
+# Start Racona
 docker compose up -d
 
 # Start plugin dev server
 bun dev
 
-# In ElyOS: Plugin Manager → Load Dev Plugin → http://localhost:5173
+# In Racona: Plugin Manager → Load Dev Plugin → http://localhost:5173
 ```
 
 ## Build

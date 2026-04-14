@@ -46,7 +46,7 @@ export const SHARED_LIBRARIES = {
 	// ─── Utilities ──────────────────────────────────────────────────
 	clsx: clsx,
 	'tailwind-merge': { twMerge },
-	'@elyos/utils': { cn }
+	'@racona/utils': { cn }
 } as const;
 
 /**
@@ -70,13 +70,13 @@ export function initializeSharedLibraries(): void {
 	}
 
 	// Ellenőrizzük, hogy már inicializálva van-e
-	if ((window as any).__ELYOS_SHARED_LIBS__) {
+	if ((window as any).__RACONA_SHARED_LIBS__) {
 		console.log('[Shared Libraries] Already initialized, skipping');
 		return;
 	}
 
 	// Regisztráljuk a shared libraries-t
-	(window as any).__ELYOS_SHARED_LIBS__ = SHARED_LIBRARIES;
+	(window as any).__RACONA_SHARED_LIBS__ = SHARED_LIBRARIES;
 
 	console.log('[Shared Libraries] Initialized:', Object.keys(SHARED_LIBRARIES).join(', '));
 

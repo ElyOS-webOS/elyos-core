@@ -2,7 +2,8 @@
 <script lang="ts">
 	import '../appAdmin.css';
 	import Decor from '$lib/components/auth/Decor.svelte';
-	import LogoVideo from '$lib/components/shared/LogoVideo.svelte';
+	//import LogoVideo from '$lib/components/shared/LogoVideo.svelte';
+	import LogoImage from '$lib/components/shared/LogoImage.svelte';
 	// @ts-expect-error - no type declarations available
 	import '@fontsource-variable/quicksand';
 	import { setContext } from 'svelte';
@@ -67,8 +68,8 @@
 				<!-- Bal oldal - Form -->
 				<div class="left-side flex w-full flex-col justify-between bg-white p-8 lg:w-2/5 lg:p-10">
 					<AuthLocaleSwitcher />
-					<div class="mt-8 grid gap-4">
-						<LogoVideo width={250} />
+					<div class="mt-8 grid gap-6">
+						<LogoImage width={240} />
 						{@render children()}
 					</div>
 				</div>

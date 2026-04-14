@@ -1,16 +1,16 @@
 #!/usr/bin/env bun
 /**
- * ElyOS Plugin Migration Script
+ * Racona Plugin Migration Script
  *
- * Migrates existing plugins from the old SDK (@elyos/webos-sdk-types, $lib/sdk)
- * to the new standalone @elyos/sdk package.
+ * Migrates existing plugins from the old SDK (@racona/webos-sdk-types, $lib/sdk)
+ * to the new standalone @racona/sdk package.
  *
  * Usage:
  *   bun run scripts/migrate-plugin.ts <plugin-directory>
  *   bun run scripts/migrate-plugin.ts <plugin-directory> --dry-run
  *
  * What it does:
- *   1. Updates package.json (removes old types pkg, adds @elyos/sdk)
+ *   1. Updates package.json (removes old types pkg, adds @racona/sdk)
  *   2. Updates imports in .ts, .js, and .svelte files
  */
 
@@ -20,19 +20,19 @@ import { join, relative } from 'node:path';
 // ─── Configuration ──────────────────────────────────────────────
 
 const IMPORT_REPLACEMENTS: [RegExp, string][] = [
-	// @elyos/webos-sdk-types → @elyos/sdk/types
-	[/@elyos\/webos-sdk-types/g, '@elyos/sdk/types'],
-	// $lib/sdk/services/* → @elyos/sdk/types (type imports from internal services)
-	[/\$lib\/sdk\/services\/\w+/g, '@elyos/sdk/types'],
-	// $lib/sdk → @elyos/sdk
-	[/\$lib\/sdk/g, '@elyos/sdk']
+	// @racona/webos-sdk-types → @racona/sdk/types
+	[/@racona\/webos-sdk-types/g, '@racona/sdk/types'],
+	// $lib/sdk/services/* → @racona/sdk/types (type imports from internal services)
+	[/\$lib\/sdk\/services\/\w+/g, '@racona/sdk/types'],
+	// $lib/sdk → @racona/sdk
+	[/\$lib\/sdk/g, '@racona/sdk']
 ];
 
 const SOURCE_EXTENSIONS = new Set(['.ts', '.js', '.svelte']);
 
-const SDK_PACKAGE = '@elyos/sdk';
+const SDK_PACKAGE = '@racona/sdk';
 const SDK_VERSION = '^1.0.0';
-const OLD_TYPES_PACKAGE = '@elyos/webos-sdk-types';
+const OLD_TYPES_PACKAGE = '@racona/webos-sdk-types';
 
 // ─── Types ──────────────────────────────────────────────────────
 

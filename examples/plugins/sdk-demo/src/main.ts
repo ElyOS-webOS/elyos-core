@@ -4,7 +4,7 @@
  * Ez a plugin a WebOS AppLayout rendszerét használja.
  * A komponensek a menu.json alapján töltődnek be dinamikusan.
  */
-import { MockWebOSSDK } from '@elyos/sdk/dev';
+import { MockWebOSSDK } from '@racona/sdk/dev';
 import App from './App.svelte';
 
 // Initialize Mock SDK for standalone development
@@ -15,12 +15,12 @@ if (typeof window !== 'undefined' && !window.webOS) {
 			translations: {
 				en: {
 					title: 'SDK Demo',
-					subtitle: 'ElyOS SDK Demo',
+					subtitle: 'Racona SDK Demo',
 					welcome: 'Welcome to the SDK Demo!'
 				},
 				hu: {
 					title: 'SDK Demo',
-					subtitle: 'ElyOS SDK Demo',
+					subtitle: 'Racona SDK Demo',
 					welcome: 'Üdvözöljük az SDK Demo alkalmazásban!'
 				}
 			}

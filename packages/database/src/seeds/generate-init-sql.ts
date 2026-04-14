@@ -1,5 +1,5 @@
 /**
- * ElyOS — Init SQL generátor
+ * Racona — Init SQL generátor
  *
  * Egyetlen futtatható SQL fájlt állít elő, amely tartalmazza:
  *   1. Séma létrehozások
@@ -187,7 +187,7 @@ function generate(): void {
 	}
 
 	console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-	console.log('     ElyOS — Init SQL generálás');
+	console.log('     Racona — Init SQL generálás');
 	console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
 	const timestamp = new Date().toISOString();
@@ -197,7 +197,7 @@ function generate(): void {
 
 	// Fejléc
 	sections.push(`-- ============================================================
--- ElyOS — Database Init Script
+-- Racona — Database Init Script
 -- Generated: ${timestamp}
 -- Admin email: ${adminEmail ?? '(placeholder — lásd lent)'}
 --

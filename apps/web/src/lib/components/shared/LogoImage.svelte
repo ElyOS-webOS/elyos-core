@@ -1,8 +1,10 @@
 <script lang="ts">
-	import Logo from '$lib/assets/logo.png?enhanced';
-	interface Props {}
+	import Logo from '$lib/assets/logo.webp?enhanced';
+	interface Props {
+		width: number;
+	}
 
-	let {}: Props = $props();
+	let { width }: Props = $props();
 </script>
 
-<enhanced:img src={Logo} alt="" width="150" />
+<enhanced:img src={Logo} alt="" style="width: {width}px; height: auto;" />

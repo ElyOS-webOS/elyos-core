@@ -1,6 +1,6 @@
 {
 	"name": "racona",
-	"version": "0.3.0",
+	"version": "0.3.2",
 	"license": "MIT",
 	"workspaces": [
 		"packages/*",
@@ -8,10 +8,10 @@
 		"examples/plugins/*"
 	],
 	"scripts": {
-		"app:dev": "bun --elide-lines=0 --filter @elyos/core dev",
-		"app:dev:varlock": "bun --elide-lines=0 --filter @elyos/core dev:varlock",
-		"app:build": "bun --filter @elyos/core build",
-		"app:check": "bun --elide-lines=0 --filter @elyos/core check",
+		"app:dev": "bun --elide-lines=0 --filter @racona/core dev",
+		"app:dev:varlock": "bun --elide-lines=0 --filter @racona/core dev:varlock",
+		"app:build": "bun --filter @racona/core build",
+		"app:check": "bun --elide-lines=0 --filter @racona/core check",
 		"db:generate": "bun --filter @racona/database db:generate",
 		"db:migrate": "bun --filter @racona/database db:migrate",
 		"db:studio": "bun --filter @racona/database db:studio",

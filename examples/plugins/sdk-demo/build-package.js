@@ -2,7 +2,7 @@
  * Build Package Script
  *
  * Ez a script létrehozza a plugin csomagot.
- * A kiterjesztés a PLUGIN_PACKAGE_EXTENSION környezeti változóból jön (alapértelmezett: elyospkg).
+ * A kiterjesztés a PLUGIN_PACKAGE_EXTENSION környezeti változóból jön (alapértelmezett: raconapkg).
  */
 
 import archiver from 'archiver';
@@ -18,7 +18,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Plugin csomag kiterjesztése környezeti változóból
-const PACKAGE_EXTENSION = process.env.PLUGIN_PACKAGE_EXTENSION || 'elyospkg';
+const PACKAGE_EXTENSION = process.env.PLUGIN_PACKAGE_EXTENSION || 'raconapkg';
 
 async function buildPackage() {
 	console.log('🔨 Building SDK Demo app package...\n');
@@ -37,7 +37,7 @@ async function buildPackage() {
 		console.log(`📦 File: ${outputPath}`);
 		console.log(`📊 Size: ${sizeInMB} MB`);
 		console.log(`📝 Extension: .${PACKAGE_EXTENSION}`);
-		console.log(`\n🚀 Ready to upload to ElyOS!`);
+		console.log(`\n🚀 Ready to upload to Racona!`);
 	});
 
 	archive.on('error', (err) => {

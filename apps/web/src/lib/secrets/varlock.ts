@@ -32,7 +32,7 @@ export interface InfisicalClient {
 	renewToken?(clientId: string, clientSecret: string): Promise<string>;
 	/** A környezet neve (pl. 'production'). */
 	environment: string;
-	/** A projekt neve (pl. 'elyos-core'). */
+	/** A projekt neve (pl. 'racona-core'). */
 	project: string;
 	/** Tesztelési célra: hány kísérlet történt eddig. */
 	attemptCount?: number;

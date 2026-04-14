@@ -12,7 +12,7 @@ const execAsync = promisify(exec);
 
 const DOCKER_COMPOSE_FILE = path.join(__dirname, '../../../../docker/docker-compose.yml');
 const ENV_FILE = path.join(__dirname, '../../../../.env');
-const VOLUME_NAME = 'docker_elyos-data';
+const VOLUME_NAME = 'docker_racona-data';
 
 /**
  * Execute a shell command and log output.

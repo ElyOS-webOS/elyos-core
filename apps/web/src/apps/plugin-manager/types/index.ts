@@ -56,7 +56,7 @@ export type UploadErrorCode =
 
 export interface ValidationConfig {
 	maxFileSize: number; // 10 MB (10485760 bytes)
-	allowedExtension: string; // '.elyospkg'
+	allowedExtension: string; // '.raconapkg'
 	allowedMimeTypes: string[]; // ['application/zip', 'application/x-zip-compressed', 'application/octet-stream']
 }
 
@@ -109,7 +109,7 @@ export interface UploadStatusProps {
 
 export const VALIDATION_CONFIG: ValidationConfig = {
 	maxFileSize: 10 * 1024 * 1024, // 10 MB
-	allowedExtension: '.elyospkg',
+	allowedExtension: '.raconapkg',
 	allowedMimeTypes: ['application/zip', 'application/x-zip-compressed', 'application/octet-stream']
 };
 

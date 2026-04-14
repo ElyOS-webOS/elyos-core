@@ -27,8 +27,8 @@ import {
 
 // Svelte komponensek dinamikus importja — a plugin Vite buildje fordítja le őket
 // Az SDK csak a path-t adja meg, a tényleges import a plugin oldalán történik
-const SIMPLE_DATATABLE_PATH = '@elyos-dev/sdk/dev/components/SimpleDataTable.svelte';
-const SIMPLE_ROW_ACTIONS_PATH = '@elyos-dev/sdk/dev/components/SimpleRowActions.svelte';
+const SIMPLE_DATATABLE_PATH = '@racona/sdk/dev/components/SimpleDataTable.svelte';
+const SIMPLE_ROW_ACTIONS_PATH = '@racona/sdk/dev/components/SimpleRowActions.svelte';
 
 /** Mock UI service — simulates toasts, dialogs, and theme for standalone development. */
 export class MockUIService implements UIService {

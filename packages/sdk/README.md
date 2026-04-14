@@ -194,10 +194,14 @@ MIT
 
 ## Changelog
 
+### [0.3.2] - 2026-04-15
+
+- **Changed**: Brand name and documentation updates
+
 ### [0.3.0] - 2026-04-14
 
-- **Changed**: Package renamed from `@elyos-dev/sdk` to `@racona/sdk`
-- **Changed**: All import paths updated from `@elyos-dev/sdk` to `@racona/sdk`
+- **Changed**: Package renamed from `@racona/sdk` to `@racona/sdk`
+- **Changed**: All import paths updated from `@racona/sdk` to `@racona/sdk`
 
 ### [0.2.1] - 2026-04-12
 

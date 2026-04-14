@@ -38,7 +38,7 @@ export const EXPECTED_ENV_KEYS = [
 	// Szerver
 	'NODE_ENV',
 	'BODY_SIZE_LIMIT',
-	'ELYOS_PORT',
+	'RACONA_PORT',
 	'APP_URL',
 	'ORIGIN',
 	// Adatbázis
@@ -202,7 +202,7 @@ export function validateSchema(env: Record<string, unknown>): Record<string, unk
 	}
 
 	// --- Port típusú mezők validációja (opcionális) ---
-	const portFields = ['ELYOS_PORT', 'SMTP_PORT', 'POSTGRES_PORT'] as const;
+	const portFields = ['RACONA_PORT', 'SMTP_PORT', 'POSTGRES_PORT'] as const;
 	for (const key of portFields) {
 		const value = env[key];
 		if (value !== undefined && value !== null && value !== '') {
@@ -354,7 +354,7 @@ export function validEnvArbitrary(): fc.Arbitrary<Record<string, unknown>> {
 			BODY_SIZE_LIMIT: fc.option(fc.integer({ min: 1, max: 104857600 }).map(String), {
 				nil: undefined
 			}),
-			ELYOS_PORT: fc.option(portStringArb, { nil: undefined }),
+			RACONA_PORT: fc.option(portStringArb, { nil: undefined }),
 			POSTGRES_USER: fc.option(fc.string({ minLength: 1, maxLength: 32 }), { nil: undefined }),
 			POSTGRES_PASSWORD: fc.option(fc.string({ minLength: 1, maxLength: 64 }), { nil: undefined }),
 			POSTGRES_DB: fc.option(fc.string({ minLength: 1, maxLength: 32 }), { nil: undefined }),

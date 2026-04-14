@@ -11,7 +11,7 @@ cp -r examples/plugins/hello-world examples/plugins/my-plugin
 # Lépj be a könyvtárba
 cd examples/plugins/my-plugin
 
-# Telepítsd a függőségeket (beleértve a @elyos/webos-sdk-types-ot is)
+# Telepítsd a függőségeket (beleértve a @racona/webos-sdk-types-ot is)
 bun install
 ```
 
@@ -260,7 +260,7 @@ window.webOS.context.window.setTitle('Új cím');
 ```typescript
 // Asset URL generálás
 const iconUrl = window.webOS.assets.getUrl('icon.svg');
-const imageUrl = window.webOS.assets.getUrl('images/logo.png');
+const imageUrl = window.webOS.assets.getUrl('images/logo.webp');
 
 // Használat HTML-ben
 <img src={window.webOS.assets.getUrl('icon.svg')} alt="Icon" />
@@ -318,7 +318,7 @@ my-plugin/
 
 - `svelte` (^5.x.x)
 - `lucide-svelte` (^0.x.x)
-- `@elyos/*` (minden verzió)
+- `@racona/*` (minden verzió)
 
 Más függőségek NEM engedélyezettek biztonsági okokból.
 
@@ -354,7 +354,7 @@ Más függőségek NEM engedélyezettek biztonsági okokból.
 
 - Svelte komponensek
 - Lucide ikonok
-- @elyos/\* package-ek
+- @racona/\* package-ek
 - Plugin saját sémája (plugin\_{plugin_id})
 - WebOS SDK API-k
 

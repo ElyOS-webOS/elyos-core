@@ -2,7 +2,7 @@
  * Plugin csomagoló script
  *
  * Összegyűjti a dist/, locales/, assets/ mappákat és a manifest.json-t,
- * majd ZIP archívumba tömöríti .elyospkg kiterjesztéssel.
+ * majd ZIP archívumba tömöríti .raconapkg kiterjesztéssel.
  *
  * Használat: bun run package
  */
@@ -33,7 +33,7 @@ if (!existsSync(distPath)) {
 	process.exit(1);
 }
 
-const outputName = `${id}-${version}.elyospkg`;
+const outputName = `${id}-${version}.raconapkg`;
 const outputPath = join(ROOT, outputName);
 
 const entries = ['manifest.json', 'dist'];

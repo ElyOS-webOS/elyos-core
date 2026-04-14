@@ -17,30 +17,30 @@ import type {
 
 /** UI service — toast notifications, dialogs, theme colors, and UI component access. */
 export class UIService implements IUIService {
-	/** Registered toast display function, set by the ElyOS core */
+	/** Registered toast display function, set by the Racona core */
 	private toastFn: ((message: string, type: ToastType, duration: number) => void) | null = null;
-	/** Registered dialog display function, set by the ElyOS core */
+	/** Registered dialog display function, set by the Racona core */
 	private dialogFn: ((options: DialogOptions) => Promise<DialogResult>) | null = null;
-	/** Registered components, set by the ElyOS core */
+	/** Registered components, set by the Racona core */
 	private _components: WebOSComponents = {};
-	/** Registered navigateTo function, set by the ElyOS core */
+	/** Registered navigateTo function, set by the Racona core */
 	private navigateToFn: ((component: string, props?: Record<string, unknown>) => void) | null =
 		null;
-	/** Registered setActionBar function, set by the ElyOS core */
+	/** Registered setActionBar function, set by the Racona core */
 	private setActionBarFn: ((items: ActionBarItem[]) => void) | null = null;
-	/** Registered clearActionBar function, set by the ElyOS core */
+	/** Registered clearActionBar function, set by the Racona core */
 	private clearActionBarFn: (() => void) | null = null;
 
 	/**
-	 * Register the components (called by the ElyOS core).
-	 * @param components - ElyOS UI components
+	 * Register the components (called by the Racona core).
+	 * @param components - Racona UI components
 	 */
 	_setComponents(components: WebOSComponents): void {
 		this._components = components;
 	}
 
 	/**
-	 * Register the toast handler (called by the ElyOS core).
+	 * Register the toast handler (called by the Racona core).
 	 * @param fn - Function that displays a toast notification
 	 */
 	_setToastHandler(fn: (message: string, type: ToastType, duration: number) => void): void {
@@ -48,7 +48,7 @@ export class UIService implements IUIService {
 	}
 
 	/**
-	 * Register the dialog handler (called by the ElyOS core).
+	 * Register the dialog handler (called by the Racona core).
 	 * @param fn - Function that displays a dialog
 	 */
 	_setDialogHandler(fn: (options: DialogOptions) => Promise<DialogResult>): void {
@@ -56,7 +56,7 @@ export class UIService implements IUIService {
 	}
 
 	/**
-	 * Register the navigateTo handler (called by the ElyOS core).
+	 * Register the navigateTo handler (called by the Racona core).
 	 * @param fn - Function that navigates to a component
 	 */
 	_setNavigateToHandler(fn: (component: string, props?: Record<string, unknown>) => void): void {
@@ -79,7 +79,7 @@ export class UIService implements IUIService {
 	}
 
 	/**
-	 * Register the setActionBar handler (called by the ElyOS core).
+	 * Register the setActionBar handler (called by the Racona core).
 	 */
 	_setActionBarHandler(setFn: (items: ActionBarItem[]) => void, clearFn: () => void): void {
 		this.setActionBarFn = setFn;
@@ -143,8 +143,8 @@ export class UIService implements IUIService {
 	}
 
 	/**
-	 * Access ElyOS UI components.
-	 * Components are registered by the ElyOS core via `_setComponents`.
+	 * Access Racona UI components.
+	 * Components are registered by the Racona core via `_setComponents`.
 	 */
 	get components(): WebOSComponents {
 		return this._components;

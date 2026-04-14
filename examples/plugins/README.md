@@ -255,7 +255,7 @@ window.webOS.assets.getUrl(assetPath);
 
 - Svelte komponensek
 - Lucide ikonok
-- @elyos/\* package-ek
+- @racona/\* package-ek
 - WebOS SDK API-k
 
 ## 📝 Jogosultságok

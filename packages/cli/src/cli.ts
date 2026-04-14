@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 /**
- * create-elyos-app CLI
+ * create-racona-app CLI
  *
- * Interactive wizard for scaffolding ElyOS app projects.
+ * Interactive wizard for scaffolding Racona app projects.
  *
  * Usage:
- *   bunx @elyos-dev/create-app
- *   bunx @elyos-dev/create-app my-app
- *   bunx @elyos-dev/create-app my-app --features sidebar,database
- *   bunx @elyos-dev/create-app my-app --template basic --no-install
+ *   bunx @racona/create-app
+ *   bunx @racona/create-app my-app
+ *   bunx @racona/create-app my-app --features sidebar,database
+ *   bunx @racona/create-app my-app --template basic --no-install
  */
 
 import { Command } from 'commander';
@@ -65,8 +65,8 @@ export const TEMPLATE_PRESETS: Record<string, PluginFeature[]> = {
 const program = new Command();
 
 program
-	.name('create-elyos-app')
-	.description('Create a new ElyOS app project')
+	.name('create-racona-app')
+	.description('Create a new Racona app project')
 	.version('1.0.0')
 	.argument('[app-name]', 'App name (kebab-case)')
 	.option(
@@ -84,7 +84,7 @@ program
 			options?: { template?: string; features?: string; install?: boolean }
 		) => {
 			console.log();
-			console.log(pc.bold(pc.cyan('  🚀 create-elyos-app')));
+			console.log(pc.bold(pc.cyan('  🚀 create-racona-app')));
 			console.log();
 
 			try {

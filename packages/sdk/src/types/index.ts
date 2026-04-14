@@ -1,13 +1,13 @@
 /**
  * @module
- * TypeScript type definitions for the ElyOS SDK.
+ * TypeScript type definitions for the Racona SDK.
  *
  * Import types from this module for type-safe access to SDK services
  * without importing any runtime code.
  *
  * @example
  * ```ts
- * import type { WebOSSDKInterface, UIService } from '@elyos-dev/sdk/types';
+ * import type { WebOSSDKInterface, UIService } from '@racona/sdk/types';
  * ```
  */
 
@@ -106,7 +106,7 @@ export interface UIService {
 	toast(message: string, type?: ToastType, duration?: number): void;
 	/** Show a dialog (info, confirm, or prompt) and return the user's response */
 	dialog(options: DialogOptions): Promise<DialogResult>;
-	/** ElyOS UI components registered by the host */
+	/** Racona UI components registered by the host */
 	components: WebOSComponents;
 	/** Current theme colors read from CSS custom properties */
 	theme: ThemeColors;
@@ -226,7 +226,7 @@ export interface AssetService {
 	getUrl(assetPath: string): string;
 }
 
-/** Shared Libraries service — access to libraries installed in the ElyOS core */
+/** Shared Libraries service — access to libraries installed in the Racona core */
 export interface SharedLibrariesService {
 	/** Get a shared library by name */
 	get(libraryName: string): any;
@@ -252,7 +252,7 @@ export interface SharedLibrariesService {
 
 // ─── Components ─────────────────────────────────────────────────
 
-/** ElyOS UI components exposed to apps */
+/** Racona UI components exposed to apps */
 export interface WebOSComponents {
 	/**
 	 * DataTable komponens — server-side pagination, sorting, toolbar snippet.
@@ -309,7 +309,7 @@ export interface WebOSComponents {
 
 // ─── SDK Main Interface ─────────────────────────────────────────
 
-/** Main SDK interface — injected into `window.webOS` by ElyOS at runtime */
+/** Main SDK interface — injected into `window.webOS` by Racona at runtime */
 export interface WebOSSDKInterface {
 	/** UI service — toasts, dialogs, theme */
 	ui: UIService;
@@ -327,7 +327,7 @@ export interface WebOSSDKInterface {
 	assets: AssetService;
 	/** Shared Libraries service — access to core libraries */
 	libs: SharedLibrariesService;
-	/** ElyOS UI components */
+	/** Racona UI components */
 	components: WebOSComponents;
 }
 

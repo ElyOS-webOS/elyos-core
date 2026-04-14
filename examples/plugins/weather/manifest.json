@@ -9,7 +9,7 @@
 		"en": "Weather plugin — RemoteService API calls and favorites management"
 	},
 	"version": "1.0.0",
-	"author": "ElyOS Team <team@elyos.dev>",
+	"author": "Racona Team <team@racona.dev>",
 	"entry": "dist/index.iife.js",
 	"icon": "icon.svg",
 	"iconStyle": "cover",

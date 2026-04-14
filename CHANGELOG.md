@@ -7,14 +7,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.2] - 2026-04-15
+
+### Changed
+
+- Brand name and documentation updates
+
+### Changed (`@racona/sdk@0.3.2`)
+
+- Brand name and documentation updates
+
+### Changed (`@racona/cli@0.3.2`)
+
+- Brand name and documentation updates
+
 ## [0.3.0] - 2026-04-14
 
 ### Changed — Racona brand migration (2026-04-14)
 
-- **Project renamed**: ElyOS → Racona
+- **Project renamed**: Racona → Racona
 - **`create-elyos-app`** → **`@racona/cli`** — CLI tool for scaffolding plugins
 - **`@elyos/sdk`** / **`@elyos-dev/sdk`** → **`@racona/sdk`** — plugin SDK
-- All UI text, documentation, and configuration references updated from ElyOS to Racona
+- All UI text, documentation, and configuration references updated from Racona to Racona
 - Domain updated: `elyos.hu` → `racona.hu` (301 redirects in place)
 
 ## [0.2.2] - 2026-04-12
@@ -136,7 +150,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Dev plugin loader: allow `host.docker.internal` URLs for Docker-hosted ElyOS instances
+- Dev plugin loader: allow `host.docker.internal` URLs for Docker-hosted Racona instances
 - Dev plugin loader: browser receives `localhost` URL (converted from `host.docker.internal`) so the plugin loads correctly from both server and client side
 - Dev plugin window now gets focus after async loading completes
 - Dev plugin loader UI strings are now fully localized (i18n keys, Docker hint added)
@@ -149,7 +163,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Initial public release of ElyOS
+- Initial public release of Racona
 - Full desktop environment in the browser with window management, taskbar, and start menu
 - Built-in applications: Settings, Users, Log, Plugin Manager, Chat, Notifications, Help
 - Plugin system with WebOS SDK for third-party app development _(in development)_

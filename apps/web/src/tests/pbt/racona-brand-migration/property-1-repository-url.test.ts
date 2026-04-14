@@ -15,7 +15,7 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
  */
 function readPackageJson(pkgName: string): Record<string, unknown> {
 	const pkgMap: Record<string, string> = {
-		'@racona/cli': resolve(__dirname, '../../../../../../packages/create-elyos-app/package.json'),
+		'@racona/cli': resolve(__dirname, '../../../../../../packages/create-racona-app/package.json'),
 		'@racona/sdk': resolve(__dirname, '../../../../../../packages/sdk/package.json')
 	};
 

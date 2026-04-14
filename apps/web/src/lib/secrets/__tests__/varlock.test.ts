@@ -42,7 +42,7 @@ function createMockInfisical(
 ): InfisicalClient & { attemptCount: number } {
 	return {
 		environment: options.environment ?? 'development',
-		project: options.project ?? 'elyos-core',
+		project: options.project ?? 'racona-core',
 		attemptCount: 0,
 		async fetchSecrets() {
 			return secrets;
@@ -56,11 +56,11 @@ function createUnavailableMockInfisical(
 ): InfisicalClient & { attemptCount: number } {
 	const client = {
 		environment: options.environment ?? 'development',
-		project: options.project ?? 'elyos-core',
+		project: options.project ?? 'racona-core',
 		attemptCount: 0,
 		async fetchSecrets(): Promise<Record<string, unknown>> {
 			client.attemptCount++;
-			throw new Error('Connection refused: https://secrets.elyos.hu');
+			throw new Error('Connection refused: https://secrets.racona.hu');
 		}
 	};
 	return client;
@@ -76,7 +76,7 @@ function createMockInfisicalWithRenewal(
 ): InfisicalClient & { attemptCount: number; renewTokenCallCount: number } {
 	const client = {
 		environment: options.environment ?? 'development',
-		project: options.project ?? 'elyos-core',
+		project: options.project ?? 'racona-core',
 		attemptCount: 0,
 		renewTokenCallCount: 0,
 		async fetchSecrets(): Promise<Record<string, unknown>> {
@@ -306,13 +306,13 @@ describe('loadSecretsWithFallback — betöltési naplózás', () => {
 		const secrets = makeValidEnv();
 		const mockInfisical = createMockInfisical(secrets, {
 			environment: 'production',
-			project: 'elyos-core'
+			project: 'racona-core'
 		});
 
 		await loadSecretsWithFallback({ infisical: mockInfisical });
 
 		expect(consoleSpy).toHaveBeenCalledWith(
-			expect.stringMatching(/\[Varlock\] \d+ secret sikeresen betöltve \(production\/elyos-core\)/)
+			expect.stringMatching(/\[Varlock\] \d+ secret sikeresen betöltve \(production\/racona-core\)/)
 		);
 	});
 
@@ -342,7 +342,7 @@ describe('loadSecretsWithFallback — betöltési naplózás', () => {
 		const secrets = makeValidEnv();
 		const mockInfisical = createMockInfisical(secrets, {
 			environment: 'development',
-			project: 'elyos-core'
+			project: 'racona-core'
 		});
 
 		await loadSecretsWithFallback({ infisical: mockInfisical });

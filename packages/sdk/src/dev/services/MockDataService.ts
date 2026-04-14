@@ -35,7 +35,7 @@ export class MockDataService implements DataService {
 	/** In-memory key-value store used for all get/set/delete operations */
 	private storage = new Map<string, unknown>();
 	/** Key prefix applied to all `localStorage` entries to avoid collisions */
-	private readonly prefix = 'elyos-mock-';
+	private readonly prefix = 'racona-mock-';
 
 	/** @param config - Optional initial data */
 	constructor(config?: MockDataConfig) {

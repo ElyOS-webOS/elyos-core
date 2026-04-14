@@ -6,7 +6,7 @@ import { svelte } from '@sveltejs/vite-plugin-svelte';
  *
  * This configuration marks common libraries as external, preventing them
  * from being bundled into the plugin. Instead, they're accessed via the
- * ElyOS SDK at runtime.
+ * Racona SDK at runtime.
  */
 export default defineConfig({
 	plugins: [

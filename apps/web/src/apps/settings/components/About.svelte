@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Logo from '$lib/assets/logo.png?enhanced';
+	import Logo from '$lib/assets/logo.webp?enhanced';
 	import { Mail, Globe, Package, ChevronRight } from 'lucide-svelte';
 	import ContentSection from '$lib/components/shared/ContentSection.svelte';
 	import { useI18n } from '$lib/i18n/hooks';

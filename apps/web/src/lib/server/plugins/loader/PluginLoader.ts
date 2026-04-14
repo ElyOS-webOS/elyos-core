@@ -59,7 +59,7 @@ export class PluginLoader {
 			const { user, permissions } = await this.getUserAndPermissions(userId, pluginId);
 
 			// 4. WebOS SDK inicializálása (Task 3.9)
-			const { WebOSSDK } = await import('@elyos-dev/sdk');
+			const { WebOSSDK } = await import('@racona/sdk');
 			WebOSSDK.initialize(pluginId, user, params || {}, permissions);
 
 			// 5. ESM modul betöltése
@@ -299,7 +299,7 @@ export class PluginLoader {
 	cleanup(pluginId: string): void {
 		// SDK cleanup
 		if (typeof window !== 'undefined') {
-			import('@elyos-dev/sdk').then(({ WebOSSDK }) => {
+			import('@racona/sdk').then(({ WebOSSDK }) => {
 				WebOSSDK.cleanup();
 			});
 		}

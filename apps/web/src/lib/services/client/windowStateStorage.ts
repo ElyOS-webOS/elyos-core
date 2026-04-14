@@ -11,7 +11,7 @@ export type StoredWindowState = {
 	isMaximized: boolean;
 };
 
-const STORAGE_KEY_PREFIX = 'elyos_window_state_';
+const STORAGE_KEY_PREFIX = 'racona_window_state_';
 
 /**
  * Get stored window state from localStorage

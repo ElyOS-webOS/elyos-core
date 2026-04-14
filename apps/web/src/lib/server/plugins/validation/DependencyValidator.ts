@@ -18,7 +18,7 @@ export const DEPENDENCY_WHITELIST = [
 	{ name: '@lucide/svelte', versionPattern: /^\^?[01]\.\d+\.\d+$/ },
 
 	// Elyos packages (minden verzió engedélyezett)
-	{ name: '@elyos/*', versionPattern: /.*/ }
+	{ name: '@racona/*', versionPattern: /.*/ }
 ] as const;
 
 /**
@@ -62,7 +62,7 @@ export class DependencyValidator {
 	 */
 	private isAllowed(packageName: string, version: string): boolean {
 		for (const allowed of DEPENDENCY_WHITELIST) {
-			// Wildcard támogatás (@elyos/*)
+			// Wildcard támogatás (@racona/*)
 			if (allowed.name.endsWith('/*')) {
 				const prefix = allowed.name.slice(0, -2); // Remove /*
 				if (packageName.startsWith(prefix)) {

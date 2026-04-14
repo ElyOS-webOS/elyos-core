@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-<a href="https://github.com/ElyOS-webOS/elyos-core/releases"><img src="https://img.shields.io/github/package-json/v/ElyOS-webOS/elyos-core" alt="Version" /></a>
+<a href="https://github.com/Racona-webOS/racona-core/releases"><img src="https://img.shields.io/github/package-json/v/Racona-webOS/racona-core" alt="Version" /></a>
   <a href="https://www.npmjs.com/package/@racona/sdk"><img src="https://img.shields.io/npm/v/@racona/sdk?label=%40racona%2Fsdk&color=blue" alt="SDK npm version" /></a>
   <a href="https://www.npmjs.com/package/@racona/cli"><img src="https://img.shields.io/npm/v/@racona/cli?label=%40racona%2Fcli&color=blue" alt="CLI npm version" /></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="License" /></a>
@@ -143,7 +143,7 @@ See [`docs/CONFIGURATION.md`](./docs/CONFIGURATION.md) for the full environment 
 
 To set up your local development environment with Infisical:
 
-1. **Request Infisical access** — contact your team admin and ask for a Machine Identity for the `elyos-core` project in the `development` environment.
+1. **Request Infisical access** — contact your team admin and ask for a Machine Identity for the `racona-core` project in the `development` environment.
 2. **Receive bootstrap credentials** — you'll get an `INFISICAL_CLIENT_ID` and `INFISICAL_CLIENT_SECRET`.
 3. **Configure your `.env`:**
    ```bash
@@ -170,8 +170,8 @@ This method creates a fully self-contained, runnable system in Docker containers
 
 ```bash
 # Clone the repository
-git clone https://github.com/ElyOS-webOS/elyos-core
-cd elyos-core
+git clone https://github.com/Racona-webOS/racona-core
+cd racona-core
 
 # Copy and configure environment variables (see section above)
 cp .env.example .env
@@ -187,8 +187,8 @@ open http://localhost:3000
 
 ```bash
 # Clone the repository
-git clone https://github.com/ElyOS-webOS/elyos-core
-cd elyos-core
+git clone https://github.com/Racona-webOS/racona-core
+cd racona-core
 
 # Copy and configure environment variables (see section above)
 cp .env.example .env
@@ -258,7 +258,7 @@ bun format            # Format code
 ## Project Structure
 
 ```
-elyos-core/
+racona-core/
 ├── apps/web/                     # Main SvelteKit application
 │   └── src/
 │       ├── routes/               # File-based routing
@@ -267,7 +267,7 @@ elyos-core/
 ├── packages/
 │   ├── database/                 # Drizzle ORM schemas, migrations, seeds
 │   ├── sdk/                      # @racona/sdk — plugin SDK (npm)
-│   └── create-elyos-app/      # CLI tool for scaffolding plugins (npm)
+│   └── create-racona-app/      # CLI tool for scaffolding plugins (npm)
 ├── examples/plugins/             # Example plugin implementations
 ├── docker/                       # Dockerfile and docker-compose.yml
 ├── docs/                         # Documentation
@@ -278,7 +278,7 @@ elyos-core/
 
 ### Self-hosting
 
-ElyOS offers three Docker deployment modes depending on your needs:
+Racona offers three Docker deployment modes depending on your needs:
 
 #### Option 1 — Full stack (recommended for most users)
 
@@ -290,7 +290,7 @@ Starts three containers in order:
 
 1. **postgres** — PostgreSQL 18 with `postgres-json-schema` extension
 2. **db-init** — one-time initialization: Drizzle migrations + seed data
-3. **elyos** — the application (starts after db-init completes)
+3. **racona** — the application (starts after db-init completes)
 
 #### Option 2 — Bundle (postgres + app, SQL-based init)
 
@@ -314,9 +314,9 @@ If you manage your own PostgreSQL instance:
 bun docker:up:app
 ```
 
-Only the ElyOS app container starts. Set `DATABASE_URL` in your `.env` to point to your external database. You are responsible for running migrations and seeding separately.
+Only the Racona app container starts. Set `DATABASE_URL` in your `.env` to point to your external database. You are responsible for running migrations and seeding separately.
 
-The app will be available at `http://localhost:3000` (configurable via `ELYOS_PORT`), PostgreSQL on port `5432` (configurable via `POSTGRES_PORT`).
+The app will be available at `http://localhost:3000` (configurable via `RACONA_PORT`), PostgreSQL on port `5432` (configurable via `POSTGRES_PORT`).
 
 ### Using pre-built images from GitHub Container Registry
 
@@ -324,10 +324,10 @@ If you don't want to build the image locally, you can use the published version 
 
 **Available images:**
 
-- `ghcr.io/elyos-webos/elyos-core:latest` — latest stable release
-- `ghcr.io/elyos-webos/elyos-core:0.1.0` — specific version
-- `ghcr.io/elyos-webos/elyos-core:0.1` — major.minor version
-- `ghcr.io/elyos-webos/elyos-core:0` — major version
+- `ghcr.io/racona-webos/racona-core:latest` — latest stable release
+- `ghcr.io/racona-webos/racona-core:0.1.0` — specific version
+- `ghcr.io/racona-webos/racona-core:0.1` — major.minor version
+- `ghcr.io/racona-webos/racona-core:0` — major version
 
 **Using with Docker Compose:**
 
@@ -348,20 +348,20 @@ services:
   postgres:
     image: postgres:18-alpine
     environment:
-      POSTGRES_USER: elyos
-      POSTGRES_PASSWORD: elyos123
-      POSTGRES_DB: elyos
+      POSTGRES_USER: racona
+      POSTGRES_PASSWORD: racona123
+      POSTGRES_DB: racona
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U elyos -d elyos']
+      test: ['CMD-SHELL', 'pg_isready -U racona -d racona']
       interval: 10s
       timeout: 5s
       retries: 5
 
   db-init:
-    image: ghcr.io/elyos-webos/elyos-core:latest
-    command: ['bun', '--filter', '@elyos/database', 'db:init']
+    image: ghcr.io/racona-webos/racona-core:latest
+    command: ['bun', '--filter', '@racona/database', 'db:init']
     env_file:
       - .env
     depends_on:
@@ -370,7 +370,7 @@ services:
     restart: 'no'
 
   app:
-    image: ghcr.io/elyos-webos/elyos-core:latest
+    image: ghcr.io/racona-webos/racona-core:latest
     ports:
       - '3000:3000'
     env_file:
@@ -395,7 +395,7 @@ docker compose up -d
 **Important:** In your `.env` file, the `DATABASE_URL` must point to the postgres service within the Docker network:
 
 ```bash
-DATABASE_URL=postgresql://elyos:elyos123@postgres:5432/elyos
+DATABASE_URL=postgresql://racona:racona123@postgres:5432/racona
 ```
 
 ### Database initialization and reset
@@ -418,10 +418,10 @@ See [`.env.example`](./.env.example) for all available configuration options, in
 
 ```bash
 # Full image (includes db-init capability)
-docker build -f docker/Dockerfile -t elyos/core:latest .
+docker build -f docker/Dockerfile -t racona/core:latest .
 
 # App-only image (no db-init, connects to external database)
-docker build -f docker/Dockerfile.app -t elyos/core-app:latest .
+docker build -f docker/Dockerfile.app -t racona/core-app:latest .
 
 # Platform-specific builds
 bun docker:build:amd64        # Full image, linux/amd64
@@ -453,7 +453,7 @@ Please read the [Contributing Guide](./docs/CONTRIBUTING.md) before submitting a
 
 ## Support
 
-I'm a software developer from Hungary with several years of experience, building ElyOS in my spare time (solo, for now) – together with an AI who also needs to be fed. 🤑
+I'm a software developer from Hungary with several years of experience, building Racona in my spare time (solo, for now) – together with an AI who also needs to be fed. 🤑
 
 If you find it useful or simply like what I'm doing, even a small contribution helps me keep going.
 

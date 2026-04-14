@@ -5,6 +5,12 @@ All notable changes to this package are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.2] - 2026-04-15
+
+### Changed
+
+- Brand name and documentation updates
+
 ## [0.3.1] - 2026-04-14
 
 ### Fixed
@@ -15,9 +21,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- **Package renamed**: `@elyos-dev/create-app` → `@racona/cli`
-- **Binary renamed**: `create-elyos-app` → `create-racona-app`
-- Generated `package.json` SDK dependency updated: `@elyos-dev/sdk` → `@racona/sdk: ^0.3.0`
+- **Package renamed**: `@racona/create-app` → `@racona/cli`
+- **Binary renamed**: `create-racona-app` → `create-racona-app`
+- Generated `package.json` SDK dependency updated: `@racona/sdk` → `@racona/sdk: ^0.3.0`
 
 ## [0.2.3] - 2026-04-12
 
@@ -39,7 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Wizard — default values**: `description` and `author` fields now have pre-filled defaults (`An ElyOS application` / `ElyOS Developer <dev@example.com>`) — pressing Enter accepts the default without typing
+- **Wizard — default values**: `description` and `author` fields now have pre-filled defaults (`An Racona application` / `Racona Developer <dev@example.com>`) — pressing Enter accepts the default without typing
 - **Wizard — cleaner feature descriptions**: removed parenthetical technical details from feature choice descriptions
 
 ## [0.2.0] - 2026-04-11
@@ -71,14 +77,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Changelog added to README for visibility on npmjs.com
-- `@elyos-dev/sdk` bumped to `^0.1.23` in generated `package.json`
+- `@racona/sdk` bumped to `^0.1.23` in generated `package.json`
 
 ## [0.1.10] - 2026-04-10
 
 ### Fixed
 
 - **Generated project dependencies**: `@lucide/svelte` bumped from `^0.561.0` to `^1.0.0` in scaffolded `package.json`
-- **Generated project dependencies**: `@elyos-dev/sdk` bumped from `^0.1.16` to `^0.1.22` in scaffolded `package.json`
+- **Generated project dependencies**: `@racona/sdk` bumped from `^0.1.16` to `^0.1.22` in scaffolded `package.json`
 
 ## [0.1.9] - 2026-04-09
 
@@ -107,13 +113,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- SDK import path corrected after `@elyos-dev/sdk` package name was restored
+- SDK import path corrected after `@racona/sdk` package name was restored
 
 ## [0.1.5] - 2026-03-20
 
 ### Fixed
 
-- SDK dependency updated to `@elyos-dev/sdk@^0.1.16`
+- SDK dependency updated to `@racona/sdk@^0.1.16`
 
 ## [0.1.4] - 2026-03-15
 
@@ -132,8 +138,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Package renamed from `create-elyos-plugin` to `@elyos-dev/create-app`
-- CLI binary renamed to `create-elyos-app`
+- Package renamed from `create-racona-plugin` to `@racona/create-app`
+- CLI binary renamed to `create-racona-app`
 - README updated, language switched to English
 
 ## [0.1.0] - 2026-03-07
@@ -141,5 +147,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial release
-- Interactive CLI scaffolding for ElyOS plugins (`basic`, `advanced`, `datatable`, `sidebar` templates)
+- Interactive CLI scaffolding for Racona plugins (`basic`, `advanced`, `datatable`, `sidebar` templates)
 - `manifest.json`, `menu.json`, `package.json`, and README generation

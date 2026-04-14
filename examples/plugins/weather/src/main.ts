@@ -4,7 +4,7 @@
  * Demonstrates RemoteService (sdk.remote.call) for API calls,
  * DataService for saving favorites, and MockWebOSSDK with custom handlers.
  */
-import { MockWebOSSDK } from '@elyos/sdk/dev';
+import { MockWebOSSDK } from '@racona/sdk/dev';
 import App from './App.svelte';
 
 // Mock weather data for standalone development

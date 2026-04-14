@@ -1,6 +1,6 @@
 # Map Example Plugin
 
-Example plugin demonstrating how to use `svelte-maplibre-gl` from ElyOS shared libraries.
+Example plugin demonstrating how to use `svelte-maplibre-gl` from Racona shared libraries.
 
 ## Features
 
@@ -60,7 +60,7 @@ export default defineConfig({
 ## Benefits
 
 - **~2MB smaller bundle** — MapLibre GL JS is not bundled
-- **Faster loading** — Library already loaded in ElyOS core
+- **Faster loading** — Library already loaded in Racona core
 - **Version consistency** — All plugins use the same MapLibre version
 
 ## Development
@@ -75,7 +75,7 @@ Then provide it as a mock library:
 
 ```typescript
 // src/main.ts
-import { MockWebOSSDK } from '@elyos-dev/sdk/dev';
+import { MockWebOSSDK } from '@racona/sdk/dev';
 import * as svelteMaplibreGl from 'svelte-maplibre-gl';
 
 if (!window.webOS) {

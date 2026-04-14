@@ -9,7 +9,7 @@
 	import AppLayout from './AppLayout.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import type { RawMenuItem } from '$lib/types/menu';
-	import type { ActionBarItem } from '@elyos-dev/sdk';
+	import type { ActionBarItem } from '@racona/sdk';
 
 	interface Props {
 		pluginId: string;

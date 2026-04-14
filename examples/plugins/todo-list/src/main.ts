@@ -3,7 +3,7 @@
  *
  * Demonstrates DataService CRUD operations with MockWebOSSDK for standalone development.
  */
-import { MockWebOSSDK } from '@elyos/sdk/dev';
+import { MockWebOSSDK } from '@racona/sdk/dev';
 import App from './App.svelte';
 
 // Initialize Mock SDK for standalone development

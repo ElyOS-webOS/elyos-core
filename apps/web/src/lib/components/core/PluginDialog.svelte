@@ -7,7 +7,7 @@
 <script lang="ts">
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
 	import { Button } from '$lib/components/ui/button';
-	import type { DialogOptions, DialogResult } from '@elyos-dev/sdk';
+	import type { DialogOptions, DialogResult } from '@racona/sdk';
 	import { useI18n } from '$lib/i18n/hooks';
 
 	const { t } = useI18n();

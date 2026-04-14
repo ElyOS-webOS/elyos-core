@@ -1,7 +1,7 @@
 BEGIN;
 
 -- ============================================================
--- ElyOS — Database Init Script
+-- Racona — Database Init Script
 -- Generated: 2026-04-07T10:54:10.244Z
 -- Admin email: szig83@gmail.com
 --
@@ -633,7 +633,7 @@ ON CONFLICT DO NOTHING;
 -- Users seed data
 -- System administrator user - must always exist
 INSERT INTO auth.users (id, full_name, email, email_verified, username, image, user_settings, oauth_image) VALUES
-  (1, 'ElyOS admin', 'youradminemail@eyoursomain.com', true, null, null, '{}', null)
+  (1, 'Racona admin', 'youradminemail@eyoursomain.com', true, null, null, '{}', null)
 ON CONFLICT (id) DO UPDATE SET
   full_name = EXCLUDED.full_name,
   email_verified = EXCLUDED.email_verified;
@@ -683,7 +683,7 @@ WHERE NOT EXISTS (
 -- User roles seed data
 -- Assigns users to their roles
 INSERT INTO auth.user_roles (user_id, role_id) VALUES
-  (1, 1)  -- ElyOS -> Rendszergazda
+  (1, 1)  -- Racona -> Rendszergazda
 ON CONFLICT (user_id, role_id) DO NOTHING;
 
 -- Seed: user_groups — User-group assignments
@@ -692,7 +692,7 @@ ON CONFLICT (user_id, role_id) DO NOTHING;
 
 -- Assign system admin to System Administrator group (group_id = 1)
 INSERT INTO auth.user_groups (user_id, group_id) VALUES
-  (1, 1)  -- ElyOS -> Rendszergazda
+  (1, 1)  -- Racona -> Rendszergazda
 ON CONFLICT (user_id, group_id) DO NOTHING;
 
 -- Seed: locales — Supported locales for i18n
@@ -1210,7 +1210,7 @@ INSERT INTO platform.translations (locale, namespace, key, value) VALUES
 ('hu', 'settings', 'about.version', 'Verzió'),
 ('hu', 'settings', 'about.description', 'Modern webes asztali környezet a hatékony munkavégzéshez.'),
 ('hu', 'settings', 'about.changelog', 'Verzió előzmények'),
-('hu', 'settings', 'about.copyright', '© {year} ElyOS')
+('hu', 'settings', 'about.copyright', '© {year} Racona')
 ON CONFLICT (locale, namespace, key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW();
 
 -- Profil beállítások (ProfileSettings.svelte)
@@ -1456,7 +1456,7 @@ INSERT INTO platform.translations (locale, namespace, key, value) VALUES
 ('en', 'settings', 'about.version', 'Version'),
 ('en', 'settings', 'about.description', 'Modern web desktop environment for efficient work.'),
 ('en', 'settings', 'about.changelog', 'Version History'),
-('en', 'settings', 'about.copyright', '© {year} ElyOS')
+('en', 'settings', 'about.copyright', '© {year} Racona')
 ON CONFLICT (locale, namespace, key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW();
 
 -- Profil beállítások (ProfileSettings.svelte)
@@ -3738,8 +3738,8 @@ INSERT INTO platform.translations (locale, namespace, key, value) VALUES
     ('en', 'plugin-manager', 'detail.description', 'Description'),
     ('hu', 'plugin-manager', 'detail.category', 'Kategória'),
     ('en', 'plugin-manager', 'detail.category', 'Category'),
-    ('hu', 'plugin-manager', 'detail.minVersion', 'Minimum ElyOS verzió'),
-    ('en', 'plugin-manager', 'detail.minVersion', 'Minimum ElyOS Version'),
+    ('hu', 'plugin-manager', 'detail.minVersion', 'Minimum Racona verzió'),
+    ('en', 'plugin-manager', 'detail.minVersion', 'Minimum Racona Version'),
     ('hu', 'plugin-manager', 'detail.installedAt', 'Telepítve'),
     ('en', 'plugin-manager', 'detail.installedAt', 'Installed At'),
     ('hu', 'plugin-manager', 'detail.updatedAt', 'Frissítve'),
@@ -3794,8 +3794,8 @@ INSERT INTO platform.translations (locale, namespace, key, value) VALUES
     ('en', 'plugin-manager', 'preview.dependenciesDescription', 'External packages required for the app to function'),
     ('hu', 'plugin-manager', 'preview.additionalInfo', 'További információk'),
     ('en', 'plugin-manager', 'preview.additionalInfo', 'Additional Information'),
-    ('hu', 'plugin-manager', 'preview.minVersion', 'Minimum ElyOS verzió'),
-    ('en', 'plugin-manager', 'preview.minVersion', 'Minimum ElyOS Version'),
+    ('hu', 'plugin-manager', 'preview.minVersion', 'Minimum Racona verzió'),
+    ('en', 'plugin-manager', 'preview.minVersion', 'Minimum Racona Version'),
     ('hu', 'plugin-manager', 'preview.locales', 'Támogatott nyelvek'),
     ('en', 'plugin-manager', 'preview.locales', 'Supported Languages'),
     ('hu', 'plugin-manager', 'preview.entryPoint', 'Belépési pont'),

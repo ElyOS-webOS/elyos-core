@@ -1,13 +1,13 @@
 /**
  * @module
- * Mock SDK for standalone ElyOS app development.
+ * Mock SDK for standalone Racona app development.
  *
- * Use this module during local development when a running ElyOS instance is not available.
+ * Use this module during local development when a running Racona instance is not available.
  * All services are simulated locally — toasts log to the console, data is stored in localStorage.
  *
  * @example
  * ```ts
- * import { MockWebOSSDK } from '@elyos-dev/sdk/dev';
+ * import { MockWebOSSDK } from '@racona/sdk/dev';
  *
  * if (!window.webOS) {
  *   MockWebOSSDK.initialize({

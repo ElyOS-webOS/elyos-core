@@ -151,10 +151,14 @@ MIT
 
 ## Changelog
 
+### [0.3.2] - 2026-04-15
+
+- **Changed**: Brand name and documentation updates
+
 ### [0.3.0] - 2026-04-14
 
-- **Changed**: Package renamed from `@elyos-dev/create-app` to `@racona/cli`
-- **Changed**: Binary renamed from `create-elyos-app` to `create-racona-app`
+- **Changed**: Package renamed from `@racona/create-app` to `@racona/cli`
+- **Changed**: Binary renamed from `create-racona-app` to `create-racona-app`
 - **Changed**: Generated `package.json` SDK dependency updated to `@racona/sdk: ^0.3.0`
 
 ### [0.2.2] - 2026-04-12

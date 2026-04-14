@@ -2,14 +2,14 @@
 
 ## Automatikus Típusok
 
-A `@elyos/webos-sdk-types` package automatikusan biztosítja a TypeScript típusdefiníciókat a WebOS SDK-hoz.
+A `@racona/webos-sdk-types` package automatikusan biztosítja a TypeScript típusdefiníciókat a WebOS SDK-hoz.
 
 ## Telepítés
 
 A hello-world példában már benne van, de új pluginban:
 
 ```bash
-bun add -d @elyos/webos-sdk-types
+bun add -d @racona/webos-sdk-types
 ```
 
 ## Használat
@@ -39,7 +39,7 @@ import type {
 	NotificationOptions,
 	DialogOptions,
 	CallOptions
-} from '@elyos/webos-sdk-types';
+} from '@racona/webos-sdk-types';
 
 // SDK típus
 const sdk: WebOSSDK | undefined = window.webOS;
@@ -62,7 +62,7 @@ await sdk?.notifications.send(options);
 
 ```svelte
 <script lang="ts">
-	import type { UserInfo } from '@elyos/webos-sdk-types';
+	import type { UserInfo } from '@racona/webos-sdk-types';
 
 	// SDK elérése
 	const sdk = window.webOS;
@@ -128,7 +128,7 @@ A hello-world példában már van `tsconfig.json`:
 ### Remote Call Típusokkal
 
 ```typescript
-import type { CallOptions } from '@elyos/webos-sdk-types';
+import type { CallOptions } from '@racona/webos-sdk-types';
 
 interface ServerTimeResult {
 	timestamp: number;
@@ -172,7 +172,7 @@ async function loadData() {
 ### Notification Típusokkal
 
 ```typescript
-import type { NotificationOptions } from '@elyos/webos-sdk-types';
+import type { NotificationOptions } from '@racona/webos-sdk-types';
 
 async function sendNotification(userId: string, message: string) {
 	const options: NotificationOptions = {
@@ -188,7 +188,7 @@ async function sendNotification(userId: string, message: string) {
 
 ## Hibaelhárítás
 
-### "Cannot find module '@elyos/webos-sdk-types'"
+### "Cannot find module '@racona/webos-sdk-types'"
 
 **Megoldás**: Telepítsd a package-et
 
@@ -200,7 +200,7 @@ bun install
 
 **Megoldás**:
 
-1. Ellenőrizd, hogy a `@elyos/webos-sdk-types` telepítve van
+1. Ellenőrizd, hogy a `@racona/webos-sdk-types` telepítve van
 2. Restart TypeScript Server (VSCode: Cmd/Ctrl + Shift + P → "TypeScript: Restart TS Server")
 3. Restart IDE
 

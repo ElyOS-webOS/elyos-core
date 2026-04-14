@@ -32,7 +32,7 @@
 		</MapLibre>
 
 		<div class="mt-4 rounded border border-green-200 bg-green-50 p-4">
-			<p class="text-sm text-green-800">✅ MapLibre GL loaded from ElyOS shared libraries</p>
+			<p class="text-sm text-green-800">✅ MapLibre GL loaded from Racona shared libraries</p>
 			<p class="mt-1 text-xs text-green-600">Bundle size saved: ~2MB</p>
 		</div>
 	{:else}

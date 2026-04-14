@@ -13,12 +13,12 @@
       },
     },
     "apps/web": {
-      "name": "@elyos/core",
+      "name": "@racona/core",
       "version": "0.1.0",
       "dependencies": {
         "@better-auth/drizzle-adapter": "^1.6.0",
-        "@elyos-dev/sdk": "workspace:*",
-        "@elyos/database": "workspace:*",
+        "@racona/database": "workspace:*",
+        "@racona/sdk": "workspace:*",
         "@sentry/node": "^10.47.0",
         "@sentry/sveltekit": "^10.47.0",
         "@tanstack/table-core": "^8.21.3",
@@ -106,8 +106,8 @@
       "name": "sdk-demo",
       "version": "1.0.0",
       "dependencies": {
-        "@elyos-dev/sdk": "workspace:*",
         "@lucide/svelte": "^0.561.0",
+        "@racona/sdk": "workspace:*",
         "svelte": "^5.0.0",
       },
       "devDependencies": {
@@ -122,7 +122,7 @@
       "name": "todo-list-plugin",
       "version": "1.0.0",
       "dependencies": {
-        "@elyos-dev/sdk": "workspace:*",
+        "@racona/sdk": "workspace:*",
         "svelte": "^5.0.0",
       },
       "devDependencies": {
@@ -135,7 +135,7 @@
       "name": "weather-plugin",
       "version": "1.0.0",
       "dependencies": {
-        "@elyos-dev/sdk": "workspace:*",
+        "@racona/sdk": "workspace:*",
         "svelte": "^5.0.0",
       },
       "devDependencies": {
@@ -144,11 +144,11 @@
         "vite": "^6.0.0",
       },
     },
-    "packages/create-elyos-app": {
-      "name": "@elyos-dev/create-app",
-      "version": "0.2.0",
+    "packages/cli": {
+      "name": "@racona/cli",
+      "version": "0.3.1",
       "bin": {
-        "create-elyos-app": "./dist/cli.js",
+        "create-racona-app": "./dist/cli.js",
       },
       "dependencies": {
         "commander": "^13.0.0",
@@ -164,7 +164,7 @@
       },
     },
     "packages/database": {
-      "name": "@elyos/database",
+      "name": "@racona/database",
       "version": "0.1.0",
       "dependencies": {
         "dotenv": "^17.2.3",
@@ -183,8 +183,8 @@
       },
     },
     "packages/sdk": {
-      "name": "@elyos-dev/sdk",
-      "version": "0.2.0",
+      "name": "@racona/sdk",
+      "version": "0.3.1",
       "devDependencies": {
         "typescript": "^5.7.0",
         "vitest": "^3.1.0",
@@ -281,14 +281,6 @@
     "@egjs/component": ["@egjs/component@3.0.5", "", {}, "sha512-cLcGizTrrUNA2EYE3MBmEDt2tQv1joVP1Q3oDisZ5nw0MZDx2kcgEXM+/kZpfa/PAkFvYVhRUZwytIQWoN3V/w=="],
 
     "@egjs/list-differ": ["@egjs/list-differ@1.0.1", "", {}, "sha512-OTFTDQcWS+1ZREOdCWuk5hCBgYO4OsD30lXcOCyVOAjXMhgL5rBRDnt/otb6Nz8CzU0L/igdcaQBDLWc4t9gvg=="],
-
-    "@elyos-dev/create-app": ["@elyos-dev/create-app@workspace:packages/create-elyos-app"],
-
-    "@elyos-dev/sdk": ["@elyos-dev/sdk@workspace:packages/sdk"],
-
-    "@elyos/core": ["@elyos/core@workspace:apps/web"],
-
-    "@elyos/database": ["@elyos/database@workspace:packages/database"],
 
     "@emnapi/runtime": ["@emnapi/runtime@1.8.1", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-mehfKSMWjjNol8659Z8KxEMrdSJDDot5SXMq00dM8BN4o+CLNXQ0xH2V7EchNHV4RmbZLmmPdEaXZc5H2FXmDg=="],
 
@@ -559,6 +551,14 @@
     "@polka/url": ["@polka/url@1.0.0-next.29", "", {}, "sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww=="],
 
     "@prisma/instrumentation": ["@prisma/instrumentation@7.6.0", "", { "dependencies": { "@opentelemetry/instrumentation": "^0.207.0" }, "peerDependencies": { "@opentelemetry/api": "^1.8" } }, "sha512-ZPW2gRiwpPzEfgeZgaekhqXrbW+Y2RJKHVqUmlhZhKzRNCcvR6DykzylDrynpArKKRQtLxoZy36fK7U0p3pdgQ=="],
+
+    "@racona/cli": ["@racona/cli@workspace:packages/cli"],
+
+    "@racona/core": ["@racona/core@workspace:apps/web"],
+
+    "@racona/database": ["@racona/database@workspace:packages/database"],
+
+    "@racona/sdk": ["@racona/sdk@workspace:packages/sdk"],
 
     "@rollup/plugin-commonjs": ["@rollup/plugin-commonjs@29.0.2", "", { "dependencies": { "@rollup/pluginutils": "^5.0.1", "commondir": "^1.0.1", "estree-walker": "^2.0.2", "fdir": "^6.2.0", "is-reference": "1.2.1", "magic-string": "^0.30.3", "picomatch": "^4.0.2" }, "peerDependencies": { "rollup": "^2.68.0||^3.0.0||^4.0.0" }, "optionalPeers": ["rollup"] }, "sha512-S/ggWH1LU7jTyi9DxZOKyxpVd4hF/OZ0JrEbeLjXk/DFXwRny0tjD2c992zOUYQobLrVkRVMDdmHP16HKP7GRg=="],
 
@@ -1806,8 +1806,6 @@
 
     "@babel/helper-compilation-targets/semver": ["semver@6.3.1", "", { "bin": { "semver": "bin/semver.js" } }, "sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA=="],
 
-    "@elyos/core/typescript": ["typescript@6.0.2", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-bGdAIrZ0wiGDo5l8c++HWtbaNCWTS4UTv7RaTH/ThVIgjkveJt83m74bBHMJkuCbslY8ixgLBVZJIOiQlQTjfQ=="],
-
     "@esbuild-kit/core-utils/esbuild": ["esbuild@0.18.20", "", { "optionalDependencies": { "@esbuild/android-arm": "0.18.20", "@esbuild/android-arm64": "0.18.20", "@esbuild/android-x64": "0.18.20", "@esbuild/darwin-arm64": "0.18.20", "@esbuild/darwin-x64": "0.18.20", "@esbuild/freebsd-arm64": "0.18.20", "@esbuild/freebsd-x64": "0.18.20", "@esbuild/linux-arm": "0.18.20", "@esbuild/linux-arm64": "0.18.20", "@esbuild/linux-ia32": "0.18.20", "@esbuild/linux-loong64": "0.18.20", "@esbuild/linux-mips64el": "0.18.20", "@esbuild/linux-ppc64": "0.18.20", "@esbuild/linux-riscv64": "0.18.20", "@esbuild/linux-s390x": "0.18.20", "@esbuild/linux-x64": "0.18.20", "@esbuild/netbsd-x64": "0.18.20", "@esbuild/openbsd-x64": "0.18.20", "@esbuild/sunos-x64": "0.18.20", "@esbuild/win32-arm64": "0.18.20", "@esbuild/win32-ia32": "0.18.20", "@esbuild/win32-x64": "0.18.20" }, "bin": { "esbuild": "bin/esbuild" } }, "sha512-ceqxoedUrcayh7Y7ZX6NdbbDzGROiyVBgC4PriJThBKSVPWnnFHZAkfI1lJT8QFkOwH4qOS2SJkS4wvpGl8BpA=="],
 
     "@eslint-community/eslint-utils/eslint-visitor-keys": ["eslint-visitor-keys@3.4.3", "", {}, "sha512-wpc+LXeiyiisxPlEkUzU6svyS1frIO3Mgxj1fdy7Pm8Ygzguax2N3Fa/D/ag1WqbOprdI+uY6wMUl8/a2G+iag=="],
@@ -1819,6 +1817,8 @@
     "@opentelemetry/instrumentation-pg/@types/pg": ["@types/pg@8.15.6", "", { "dependencies": { "@types/node": "*", "pg-protocol": "*", "pg-types": "^2.2.0" } }, "sha512-NoaMtzhxOrubeL/7UZuNTrejB4MPAJ0RpxZqXQf2qXuVlTPuG6Y8p4u9dKRaue4yjmC7ZhzVO2/Yyyn25znrPQ=="],
 
     "@prisma/instrumentation/@opentelemetry/instrumentation": ["@opentelemetry/instrumentation@0.207.0", "", { "dependencies": { "@opentelemetry/api-logs": "0.207.0", "import-in-the-middle": "^2.0.0", "require-in-the-middle": "^8.0.0" }, "peerDependencies": { "@opentelemetry/api": "^1.3.0" } }, "sha512-y6eeli9+TLKnznrR8AZlQMSJT7wILpXH+6EYq5Vf/4Ao+huI7EedxQHwRgVUOMLFbe7VFDvHJrX9/f4lcwnJsA=="],
+
+    "@racona/core/typescript": ["typescript@6.0.2", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-bGdAIrZ0wiGDo5l8c++HWtbaNCWTS4UTv7RaTH/ThVIgjkveJt83m74bBHMJkuCbslY8ixgLBVZJIOiQlQTjfQ=="],
 
     "@rollup/plugin-commonjs/estree-walker": ["estree-walker@2.0.2", "", {}, "sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w=="],
 

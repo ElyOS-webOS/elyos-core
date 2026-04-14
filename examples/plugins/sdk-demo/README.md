@@ -1,6 +1,6 @@
 # Hello World Plugin
 
-A comprehensive example plugin for ElyOS demonstrating all SDK features and plugin development best practices.
+A comprehensive example plugin for Racona demonstrating all SDK features and plugin development best practices.
 
 ## What It Demonstrates
 
@@ -38,7 +38,7 @@ hello-world/
 ├── package.json
 ├── vite.config.ts
 ├── build-all.js                 # Build script (main + components)
-└── build-package.js             # Package script (.elyospkg)
+└── build-package.js             # Package script (.raconapkg)
 ```
 
 ## Development
@@ -52,16 +52,16 @@ bun dev
 
 The plugin initializes `MockWebOSSDK` automatically when `window.webOS` is not available, providing console-based feedback and localStorage-based storage.
 
-### ElyOS Mode (Docker)
+### Racona Mode (Docker)
 
 ```bash
-# Start ElyOS
+# Start Racona
 docker compose up -d
 
 # Start plugin dev server
 bun dev
 
-# In ElyOS: Plugin Manager → Load Dev Plugin → http://localhost:5173
+# In Racona: Plugin Manager → Load Dev Plugin → http://localhost:5173
 ```
 
 ## Build
@@ -70,7 +70,7 @@ bun dev
 # Build main plugin + all components
 bun run build
 
-# Create .elyospkg package for upload
+# Create .raconapkg package for upload
 bun run package
 ```
 

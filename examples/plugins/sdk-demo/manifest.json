@@ -9,7 +9,7 @@
 		"en": "Example application demonstrating all main WebOS SDK features"
 	},
 	"version": "1.0.0",
-	"author": "WebOS Team <team@elyos.dev>",
+	"author": "WebOS Team <team@racona.dev>",
 	"entry": "dist/index.iife.js",
 	"icon": "icon.svg",
 	"iconStyle": "cover",

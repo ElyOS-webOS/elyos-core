@@ -17,7 +17,7 @@
 		if (!e.dataTransfer) return;
 		isDragging = true;
 		e.dataTransfer.effectAllowed = 'copy';
-		e.dataTransfer.setData('application/x-elyos-app', app.appName);
+		e.dataTransfer.setData('application/x-racona-app', app.appName);
 		e.dataTransfer.setData('text/plain', app.title);
 		ondragstart?.();
 	}

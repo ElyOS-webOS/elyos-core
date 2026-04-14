@@ -8,7 +8,7 @@
 	 * DataService for saving favorites, and UIService for toast feedback.
 	 */
 	import { onMount } from 'svelte';
-	import type {} from '@elyos/sdk/types';
+	import type {} from '@racona/sdk/types';
 
 	let { pluginId = 'weather' }: { pluginId?: string } = $props();
 

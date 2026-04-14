@@ -129,7 +129,7 @@
 	async function handleWorkspaceDrop(e: DragEvent) {
 		e.preventDefault();
 
-		const appId = e.dataTransfer?.getData('application/x-elyos-app');
+		const appId = e.dataTransfer?.getData('application/x-racona-app');
 		if (!appId) return;
 
 		// Check if shortcut already exists for this app

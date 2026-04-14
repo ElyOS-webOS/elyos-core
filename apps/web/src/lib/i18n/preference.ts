@@ -12,7 +12,7 @@
 import { DEFAULT_SUPPORTED_LOCALES } from './store.svelte.js';
 
 /** Cookie neve a nyelvi preferenciához */
-export const LOCALE_COOKIE_NAME = 'elyos_locale';
+export const LOCALE_COOKIE_NAME = 'racona_locale';
 
 /** Cookie élettartama (1 év) */
 export const LOCALE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;

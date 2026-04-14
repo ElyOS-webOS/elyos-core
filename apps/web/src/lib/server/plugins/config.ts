@@ -9,13 +9,13 @@ import { env } from '$lib/env';
 
 /**
  * Plugin csomag kiterjesztése (pont nélkül)
- * Példa: 'elyospkg', 'wospkg'
+ * Példa: 'raconapkg', 'wospkg'
  */
 export const PLUGIN_PACKAGE_EXTENSION = env.PLUGIN_PACKAGE_EXTENSION;
 
 /**
  * Plugin csomag kiterjesztése ponttal
- * Példa: '.elyospkg', '.wospkg'
+ * Példa: '.raconapkg', '.wospkg'
  */
 export const PLUGIN_PACKAGE_EXTENSION_WITH_DOT = `.${PLUGIN_PACKAGE_EXTENSION}`;
 

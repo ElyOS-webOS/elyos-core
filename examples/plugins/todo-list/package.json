@@ -1,7 +1,7 @@
 {
 	"name": "todo-list-plugin",
 	"version": "1.0.0",
-	"description": "Todo List plugin for ElyOS — demonstrates DataService CRUD operations",
+	"description": "Todo List plugin for Racona — demonstrates DataService CRUD operations",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
@@ -9,7 +9,7 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
-		"@elyos-dev/sdk": "workspace:*",
+		"@racona/sdk": "workspace:*",
 		"svelte": "^5.0.0"
 	},
 	"devDependencies": {

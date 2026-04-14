@@ -17,7 +17,7 @@ export class I18nService implements II18nService {
 	private _locale: string = 'en';
 	/** Promise that resolves when translations have finished loading from the server */
 	private loadingPromise: Promise<void> | null = null;
-	/** Listener for the ElyOS locale-change custom event, stored for cleanup on destroy */
+	/** Listener for the Racona locale-change custom event, stored for cleanup on destroy */
 	private storageListener: ((e: StorageEvent) => void) | null = null;
 	/** Registered callbacks to invoke after each locale change */
 	private _onLocaleChangeCallbacks: Array<() => void> = [];
@@ -44,7 +44,7 @@ export class I18nService implements II18nService {
 		this._onLocaleChangeCallbacks.push(callback);
 	}
 
-	/** Listen for system-level locale changes (ElyOS CustomEvent) */
+	/** Listen for system-level locale changes (Racona CustomEvent) */
 	private listenForLocaleChanges(): void {
 		if (typeof window === 'undefined') return;
 
@@ -59,21 +59,21 @@ export class I18nService implements II18nService {
 			}
 		}) as (e: StorageEvent) => void;
 
-		window.addEventListener('elyos:locale-change', this.storageListener as EventListener);
+		window.addEventListener('racona:locale-change', this.storageListener as EventListener);
 	}
 
 	/** Remove the locale change listener — call this when the plugin unmounts. */
 	destroy(): void {
 		if (this.storageListener && typeof window !== 'undefined') {
-			window.removeEventListener('elyos:locale-change', this.storageListener as EventListener);
+			window.removeEventListener('racona:locale-change', this.storageListener as EventListener);
 			this.storageListener = null;
 		}
 	}
 
-	/** Detect the current locale from the ElyOS `elyos_locale` cookie */
+	/** Detect the current locale from the Racona `racona_locale` cookie */
 	private detectLocale(): void {
 		if (typeof document !== 'undefined') {
-			const match = document.cookie.match(/(?:^|;\s*)elyos_locale=([^;]+)/);
+			const match = document.cookie.match(/(?:^|;\s*)racona_locale=([^;]+)/);
 			if (match?.[1]) {
 				this._locale = decodeURIComponent(match[1]);
 				return;
@@ -86,7 +86,7 @@ export class I18nService implements II18nService {
 
 	/**
 	 * Load translations directly from an object (for dev mode).
-	 * Called by the ElyOS core when loading a dev plugin.
+	 * Called by the Racona core when loading a dev plugin.
 	 * @param translations - Translation key-value pairs
 	 */
 	loadTranslationsFromObject(translations: Record<string, string>): void {
