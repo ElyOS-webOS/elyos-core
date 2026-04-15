@@ -44,6 +44,10 @@ export default defineConfig({
 			ignored: ['**/uploads/plugins/**', '**/uploads/plugins-temp/**']
 		}
 	},
+	// Three.js SSR kizárás — a three csomag nem kompatibilis a szerver oldali renderelésssel
+	ssr: {
+		noExternal: ['three', '@threlte/core']
+	},
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}', 'src/**/*.svelte.{test,spec}.{js,ts}'],
 		environment: 'jsdom',

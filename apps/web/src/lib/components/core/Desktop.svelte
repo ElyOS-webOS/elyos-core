@@ -8,6 +8,10 @@
 		setDesktopStore,
 		getConnectionStore
 	} from '$lib/stores';
+	import {
+		createAiAssistantStore,
+		setAiAssistantStore
+	} from '$apps/ai-assistant/stores/aiAssistantStore.svelte';
 	import { getAppByName, getApps } from '$lib/services/client/appRegistry';
 	import * as ContextMenu from '$lib/components/ui/context-menu';
 	import Window from '$lib/components/core/window/Window.svelte';
@@ -43,6 +47,10 @@
 
 	const desktopStore = createDesktopStore();
 	setDesktopStore(desktopStore);
+
+	// AI Assistant store inicializálása a Svelte context-ben
+	const aiAssistantStore = createAiAssistantStore();
+	setAiAssistantStore(aiAssistantStore);
 
 	// ThemeManager csak kliens oldalon
 	let themeManager = $state<ReturnType<typeof getThemeManager> | null>(null);

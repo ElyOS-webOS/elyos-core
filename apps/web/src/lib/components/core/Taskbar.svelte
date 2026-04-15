@@ -12,6 +12,7 @@
 	import WindowLink from '$lib/components/ui/WindowLink.svelte';
 	import NotificationCenter from './NotificationCenter.svelte';
 	import ChatCenter from './ChatCenter.svelte';
+	import AIAssistantCenter from './AIAssistantCenter.svelte';
 	import { getContext, onMount } from 'svelte';
 	import { takeWindowScreenshot } from '$lib/services/client/screenshot';
 	import { browser } from '$app/environment';
@@ -45,6 +46,7 @@
 				appGuidLink: boolean;
 				messages?: boolean;
 				notifications?: boolean;
+				aiAssistant?: boolean;
 			};
 		};
 	}>('settings');
@@ -249,8 +251,7 @@
 						<Popover.Content
 							class="z-1000 mx-2 my-2 flex w-(--startmenu-width) items-stretch"
 							onInteractOutside={(e) => e.preventDefault()}
-							data-startmenu-content
-							><StartMenu bind:open={startMenuOpen} /></Popover.Content
+							data-startmenu-content><StartMenu bind:open={startMenuOpen} /></Popover.Content
 						>
 					</Popover.Root>
 				</div>
@@ -331,6 +332,9 @@
 		{/if}
 		{#if settings.taskbar.itemVisibility.messages ?? true}
 			<ChatCenter />
+		{/if}
+		{#if settings.taskbar.itemVisibility.aiAssistant ?? true}
+			<AIAssistantCenter />
 		{/if}
 		{#if settings.taskbar.itemVisibility.notifications ?? true}
 			<NotificationCenter />
