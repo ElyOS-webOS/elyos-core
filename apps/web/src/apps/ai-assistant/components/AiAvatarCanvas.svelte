@@ -21,6 +21,7 @@
 			theme: 'light' | 'dark';
 			enableMouseTracking?: boolean;
 			panelRef?: HTMLDivElement;
+			headAnimationMode?: 'idle' | 'typing' | 'breathing';
 		}>;
 		/** Az aktuális érzelmi állapot — átadódik a belső avatar komponensnek */
 		emotionState: EmotionState;
@@ -30,6 +31,8 @@
 		enableMouseTracking?: boolean;
 		/** Opcionális: a panel referencia az egérkövetéshez */
 		panelRef?: HTMLDivElement;
+		/** Opcionális: fej animáció mód (alapértelmezett: 'idle') */
+		headAnimationMode?: 'idle' | 'typing' | 'breathing';
 	}
 
 	let {
@@ -37,7 +40,8 @@
 		emotionState,
 		theme,
 		enableMouseTracking = true,
-		panelRef
+		panelRef,
+		headAnimationMode = 'idle'
 	}: Props = $props();
 </script>
 
@@ -47,5 +51,5 @@
   Requirements: 13.9
 -->
 <div class="aspect-square w-full" style="height: 100%;" aria-hidden="true">
-	<AvatarComponent {emotionState} {theme} {enableMouseTracking} {panelRef} />
+	<AvatarComponent {emotionState} {theme} {enableMouseTracking} {panelRef} {headAnimationMode} />
 </div>

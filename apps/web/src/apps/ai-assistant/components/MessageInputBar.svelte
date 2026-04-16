@@ -1,20 +1,17 @@
 <!--
   MessageInputBar.svelte — Üzenet beviteli sáv az AI asszisztenshez.
 
-  Tartalmaz:
-  - Szövegbeviteli mezőt (max 500 karakter) inline validációval
-  - Send gombot
-  - TTS placeholder gombot (disabled — jövőbeli funkció)
-  - Enter billentyűre küldés
-  - Inline validáció a hosszra
+  Új design: Széles, teljesen lekerekített input mező nyíl gombbal.
 
   Requirements: 2.2, 2.4, 2.5, 8.3, 12.1
 -->
 <script lang="ts">
-	import { Send, Volume2 } from 'lucide-svelte';
+	import { ArrowRight } from 'lucide-svelte';
 	import { useI18n } from '$lib/i18n/hooks';
+	import { getAiAssistantStore } from '../stores/aiAssistantStore.svelte.js';
 
 	const { t } = useI18n();
+	const aiStore = getAiAssistantStore();
 
 	interface Props {
 		/** Küldés callback — meghívódik érvényes üzenet esetén */
@@ -59,6 +56,7 @@
 	function handleSend() {
 		if (!validate()) return;
 		const text = inputValue.trim();
+		aiStore.stopTyping(); // Gépelés leállítása
 		onSend(text);
 		inputValue = '';
 		validationError = null;
@@ -72,8 +70,19 @@
 		}
 	}
 
-	/** Input változáskor validálás */
+	/** Input változáskor validálás és gépelés jelzése */
 	function handleInput() {
+		// Gépelés jelzése - mindig hívjuk, még ha üres is
+		// (így ha törlünk mindent, akkor is elindul a 3mp timeout)
+		aiStore.startTyping();
+
+		// Ha üres, akkor azonnal állítsuk le a typing flag-et
+		// de a timeout továbbra is fut (3mp után breathing)
+		if (inputValue.length === 0) {
+			aiStore.isTyping = false;
+		}
+
+		// Validálás
 		if (isTooLong) {
 			validationError =
 				t('ai-assistant.input.tooLong', { max: String(maxLength) }) ??
@@ -84,63 +93,99 @@
 	}
 </script>
 
-<div class="border-t p-3">
+<div class="input-wrapper-container">
 	<!-- Validációs hibaüzenet -->
 	{#if validationError}
-		<p class="text-destructive mb-2 text-xs" role="alert" aria-live="polite">
+		<p class="text-destructive mb-2 text-center text-xs" role="alert" aria-live="polite">
 			{validationError}
 		</p>
 	{/if}
 
-	<div class="flex items-end gap-2">
+	<div class="input-wrapper">
 		<!-- Szövegbeviteli mező -->
-		<div class="relative flex-1">
-			<textarea
-				bind:value={inputValue}
-				onkeydown={handleKeydown}
-				oninput={handleInput}
-				{disabled}
-				rows={2}
-				class="border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:ring-ring w-full resize-none rounded-md border px-3 py-2 text-sm focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50
-					{isTooLong ? 'border-destructive focus-visible:ring-destructive' : ''}"
-				placeholder={t('ai-assistant.input.placeholder') ?? 'Kérdezz valamit...'}
-				aria-label={t('ai-assistant.input.label') ?? 'Kérdés beviteli mező'}
-				aria-describedby={validationError ? 'input-error' : 'char-count'}
-				aria-invalid={isTooLong}
-			></textarea>
+		<textarea
+			bind:value={inputValue}
+			onkeydown={handleKeydown}
+			oninput={handleInput}
+			{disabled}
+			rows={1}
+			class="input-field"
+			placeholder={t('ai-assistant.input.placeholder') ?? 'Kérdezz valamit...'}
+			aria-label={t('ai-assistant.input.label') ?? 'Kérdés beviteli mező'}
+			aria-describedby={validationError ? 'input-error' : undefined}
+			aria-invalid={isTooLong}
+		></textarea>
 
-			<!-- Karakter számláló -->
-			<span
-				id="char-count"
-				class="text-muted-foreground absolute right-2 bottom-1.5 text-xs
-					{isTooLong ? 'text-destructive' : ''}"
-				aria-live="polite"
-			>
-				{charCount}/{maxLength}
-			</span>
-		</div>
-
-		<!-- Gombok oszlopa -->
-		<div class="flex flex-col gap-1.5 pb-0.5">
-			<!-- TTS placeholder gomb (disabled — jövőbeli funkció, Requirements: 12.1) -->
-			<button
-				disabled
-				title={t('ai-assistant.tts.comingSoon') ?? 'Szövegfelolvasás (hamarosan)'}
-				aria-label={t('ai-assistant.tts.comingSoon') ?? 'Szövegfelolvasás (hamarosan)'}
-				class="text-muted-foreground flex h-8 w-8 cursor-not-allowed items-center justify-center rounded-md opacity-40"
-			>
-				<Volume2 class="h-4 w-4" />
-			</button>
-
-			<!-- Send gomb -->
-			<button
-				onclick={handleSend}
-				disabled={!canSubmit}
-				aria-label={t('ai-assistant.input.send') ?? 'Küldés'}
-				class="bg-primary text-primary-foreground hover:bg-primary/90 flex h-8 w-8 items-center justify-center rounded-md transition-colors disabled:cursor-not-allowed disabled:opacity-50"
-			>
-				<Send class="h-4 w-4" />
-			</button>
-		</div>
+		<!-- Send gomb -->
+		<button
+			onclick={handleSend}
+			disabled={!canSubmit}
+			aria-label={t('ai-assistant.input.send') ?? 'Küldés'}
+			class="send-button"
+		>
+			<ArrowRight class="h-5 w-5" />
+		</button>
 	</div>
 </div>
+
+<style>
+	.input-wrapper-container {
+		width: 100%;
+	}
+
+	.input-wrapper {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+		border: 1px solid var(--border);
+		border-radius: 9999px;
+		background: var(--background);
+		padding: 0.5rem 1rem;
+	}
+
+	.input-field {
+		flex: 1;
+		outline: none;
+		border: none;
+		background: transparent;
+		min-height: 36px;
+		max-height: 120px;
+		resize: none;
+		color: var(--foreground);
+		font-size: 0.875rem;
+		line-height: 1.25rem;
+	}
+
+	.input-field::placeholder {
+		color: var(--muted-foreground);
+	}
+
+	.input-field:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	.send-button {
+		display: flex;
+		flex-shrink: 0;
+		justify-content: center;
+		align-items: center;
+		transition: background-color 0.2s ease;
+		border-radius: 50%;
+		background: var(--primary);
+		width: 36px;
+		height: 36px;
+		color: var(--primary-foreground);
+	}
+
+	.send-button:hover:not(:disabled) {
+		opacity: 0.9;
+		background: var(--primary);
+	}
+
+	.send-button:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+</style>

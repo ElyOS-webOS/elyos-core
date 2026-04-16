@@ -12,7 +12,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { mode } from 'mode-watcher';
-	import { Bot, Trash2 } from 'lucide-svelte';
+	import { Bot } from 'lucide-svelte';
 	import { useI18n } from '$lib/i18n/hooks';
 	import { getAiAssistantStore } from '../stores/aiAssistantStore.svelte.js';
 	import AiAvatarCanvas from './AiAvatarCanvas.svelte';
@@ -34,8 +34,31 @@
 		{ value: 'surprised', label: 'Meglepett', emoji: '😮' }
 	];
 
+	/** Random szövegek a speech bubble-höz */
+	const SPEECH_TEXTS = [
+		'Szia!',
+		'Miben segíthetek?',
+		'Van kérdésed?',
+		'Gondolkodom...',
+		'Érdekes!',
+		'Hmm...',
+		'Figyelek!',
+		'Készen állok!',
+		'Mondd csak!',
+		'Hallgatlak...',
+		'Mi jár a fejedben?',
+		'Segíthetek valamiben?',
+		'Kíváncsi vagyok!',
+		'Mesélj!',
+		'Várom a kérdésed',
+		'Itt vagyok neked'
+	];
+
 	let messagesEndRef: HTMLDivElement | undefined = $state();
 	let panelRef: HTMLDivElement | undefined = $state();
+	let currentSpeechText = $state('');
+	let showSpeech = $state(false);
+	let isFadingOut = $state(false);
 
 	/** Görgetés az utolsó üzenethez */
 	function scrollToBottom() {
@@ -59,11 +82,6 @@
 		await aiStore.sendMessage(text);
 	}
 
-	/** History törlése */
-	function handleClearHistory() {
-		aiStore.clearHistory();
-	}
-
 	/** Időbélyeg formázása */
 	function formatTime(timestamp: number): string {
 		return new Date(timestamp).toLocaleTimeString('hu-HU', {
@@ -82,6 +100,30 @@
 	// localStorage betöltése megnyitáskor
 	onMount(() => {
 		aiStore.loadFromStorage();
+
+		// Random speech bubble megjelenítés 8-15 mp-enként
+		function scheduleNextSpeech() {
+			const delay = Math.random() * 7000 + 8000; // 8000-15000 ms (8-15 sec)
+			setTimeout(() => {
+				// Random szöveg kiválasztása
+				currentSpeechText = SPEECH_TEXTS[Math.floor(Math.random() * SPEECH_TEXTS.length)];
+				showSpeech = true;
+				isFadingOut = false;
+
+				// 3.6 másodperc múlva kezd el fade-out-olni
+				setTimeout(() => {
+					isFadingOut = true;
+					// 0.4 másodperc múlva teljesen eltűnik (fade-out animáció ideje)
+					setTimeout(() => {
+						showSpeech = false;
+					}, 400);
+				}, 3600);
+
+				scheduleNextSpeech();
+			}, delay);
+		}
+
+		scheduleNextSpeech();
 	});
 </script>
 
@@ -93,67 +135,73 @@
 	aria-label={t('ai-assistant.panel.title') ?? 'AI Asszisztens'}
 	aria-modal="false"
 	onkeydown={handleKeydown}
-	class="flex h-[520px] flex-col"
+	class="flex flex-col"
 >
-	<!-- Fejléc -->
-	<div class="flex items-center justify-between border-b px-4 py-2.5">
-		<div class="flex items-center gap-2">
-			<Bot class="text-primary h-4 w-4" />
-			<span class="text-sm font-semibold">
-				{t('ai-assistant.panel.title') ?? 'AI Asszisztens'}
-			</span>
-		</div>
-		{#if aiStore.hasMessages}
-			<button
-				onclick={handleClearHistory}
-				aria-label={t('ai-assistant.history.clear') ?? 'Előzmények törlése'}
-				title={t('ai-assistant.history.clear') ?? 'Előzmények törlése'}
-				class="text-muted-foreground hover:text-destructive rounded-md p-1 transition-colors"
-			>
-				<Trash2 class="h-4 w-4" />
-			</button>
-		{/if}
-	</div>
-
 	<!-- Avatar + érzelem-választó -->
-	<div class="flex flex-col items-center gap-3 border-b px-4 py-3">
-		<!-- 3D Avatar (Requirements: 2.1, 13.1) -->
-		<div class="h-60 w-60 shrink-0">
-			<AiAvatarCanvas emotionState={aiStore.currentEmotion} {theme} {panelRef} />
+	<div class="relative flex flex-col items-center gap-3 p-4">
+		<!-- Speech Bubble (képregény stílusú beszédbuborék) - fej felett középen -->
+		{#if showSpeech}
+			<div
+				class="speech-bubble-container absolute top-0 left-1/2 -translate-x-1/2 {isFadingOut
+					? 'fade-out'
+					: ''}"
+			>
+				<div
+					class="speech-bubble bg-background relative rounded-2xl border px-2.5 py-1.5 text-xs font-medium shadow-md"
+				>
+					{currentSpeechText}
+					<!-- Kis háromszög a buborék alján középen (csőr) -->
+					<div
+						class="bg-background absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 border-r border-b"
+					></div>
+				</div>
+			</div>
+		{/if}
+
+		<!-- 3D Avatar - sötét elmosódott korong háttérrel (Requirements: 2.1, 13.1) -->
+		<div class="relative h-60 w-60 shrink-0">
+			<!-- Sötét elmosódott korong a fej körül -->
+			<div
+				class="absolute top-1/2 left-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gray-950/95 blur-3xl"
+			></div>
+			<!-- Avatar -->
+			<div class="relative z-10 h-full w-full">
+				<AiAvatarCanvas
+					emotionState={aiStore.currentEmotion}
+					{theme}
+					{panelRef}
+					enableMouseTracking={false}
+				/>
+			</div>
 		</div>
 
 		<!-- Érzelem-választó lista (Requirements: 13.4, 13.5, 13.6) -->
-		<div class="flex w-full flex-col gap-1.5">
-			<span class="text-muted-foreground text-xs font-medium">
-				{t('ai-assistant.emotion.label') ?? 'Hangulat'}
-			</span>
-			<div
-				class="flex flex-wrap justify-center gap-1"
-				role="group"
-				aria-label={t('ai-assistant.emotion.label') ?? 'Érzelem választó'}
-			>
-				{#each EMOTIONS as emotion (emotion.value)}
-					<button
-						onclick={() => selectEmotion(emotion.value)}
-						aria-pressed={aiStore.currentEmotion === emotion.value}
-						aria-label={emotion.label}
-						title={emotion.label}
-						class="flex items-center gap-1 rounded-full px-2 py-0.5 text-xs transition-colors
-							{aiStore.currentEmotion === emotion.value
-							? 'bg-primary text-primary-foreground'
-							: 'bg-muted text-muted-foreground hover:bg-muted/80'}"
-					>
-						<span aria-hidden="true">{emotion.emoji}</span>
-						<span>{emotion.label}</span>
-					</button>
-				{/each}
-			</div>
+		<div
+			class="hidden flex-wrap justify-center gap-1"
+			role="group"
+			aria-label={t('ai-assistant.emotion.label') ?? 'Érzelem választó'}
+		>
+			{#each EMOTIONS as emotion (emotion.value)}
+				<button
+					onclick={() => selectEmotion(emotion.value)}
+					aria-pressed={aiStore.currentEmotion === emotion.value}
+					aria-label={emotion.label}
+					title={emotion.label}
+					class="flex items-center gap-1 rounded-full px-2 py-0.5 text-xs transition-colors
+						{aiStore.currentEmotion === emotion.value
+						? 'bg-primary text-primary-foreground'
+						: 'bg-muted text-muted-foreground hover:bg-muted/80'}"
+				>
+					<span aria-hidden="true">{emotion.emoji}</span>
+					<span>{emotion.label}</span>
+				</button>
+			{/each}
 		</div>
 	</div>
 
 	<!-- Üzenet előzmények (Requirements: 2.3, 2.6) -->
 	<div
-		class="flex-1 overflow-y-auto px-4 py-3"
+		class="hidden flex-1 overflow-y-auto px-4 py-3"
 		role="log"
 		aria-label={t('ai-assistant.history.label') ?? 'Beszélgetési előzmények'}
 		aria-live="polite"
@@ -231,7 +279,7 @@
 	<!-- Hibaüzenet -->
 	{#if aiStore.error}
 		<div
-			class="bg-destructive/10 text-destructive mx-4 mb-2 rounded-md px-3 py-2 text-xs"
+			class="bg-destructive/10 text-destructive mx-4 mb-2 hidden rounded-md px-3 py-2 text-xs"
 			role="alert"
 			aria-live="assertive"
 		>
@@ -240,5 +288,43 @@
 	{/if}
 
 	<!-- Üzenet beviteli sáv (Requirements: 2.2, 2.4, 2.5) -->
-	<MessageInputBar onSend={handleSend} disabled={!aiStore.canSend} maxLength={500} />
+	<div class="hidden">
+		<MessageInputBar onSend={handleSend} disabled={!aiStore.canSend} maxLength={500} />
+	</div>
 </div>
+
+<style>
+	@keyframes fadeInUp {
+		from {
+			transform: translateY(10px);
+			opacity: 0;
+		}
+		to {
+			transform: translateY(0);
+			opacity: 1;
+		}
+	}
+
+	@keyframes fadeOutDown {
+		from {
+			transform: translateY(0);
+			opacity: 1;
+		}
+		to {
+			transform: translateY(10px);
+			opacity: 0;
+		}
+	}
+
+	.speech-bubble-container {
+		animation: fadeInUp 0.4s ease-out;
+	}
+
+	.speech-bubble-container.fade-out {
+		animation: fadeOutDown 0.4s ease-out;
+	}
+
+	.speech-bubble {
+		position: relative;
+	}
+</style>

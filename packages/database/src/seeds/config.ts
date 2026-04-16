@@ -151,6 +151,11 @@ export const seedConfig: Record<string, SeedDefinition> = {
 		dependsOn: ['locales'],
 		description: 'Activity log action key translations (activity namespace)'
 	},
+	translations_ai_assistant: {
+		file: 'platform/translations_ai_assistant.sql',
+		dependsOn: ['locales'],
+		description: 'AI Assistant translations (panel, input, history)'
+	},
 
 	// Platform schema - apps
 	apps: {

@@ -16,7 +16,8 @@
 		emotionState = 'neutral',
 		theme = 'light',
 		enableMouseTracking = true,
-		panelRef
+		panelRef,
+		headAnimationMode = 'idle'
 	}: AvatarRendererProps = $props();
 
 	// GLB modell állapot
@@ -76,6 +77,7 @@
 				{canvasWrapper}
 				{enableMouseTracking}
 				{panelRef}
+				{headAnimationMode}
 			/>
 		{:else if loadError}
 			<!-- Fallback gömb ha a GLB nem töltődik be -->

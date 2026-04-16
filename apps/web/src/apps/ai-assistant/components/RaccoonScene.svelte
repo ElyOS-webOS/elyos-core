@@ -12,6 +12,7 @@
 		canvasWrapper?: HTMLDivElement;
 		enableMouseTracking?: boolean;
 		panelRef?: HTMLDivElement;
+		headAnimationMode?: 'idle' | 'typing' | 'breathing'; // Fej animáció mód
 	}
 
 	let {
@@ -19,7 +20,8 @@
 		emotionState,
 		canvasWrapper,
 		enableMouseTracking = true,
-		panelRef
+		panelRef,
+		headAnimationMode = 'idle'
 	}: Props = $props();
 
 	// Wrapper group referencia — ezen fut az animáció
@@ -49,6 +51,12 @@
 		tgtPosX = 0,
 		tgtPosZ = 0,
 		tgtScale = 1;
+
+	// Gépelés/lélegzés animáció smooth átmenethez
+	let currentTypingRotY = 0;
+	let currentTypingRotX = 0;
+	let breathingStartTime = 0; // Mikor kezdődött a breathing mode
+	let lastHeadAnimationMode: 'idle' | 'typing' | 'breathing' = 'idle'; // Előző mód követése
 
 	function lerp(a: number, b: number, t: number): number {
 		return a + (b - a) * Math.min(t, 1);
@@ -182,60 +190,143 @@
 
 		const now = performance.now();
 		const elapsed = now - animStartTime;
-		const t = Math.min(elapsed / 400, 1);
+		const t = Math.min(elapsed / 3000, 1); // 3000ms = 3 másodperc az átmenethez
 
-		// Smooth lerp az alapértékekhez
-		curRotX = lerp(curRotX, tgtRotX, t * 0.1);
-		curRotY = lerp(curRotY, tgtRotY, t * 0.1);
-		curRotZ = lerp(curRotZ, tgtRotZ, t * 0.1);
-		curPosY = lerp(curPosY, tgtPosY, t * 0.1);
-		curPosX = lerp(curPosX, tgtPosX, t * 0.1);
-		curPosZ = lerp(curPosZ, tgtPosZ, t * 0.1);
-		curScale = lerp(curScale, tgtScale, t * 0.1);
+		// Smooth lerp az alapértékekhez - nagyon lassú átmenet
+		curRotX = lerp(curRotX, tgtRotX, 0.01);
+		curRotY = lerp(curRotY, tgtRotY, 0.01);
+		curRotZ = lerp(curRotZ, tgtRotZ, 0.01);
+		curPosY = lerp(curPosY, tgtPosY, 0.01);
+		curPosX = lerp(curPosX, tgtPosX, 0.01);
+		curPosZ = lerp(curPosZ, tgtPosZ, 0.01);
+		curScale = lerp(curScale, tgtScale, 0.01);
 
 		const time = now * 0.001;
-		let extraRotX = 0,
-			extraRotY = 0,
-			extraRotZ = 0,
-			extraPosY = 0,
-			extraPosX = 0,
-			extraPosZ = 0,
-			extraScale = 1;
+		// Extra animációs értékek - minden frame-ben újrainicializáljuk
+		let extraRotX = 0;
+		let extraRotY = 0;
+		let extraRotZ = 0;
+		let extraPosY = 0;
+		let extraPosX = 0;
+		let extraPosZ = 0;
+		let extraScale = 1;
+
+		// Animáció mód alapú target értékek
+		let targetTypingRotY = 0;
+		let targetTypingRotX = 0;
+
+		// Breathing mode kezdési idő követése
+		if (headAnimationMode === 'breathing') {
+			// Ha most váltottunk breathing módba, nullázzuk az időt
+			if (lastHeadAnimationMode !== 'breathing') {
+				breathingStartTime = now;
+			}
+		} else {
+			breathingStartTime = 0;
+		}
+
+		// Előző mód mentése
+		lastHeadAnimationMode = headAnimationMode;
+
+		switch (headAnimationMode) {
+			case 'idle':
+				// Nézelődős animáció - aktív, természetes mozgás
+				// Semmi extra target, az idle animáció a switch-ben lesz
+				break;
+
+			case 'typing':
+				// Gépelés közben: balra néz az input mezőre
+				targetTypingRotY = -0.4;
+				targetTypingRotX = -0.1;
+				break;
+
+			case 'breathing':
+				// Semleges pozíció (0, 0) - visszatér középre
+				// A lélegzés animáció a switch-ben lesz, de csak 0.5-1mp után
+				targetTypingRotY = 0;
+				targetTypingRotX = 0;
+				break;
+		}
+
+		// Smooth lerp a target rotációhoz
+		// FONTOS: typing módban gyorsabb lerp, hogy ne legyen animáció küldéskor
+		const typingLerpSpeed = headAnimationMode === 'typing' ? 0.3 : 0.05;
+		currentTypingRotY = lerp(currentTypingRotY, targetTypingRotY, typingLerpSpeed);
+		currentTypingRotX = lerp(currentTypingRotX, targetTypingRotX, typingLerpSpeed);
 
 		switch (lastEmotion) {
 			case 'neutral':
-				// Finom lélegzés animáció
-				extraPosY = Math.sin(time * 1.5) * 0.015;
-				extraScale = 1 + Math.sin(time * 1.5) * 0.008;
+				if (headAnimationMode === 'idle') {
+					// Idle animáció: aktív nézelődés - gyors, szemből/előre indul
+					// Még gyorsabb hullámok (0.3 → 0.5, 0.4 → 0.6, stb.)
+					const slowWave1 = Math.sin(time * 0.5) * 0.3;
+					const slowWave2 = Math.sin(time * 0.6 + 1.5) * 0.2;
+					const slowWave3 = Math.sin(time * 0.55 + 3) * 0.15;
+					const slowWave4 = Math.sin(time * 0.4 + 2) * 0.1;
+
+					// Y rotáció: jobbra-balra (0 körül oszcillál)
+					extraRotY = slowWave1 + slowWave2 * 0.5;
+					// X rotáció: fel-le, de FELFELE offset (+0.15) hogy előre nézzen
+					extraRotX = (slowWave3 + slowWave4) * 0.6 + 0.15;
+					extraRotZ = 0; // Nincs Z rotáció idle módban
+
+					// Finom lélegzés idle módban is
+					extraScale = 1 + Math.sin(time * 1.5) * 0.005;
+				} else if (headAnimationMode === 'typing') {
+					// Gépelés közben: csak finom lélegzés, SEMMI más mozgás
+					extraRotX = 0;
+					extraRotY = 0;
+					extraRotZ = 0;
+					extraScale = 1 + Math.sin(time * 1.5) * 0.005;
+				} else if (headAnimationMode === 'breathing') {
+					// Breathing mode: 0.7mp várakozás után kezdődik a lélegzés
+					const breathingElapsed = now - breathingStartTime;
+					const breathingDelay = 700; // 0.7 másodperc várakozás
+
+					if (breathingElapsed > breathingDelay) {
+						// Lélegzés animáció: scale + nagyon minimális jobbra-balra mozgás
+						const breathingTime = (breathingElapsed - breathingDelay) * 0.001;
+						extraScale = 1 + Math.sin(breathingTime * 1.5) * 0.013; // 1.3%
+
+						// Nagyon finom jobbra-balra mozgás (gyorsabb frekvencia: 0.4)
+						extraRotY = Math.sin(breathingTime * 0.4) * 0.05;
+						extraRotX = 0;
+						extraRotZ = 0;
+					} else {
+						// Várakozás közben semmi animáció
+						extraScale = 1;
+						extraRotX = 0;
+						extraRotY = 0;
+						extraRotZ = 0;
+					}
+				}
 				break;
 
 			case 'happy':
 				// Helyeslő bólogatás (fel-le)
 				const nodSpeed = 2.5;
-				extraRotX = Math.sin(time * nodSpeed) * 0.3; // Fel-le bólogatás
-				extraPosY = Math.sin(time * nodSpeed) * 0.05; // Kicsit fel-le mozog
+				extraRotX = Math.sin(time * nodSpeed) * 0.3;
+				extraPosY = Math.sin(time * nodSpeed) * 0.05;
 				break;
 
 			case 'confused':
 				// Tagadó fejrázás (jobbra-balra)
 				const shakeSpeed = 3;
-				extraRotY = Math.sin(time * shakeSpeed) * 0.4; // Jobbra-balra rázás
+				extraRotY = Math.sin(time * shakeSpeed) * 0.4;
 				break;
 
 			case 'thinking':
 				// Oldalra billentett fej + finom pulzálás
-				extraRotZ = 0.4 + Math.sin(time * 0.8) * 0.1; // Finom billegés
+				extraRotZ = 0.4 + Math.sin(time * 0.8) * 0.1;
 				extraPosY = Math.sin(time * 1.0) * 0.02;
 				break;
 
 			case 'surprised':
 				// Hirtelen hátraugrás után remegés
 				if (t < 1) {
-					// Gyors hátraugrás
 					extraPosZ = -0.15 * (1 - t);
 					extraRotX = 0.15 * (1 - t);
 				} else {
-					// Finom remegés a meglepetéstől
 					const trembleSpeed = 12;
 					extraRotX = Math.sin(time * trembleSpeed) * 0.02;
 					extraRotY = Math.sin(time * trembleSpeed * 1.3) * 0.015;
@@ -243,18 +334,19 @@
 				break;
 		}
 
-		// Alkalmazzuk az összes transzformációt (egér követés + érzelem animáció)
-		// Egér követés smooth lerp - fokozatos átmenet az egér pozíciójához vagy vissza az alaphelyzetbe
-		const mouseLerpSpeed = isMouseOverPanel ? 0.15 : 0.08; // Gyorsabb követés, lassabb visszatérés
+		// Alkalmazzuk az összes transzformációt
+		// Egér követés smooth lerp
+		const mouseLerpSpeed = isMouseOverPanel ? 0.15 : 0.08;
 		currentMouseRotX = lerp(currentMouseRotX, targetRotX, mouseLerpSpeed);
 		currentMouseRotY = lerp(currentMouseRotY, targetRotY, mouseLerpSpeed);
 
-		const mouseInfluence = 0.5; // 50% hatás
+		const mouseInfluence = 0.5;
 		const smoothMouseRotX = currentMouseRotX * mouseInfluence;
 		const smoothMouseRotY = currentMouseRotY * mouseInfluence;
 
-		groupRef.rotation.x = smoothMouseRotX + extraRotX;
-		groupRef.rotation.y = smoothMouseRotY + extraRotY;
+		// Alkalmazzuk a gépelés rotációt (már lerp-elve van fentebb)
+		groupRef.rotation.x = smoothMouseRotX + extraRotX + currentTypingRotX;
+		groupRef.rotation.y = smoothMouseRotY + extraRotY + currentTypingRotY;
 		groupRef.rotation.z = curRotZ + extraRotZ;
 		groupRef.position.x = curPosX + extraPosX;
 		groupRef.position.y = curPosY + extraPosY;

@@ -105,10 +105,14 @@ class AiAssistantStore {
 	messages = $state<ChatMessage[]>([]);
 	loading = $state(false);
 	error = $state<string | null>(null);
+	isTyping = $state(false); // Felhasználó gépel-e
+	headAnimationMode = $state<'idle' | 'typing' | 'breathing'>('idle'); // Fej animáció állapot
 
 	// --- Derived értékek ---
 	readonly hasMessages = $derived(this.messages.length > 0);
 	readonly canSend = $derived(!this.loading);
+	readonly showChatBubbles = $derived(this.isOpen && this.hasMessages); // chat buborékok csak akkor láthatók
+	readonly showInputField = $derived(this.isOpen); // input mező csak akkor látható
 
 	// --- Privát mezők ---
 	#cache = new SvelteMap<string, ResponseCacheEntry>();
@@ -129,6 +133,52 @@ class AiAssistantStore {
 	/** Váltja a chat panel nyitott/zárt állapotát */
 	toggle(): void {
 		this.isOpen = !this.isOpen;
+	}
+
+	// --- Gépelés követés ---
+
+	#typingTimeout: ReturnType<typeof setTimeout> | null = null;
+	#breathingTimeout: ReturnType<typeof setTimeout> | null = null;
+
+	/** Jelzi, hogy a felhasználó gépel */
+	startTyping(): void {
+		this.isTyping = true;
+		this.headAnimationMode = 'typing';
+
+		// Töröljük a korábbi timeout-okat
+		if (this.#typingTimeout) {
+			clearTimeout(this.#typingTimeout);
+		}
+		if (this.#breathingTimeout) {
+			clearTimeout(this.#breathingTimeout);
+		}
+
+		// 3 másodperc után visszaállunk középre (breathing előkészítés)
+		this.#typingTimeout = setTimeout(() => {
+			this.isTyping = false;
+			this.headAnimationMode = 'breathing';
+
+			// 0.5-1 másodperc után kezdődik a lélegzés animáció
+			// (a breathing mode már aktív, csak jelezzük hogy kész az átmenet)
+		}, 3000);
+	}
+
+	/** Leállítja a gépelés jelzést */
+	stopTyping(): void {
+		this.isTyping = false;
+		if (this.#typingTimeout) {
+			clearTimeout(this.#typingTimeout);
+			this.#typingTimeout = null;
+		}
+		if (this.#breathingTimeout) {
+			clearTimeout(this.#breathingTimeout);
+			this.#breathingTimeout = null;
+		}
+		// Küldés után maradjon typing módban, DE indítsunk egy timeout-ot
+		// ami 3mp után breathing módba állítja (ha nem kezd el újra gépelni)
+		this.#typingTimeout = setTimeout(() => {
+			this.headAnimationMode = 'breathing';
+		}, 3000);
 	}
 
 	// --- Érzelem detektálás ---
@@ -263,7 +313,8 @@ class AiAssistantStore {
 		this.messages = [...this.messages, userMessage].slice(-this.#config.maxHistoryLength);
 		this.error = null;
 		this.loading = true;
-		this.currentEmotion = 'thinking';
+		// NE állítsuk thinking-re - maradjon neutral, így nincs animáció
+		// this.currentEmotion = 'thinking';
 
 		try {
 			// Cache ellenőrzés
@@ -273,12 +324,24 @@ class AiAssistantStore {
 				return;
 			}
 
-			// Phase 2-ban ide kerül a valós API hívás
-			// Egyelőre placeholder válasz
-			const placeholderAnswer =
-				'Az AI integráció a Phase 2-ban kerül megvalósításra. Kérdésed rögzítve.';
-			this.setCachedResponse(trimmed, placeholderAnswer);
-			this.#addAssistantMessage(placeholderAnswer);
+			// Random válasz generálása (placeholder Phase 2-ig)
+			const randomResponses = [
+				'Érdekes kérdés! Ezen gondolkodom...',
+				'Hmm, hadd lássam mit tudok erről mondani.',
+				'Ez egy jó kérdés! Szerintem...',
+				'Köszönöm a kérdést! A válaszom:',
+				'Remek, hogy megkérdezted! Úgy gondolom...',
+				'Ez egy izgalmas téma! Az én véleményem szerint...',
+				'Nagyon jó kérdés! Hadd válaszoljak rá...',
+				'Örülök, hogy ezt kérdezted! Szerintem...'
+			];
+
+			// Kis késleltetés a természetesebb élményért
+			await new Promise((resolve) => setTimeout(resolve, 1000 + Math.random() * 1000));
+
+			const randomAnswer = randomResponses[Math.floor(Math.random() * randomResponses.length)];
+			this.setCachedResponse(trimmed, randomAnswer);
+			this.#addAssistantMessage(randomAnswer);
 		} catch {
 			this.error = 'Az AI asszisztens jelenleg nem elérhető. Kérjük, próbálja újra később.';
 			this.currentEmotion = 'confused';
@@ -290,7 +353,9 @@ class AiAssistantStore {
 
 	/** Hozzáad egy assistant üzenetet és frissíti az érzelmi állapotot */
 	#addAssistantMessage(content: string): void {
-		const emotion = this.detectEmotion(content);
+		// NE detektáljuk az érzelmet - maradjon neutral
+		// const emotion = this.detectEmotion(content);
+		const emotion: EmotionState = 'neutral';
 		const assistantMessage: ChatMessage = {
 			id: crypto.randomUUID(),
 			role: 'assistant',
@@ -300,7 +365,8 @@ class AiAssistantStore {
 		};
 
 		this.messages = [...this.messages, assistantMessage].slice(-this.#config.maxHistoryLength);
-		this.currentEmotion = emotion;
+		// NE változtassuk meg a currentEmotion-t - így nincs animáció
+		// this.currentEmotion = emotion;
 	}
 }
 

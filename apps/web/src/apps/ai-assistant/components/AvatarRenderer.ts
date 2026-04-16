@@ -33,6 +33,8 @@ export interface AvatarRendererProps {
 	enableMouseTracking?: boolean;
 	/** Opcionális: a panel referencia az egérkövetéshez */
 	panelRef?: HTMLDivElement;
+	/** Opcionális: fej animáció mód (alapértelmezett: 'idle') */
+	headAnimationMode?: 'idle' | 'typing' | 'breathing';
 }
 
 /**
