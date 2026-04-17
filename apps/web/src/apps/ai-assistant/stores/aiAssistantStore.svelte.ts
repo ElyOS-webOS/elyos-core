@@ -107,6 +107,7 @@ class AiAssistantStore {
 	error = $state<string | null>(null);
 	isTyping = $state(false); // Felhasználó gépel-e
 	headAnimationMode = $state<'idle' | 'idle2' | 'typing' | 'breathing'>('idle'); // Fej animáció állapot
+	avatarModelUrl = $state<string | undefined>(undefined); // Avatar modell URL
 
 	// --- Derived értékek ---
 	readonly hasMessages = $derived(this.messages.length > 0);
@@ -117,6 +118,14 @@ class AiAssistantStore {
 	// --- Privát mezők ---
 	#cache = new SvelteMap<string, ResponseCacheEntry>();
 	#config: AiAssistantConfig = { ...DEFAULT_CONFIG };
+
+	// --- Avatar konfiguráció ---
+
+	/** Beállítja az avatar modell URL-t */
+	setAvatarModelUrl(url: string | undefined): void {
+		console.log('[AiAssistantStore] Avatar model URL frissítve:', url);
+		this.avatarModelUrl = url;
+	}
 
 	// --- Panel vezérlés ---
 

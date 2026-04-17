@@ -5,17 +5,17 @@
   bármely Svelte komponens behelyettesíthető, amely implementálja az
   AvatarRenderer interfészt (fogadja az `emotionState` és `theme` prop-okat).
 
-  Alapértelmezett avatar: RaccoonHead (Threlte-alapú 3D animált mosómedve fej)
+  Alapértelmezett avatar: AvatarHead (Threlte-alapú 3D animált avatar fej)
 
   Requirements: 13.1, 13.3, 13.9
 -->
 <script lang="ts">
 	import type { Component } from 'svelte';
-	import RaccoonHead from './RaccoonHead.svelte';
+	import AvatarHead from './AvatarHead.svelte';
 	import type { EmotionState } from '../types/index.js';
 
 	interface Props {
-		/** Cserélhető avatar komponens (alapértelmezett: RaccoonHead) */
+		/** Cserélhető avatar komponens (alapértelmezett: AvatarHead) */
 		avatarComponent?: Component<{
 			emotionState: EmotionState;
 			theme: 'light' | 'dark';
@@ -23,6 +23,7 @@
 			panelRef?: HTMLDivElement;
 			headAnimationMode?: 'idle' | 'idle2' | 'typing' | 'breathing';
 			filename?: string;
+			modelUrl?: string;
 		}>;
 		/** Az aktuális érzelmi állapot — átadódik a belső avatar komponensnek */
 		emotionState: EmotionState;
@@ -33,19 +34,22 @@
 		/** Opcionális: a panel referencia az egérkövetéshez */
 		panelRef?: HTMLDivElement;
 		/** Opcionális: fej animáció mód (alapértelmezett: 'idle') */
-		headAnimationMode?: 'idle' | 'typing' | 'breathing';
+		headAnimationMode?: 'idle' | 'idle2' | 'typing' | 'breathing';
 		/** Opcionális: GLB fájl neve (alapértelmezett: 'ai_head_01.glb') */
 		filename?: string;
+		/** Opcionális: teljes modell URL — felülírja a filename prop-ot */
+		modelUrl?: string;
 	}
 
 	let {
-		avatarComponent: AvatarComponent = RaccoonHead,
+		avatarComponent: AvatarComponent = AvatarHead,
 		emotionState,
 		theme,
 		enableMouseTracking = true,
 		panelRef,
 		headAnimationMode = 'idle',
-		filename = 'ai_head_01.glb'
+		filename = 'ai_head_01.glb',
+		modelUrl
 	}: Props = $props();
 </script>
 
@@ -62,5 +66,6 @@
 		{panelRef}
 		{headAnimationMode}
 		{filename}
+		{modelUrl}
 	/>
 </div>

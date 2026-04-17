@@ -4,6 +4,8 @@ import { relations } from 'drizzle-orm';
 import { apps } from './apps/apps';
 import { conversations } from './chat/conversations';
 import { messages } from './chat/messages';
+import { aiAvatars } from './ai-avatar/ai_avatars';
+import { userAvatarConfigs } from './ai-avatar/user_avatar_configs';
 
 // Import auth tables for cross-schema relations
 import { users } from '../auth/users/users';
@@ -37,6 +39,22 @@ export const messagesRelations = relations(messages, ({ one }) => ({
 	}),
 	sender: one(users, {
 		fields: [messages.senderId],
+		references: [users.id]
+	})
+}));
+
+// AI Avatar relations
+export const aiAvatarsRelations = relations(aiAvatars, ({ many }) => ({
+	userConfigs: many(userAvatarConfigs)
+}));
+
+export const userAvatarConfigsRelations = relations(userAvatarConfigs, ({ one }) => ({
+	avatar: one(aiAvatars, {
+		fields: [userAvatarConfigs.avatarIdname],
+		references: [aiAvatars.idname]
+	}),
+	user: one(users, {
+		fields: [userAvatarConfigs.userId],
 		references: [users.id]
 	})
 }));

@@ -210,6 +210,27 @@ INSERT INTO platform.apps (
         true,
         true,
         75
+    ),
+    -- AI Assistant app (utilities category) - Public
+    (
+        'ai-assistant',
+        '{"hu": "AI Asszisztens", "en": "AI Assistant"}'::jsonb,
+        '{"hu": "Mesterséges intelligencia alapú asszisztens 3D avatárral", "en": "Artificial intelligence assistant with 3D avatar"}'::jsonb,
+        '1.0.0',
+        'Bot',
+        'icon',
+        'utilities',
+        '[]'::jsonb,
+        false,
+        '{"width": 1200, "height": 800}'::jsonb,
+        '{"width": 900, "height": 600}'::jsonb,
+        NULL,
+        'System',
+        '["ai", "asszisztens", "mesterséges intelligencia", "avatar", "assistant", "artificial intelligence", "chat", "bot"]'::jsonb,
+        NULL,
+        true,
+        true,
+        70
     )
 ON CONFLICT (app_id) DO UPDATE SET
     name = EXCLUDED.name,

@@ -1,0 +1,14 @@
+[
+	{
+		"labelKey": "menu.settings",
+		"href": "#settings",
+		"icon": "Settings",
+		"component": "AvatarSettings"
+	},
+	{
+		"labelKey": "menu.install",
+		"href": "#install",
+		"icon": "Download",
+		"component": "AvatarInstall"
+	}
+]

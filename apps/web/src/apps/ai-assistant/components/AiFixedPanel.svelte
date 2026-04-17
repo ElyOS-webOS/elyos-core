@@ -13,9 +13,15 @@
 
 	interface Props {
 		isVisible: boolean;
+		modelUrl?: string;
 	}
 
-	let { isVisible }: Props = $props();
+	let { isVisible, modelUrl }: Props = $props();
+
+	// Debug log
+	$effect(() => {
+		console.log('[AiFixedPanel] modelUrl változott:', modelUrl);
+	});
 
 	const aiStore = getAiAssistantStore();
 
@@ -38,6 +44,7 @@
 			{panelRef}
 			enableMouseTracking={false}
 			headAnimationMode={aiStore.headAnimationMode}
+			{modelUrl}
 		/>
 	</div>
 

@@ -1,0 +1,9 @@
+{
+	"idname": "tmnt",
+	"displayName": "Raphael",
+	"descriptions": {
+		"hu": "TMNT Rafaelló",
+		"en": "TMNT Raphael"
+	},
+	"availableQualities": ["sd"]
+}

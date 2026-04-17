@@ -51,6 +51,10 @@ export { TranslationRepository, translationRepository } from './translationRepos
 // Notification repository exports
 export { notificationRepository } from './notificationRepository';
 
+// Avatar repository exports
+export { avatarRepository } from './avatarRepository';
+export type { InsertAvatarData, UpsertAvatarConfigData } from './avatarRepository';
+
 // Theme presets repository exports
 export { themePresetsRepository } from './theme-presets-repository';
 

@@ -1,0 +1,9 @@
+{
+	"idname": "my-avatar",
+	"displayName": "My Avatar",
+	"descriptions": {
+		"hu": "Az én egyedi avatárom",
+		"en": "My custom avatar"
+	},
+	"availableQualities": ["sd", "hd"]
+}

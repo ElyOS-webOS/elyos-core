@@ -1,0 +1,20 @@
+{
+	"name": "@webos/ai-avatar",
+	"version": "0.1.0",
+	"description": "Avatar packager tool — bundles AI avatar assets into a .raconapkg archive",
+	"type": "module",
+	"scripts": {
+		"pack": "cd installers && bun run ../src/index.ts",
+		"typecheck": "tsc --noEmit"
+	},
+	"bin": {
+		"pack-avatar": "./src/index.ts"
+	},
+	"devDependencies": {
+		"@types/node": "^25.3.5",
+		"typescript": "^5.7.0"
+	},
+	"dependencies": {
+		"jszip": "^3.10.1"
+	}
+}

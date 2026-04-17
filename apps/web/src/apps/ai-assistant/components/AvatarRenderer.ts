@@ -35,6 +35,8 @@ export interface AvatarRendererProps {
 	panelRef?: HTMLDivElement;
 	/** Opcionális: fej animáció mód (alapértelmezett: 'idle') */
 	headAnimationMode?: 'idle' | 'idle2' | 'typing' | 'breathing';
+	/** Opcionális: teljes modell URL (pl. /api/ai-avatar/[idname]/[idname]_hd.glb) — felülírja a filename prop-ot */
+	modelUrl?: string;
 }
 
 /**

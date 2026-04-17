@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { BotMessageSquare } from 'lucide-svelte';
+	import { onMount } from 'svelte';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { I18nProvider } from '$lib/i18n/components';
 	import AiFixedPanel from '$apps/ai-assistant/components/AiFixedPanel.svelte';
@@ -7,9 +8,25 @@
 	import AiInputField from '$apps/ai-assistant/components/AiInputField.svelte';
 	import { useI18n } from '$lib/i18n/hooks';
 	import { getAiAssistantStore } from '$apps/ai-assistant/stores/aiAssistantStore.svelte.js';
+	import { getAvatarConfig } from '$apps/ai-assistant/avatar.remote';
 
 	const { t } = useI18n();
 	const aiStore = getAiAssistantStore();
+
+	// Avatar konfiguráció betöltése onMount-ban
+	onMount(async () => {
+		console.log('[AIAssistantCenter] Avatar konfiguráció betöltése...');
+		const result = await getAvatarConfig();
+		console.log('[AIAssistantCenter] Avatar config result:', result);
+		if (result.success && result.config) {
+			const { avatarIdname, quality } = result.config;
+			const modelUrl = `/api/ai-avatar/${avatarIdname}/${avatarIdname}_${quality}.glb`;
+			console.log('[AIAssistantCenter] Beállított model URL:', modelUrl);
+			aiStore.setAvatarModelUrl(modelUrl);
+		} else {
+			console.log('[AIAssistantCenter] Nincs mentett avatar konfiguráció');
+		}
+	});
 
 	/** Toggle panel láthatóság */
 	function handleToggle() {
@@ -45,7 +62,7 @@
 	</Tooltip.Provider>
 
 	<!-- Fixed Panel (jobb alsó sarok) -->
-	<AiFixedPanel isVisible={aiStore.isOpen} />
+	<AiFixedPanel isVisible={aiStore.isOpen} modelUrl={aiStore.avatarModelUrl} />
 
 	<!-- Chat Bubbles (képernyő közepe) -->
 	<AiChatBubbles

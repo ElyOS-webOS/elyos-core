@@ -1,0 +1,1 @@
+ALTER TABLE "platform"."ai_avatars" ADD COLUMN "available_qualities" jsonb NOT NULL;

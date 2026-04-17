@@ -4,7 +4,7 @@ import * as path from 'path';
 
 // Load .env from workspace root (only if DATABASE_URL not already set)
 if (!process.env.DATABASE_URL) {
-	config({ path: path.resolve(__dirname, '../../.env') });
+	config({ path: path.resolve(__dirname, '../../.env.local') });
 }
 
 export default defineConfig({

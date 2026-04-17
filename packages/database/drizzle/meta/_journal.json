@@ -15,6 +15,20 @@
       "when": 1775310748808,
       "tag": "0001_bright_polaris",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1776411533684,
+      "tag": "0002_optimal_domino",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1776436915461,
+      "tag": "0003_small_lilandra",
+      "breakpoints": true
     }
   ]
 }

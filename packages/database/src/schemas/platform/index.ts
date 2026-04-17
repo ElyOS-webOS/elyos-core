@@ -32,5 +32,8 @@ export * from './chat';
 // Desktop
 export { desktopShortcuts } from './desktop/desktop_shortcuts';
 
+// AI Avatar
+export * from './ai-avatar';
+
 // Relations
 export * from './relations';

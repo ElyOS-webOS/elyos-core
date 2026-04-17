@@ -1,0 +1,9 @@
+{
+	"idname": "fox",
+	"displayName": "Foxy",
+	"descriptions": {
+		"hu": "Róka móka",
+		"en": "Foxy"
+	},
+	"availableQualities": ["sd", "hd"]
+}
