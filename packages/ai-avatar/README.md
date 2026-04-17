@@ -10,35 +10,49 @@ Hozz létre egy könyvtárat az avatar fájloknak, és helyezd el benne a követ
 
 ```
 my-avatar/
-├── my-avatar_hd.glb      # HD minőségű 3D modell
-├── my-avatar_sd.glb      # SD minőségű 3D modell
-├── my-avatar_cover.jpg   # Előnézeti kép (cover)
-└── manifest.json         # Avatar metaadatok
+├── hd.glb              # HD minőségű 3D modell
+├── sd.glb              # SD minőségű 3D modell
+├── cover.jpg           # Előnézeti kép (cover)
+└── manifest.json       # Avatar metaadatok
 ```
 
-**Fontos:** A fájlnevek **kebab-case** formátumban legyenek (kisbetűk, kötőjellel elválasztva).
+**Alternatív fájlnevek (prefixszel):**
+
+```
+my-avatar/
+├── my-avatar_hd.glb    # HD minőségű 3D modell
+├── my-avatar_sd.glb    # SD minőségű 3D modell
+├── my-avatar_cover.jpg # Előnézeti kép (cover)
+└── manifest.json       # Avatar metaadatok
+```
+
+**Mindkét formátum elfogadott!** A csomagoló automatikusan átnevezi őket a helyes formátumra a ZIP archívumban.
+
+**Fontos:** A mappa neve **kebab-case** formátumban legyen (kisbetűk, kötőjellel elválasztva).
 
 ### 2. Fájl követelmények
 
-#### GLB modellek (`*_hd.glb`, `*_sd.glb`)
+#### GLB modellek (`hd.glb`, `sd.glb` vagy `{name}_hd.glb`, `{name}_sd.glb`)
 
 - Formátum: GLB (GLTF Binary)
 - HD modell: magasabb poligonszám, részletesebb textúrák
 - SD modell: optimalizált teljesítményre, alacsonyabb poligonszám
 - **Legalább az egyik kötelező** (SD vagy HD), de mindkettő is lehet
+- **Fájlnév**: Lehet `hd.glb` / `sd.glb` VAGY `{name}_hd.glb` / `{name}_sd.glb`
 
 A manifest `availableQualities` mezője határozza meg, hogy melyik fájlok kötelezőek:
 
-- `["sd"]` → csak `{name}_sd.glb` kell
-- `["hd"]` → csak `{name}_hd.glb` kell
+- `["sd"]` → csak `sd.glb` (vagy `{name}_sd.glb`) kell
+- `["hd"]` → csak `hd.glb` (vagy `{name}_hd.glb`) kell
 - `["sd", "hd"]` → mindkét fájl kell
 
-#### Cover kép (`*_cover.jpg`)
+#### Cover kép (`cover.jpg` vagy `{name}_cover.jpg`)
 
 - Formátum: JPEG
 - Ajánlott méret: 512×512 px vagy 1024×1024 px
 - Négyzet alakú (1:1 arány)
 - Az avatar előnézeti képe a kiválasztó felületen
+- **Fájlnév**: Lehet `cover.jpg` VAGY `{name}_cover.jpg`
 
 #### Manifest (`manifest.json`)
 
@@ -61,10 +75,12 @@ A packager az `installers/{avatar-neve}/` mappában keresi a fájlokat.
 
 Például ha `bun run pack fox`-ot futtatsz, akkor az `installers/fox/` mappában keresi:
 
-- `fox/fox_hd.glb`
-- `fox/fox_sd.glb`
-- `fox/fox_cover.jpg`
+- `fox/hd.glb` vagy `fox/fox_hd.glb`
+- `fox/sd.glb` vagy `fox/fox_sd.glb`
+- `fox/cover.jpg` vagy `fox/fox_cover.jpg`
 - `fox/manifest.json`
+
+A csomagoló automatikusan átnevezi a fájlokat a ZIP archívumban a helyes formátumra (`fox_hd.glb`, `fox_sd.glb`, `fox_cover.jpg`).
 
 ### 4. Kimenet
 
@@ -127,7 +143,13 @@ cd packages/ai-avatar/installers
 mkdir cool-robot
 cd cool-robot
 
-# 2. Fájlok elhelyezése
+# 2. Fájlok elhelyezése (egyszerű nevek)
+# - hd.glb
+# - sd.glb
+# - cover.jpg
+# - manifest.json
+
+# VAGY prefixes nevek:
 # - cool-robot_hd.glb
 # - cool-robot_sd.glb
 # - cool-robot_cover.jpg
@@ -156,14 +178,32 @@ Példa: Ha `bun run pack fox`-ot futtatsz, akkor a `./fox/` mappának léteznie 
 
 ### "Hiányzó fájl"
 
-Ellenőrizd, hogy minden kötelező fájl megvan-e a megadott mappában:
+Ellenőrizd, hogy minden kötelező fájl megvan-e a megadott mappában. A fájlok lehetnek egyszerű névvel vagy prefixszel:
+
+**Egyszerű nevek:**
+
+- `hd.glb`
+- `sd.glb`
+- `cover.jpg`
+- `manifest.json`
+
+**VAGY prefixes nevek:**
 
 - `{name}_hd.glb`
 - `{name}_sd.glb`
 - `{name}_cover.jpg`
 - `manifest.json`
 
-Példa: Ha az avatar neve `fox`, akkor a `fox/` mappában kell lennie:
+Példa: Ha az avatar neve `fox`, akkor a `fox/` mappában lehet:
+
+**Egyszerű:**
+
+- `fox/hd.glb`
+- `fox/sd.glb`
+- `fox/cover.jpg`
+- `fox/manifest.json`
+
+**VAGY prefixes:**
 
 - `fox/fox_hd.glb`
 - `fox/fox_sd.glb`
@@ -180,12 +220,12 @@ Ellenőrizd a manifest.json struktúráját:
 - Az `availableQualities` egy tömb, amely legalább egy elemet tartalmaz (`"sd"` vagy `"hd"`)?
 - Az `availableQualities` tömbben csak `"sd"` és `"hd"` értékek szerepelnek?
 
-### "Hiányzó fájl: {name}\_sd.glb vagy {name}\_hd.glb"
+### "Hiányzó fájl: sd.glb vagy hd.glb"
 
 A manifest `availableQualities` mezőjében megadott minőségi szinteknek megfelelő GLB fájloknak léteznie kell:
 
-- Ha `availableQualities: ["sd"]` → csak `{name}_sd.glb` kötelező
-- Ha `availableQualities: ["hd"]` → csak `{name}_hd.glb` kötelező
+- Ha `availableQualities: ["sd"]` → csak `sd.glb` (vagy `{name}_sd.glb`) kötelező
+- Ha `availableQualities: ["hd"]` → csak `hd.glb` (vagy `{name}_hd.glb`) kötelező
 - Ha `availableQualities: ["sd", "hd"]` → mindkét fájl kötelező
 
 ## Telepítés

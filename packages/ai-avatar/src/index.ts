@@ -63,30 +63,74 @@ if (!manifestResult.valid) {
 
 const manifest = manifestResult.manifest!;
 
-// Kötelező fájlok listája a manifest alapján
-const requiredFiles: Record<string, string> = {
-	cover: `${name}_cover.jpg`,
-	manifest: 'manifest.json'
+// Fájlok keresése - elfogadjuk prefix nélküli és prefixes formátumot is
+type FileMapping = {
+	sourceFile: string; // A ténylegesen megtalált fájl neve
+	targetFile: string; // A ZIP-ben használandó fájlnév
+	key: string; // Azonosító (cover, sd, hd, manifest)
 };
+
+const fileMappings: FileMapping[] = [];
+
+// Cover fájl keresése
+const coverOptions = [`${name}_cover.jpg`, 'cover.jpg'];
+let coverFound = false;
+for (const filename of coverOptions) {
+	const fullPath = join(inputDir, filename);
+	if (existsSync(fullPath)) {
+		fileMappings.push({
+			sourceFile: filename,
+			targetFile: `${name}_cover.jpg`,
+			key: 'cover'
+		});
+		coverFound = true;
+		break;
+	}
+}
+if (!coverFound) {
+	console.error(`\x1b[31mHiányzó fájl:\x1b[0m cover.jpg vagy ${name}_cover.jpg (cover)`);
+}
+
+// Manifest fájl (mindig manifest.json)
+const manifestFile = 'manifest.json';
+if (existsSync(join(inputDir, manifestFile))) {
+	fileMappings.push({
+		sourceFile: manifestFile,
+		targetFile: manifestFile,
+		key: 'manifest'
+	});
+} else {
+	console.error(`\x1b[31mHiányzó fájl:\x1b[0m manifest.json (manifest)`);
+}
 
 // Minőségi szintek alapján hozzáadjuk a modell fájlokat
 for (const quality of manifest.availableQualities) {
-	requiredFiles[quality] = `${name}_${quality}.glb`;
+	const glbOptions = [`${name}_${quality}.glb`, `${quality}.glb`];
+	let glbFound = false;
+	for (const filename of glbOptions) {
+		const fullPath = join(inputDir, filename);
+		if (existsSync(fullPath)) {
+			fileMappings.push({
+				sourceFile: filename,
+				targetFile: `${name}_${quality}.glb`,
+				key: quality
+			});
+			glbFound = true;
+			break;
+		}
+	}
+	if (!glbFound) {
+		console.error(
+			`\x1b[31mHiányzó fájl:\x1b[0m ${quality}.glb vagy ${name}_${quality}.glb (${quality})`
+		);
+	}
 }
 
 info(`Elérhető minőségi szintek: ${manifest.availableQualities.join(', ')}`);
 
-// Fájlok meglétének ellenőrzése
-let hasError = false;
-for (const [key, filename] of Object.entries(requiredFiles)) {
-	const fullPath = join(inputDir, filename);
-	if (!existsSync(fullPath)) {
-		console.error(`\x1b[31mHiányzó fájl:\x1b[0m ${filename} (${key})`);
-		hasError = true;
-	}
-}
-
-if (hasError) {
+// Ellenőrizzük, hogy minden kötelező fájl megvan-e
+const expectedFileCount = 2 + manifest.availableQualities.length; // cover + manifest + qualities
+if (fileMappings.length !== expectedFileCount) {
 	error('Egy vagy több kötelező fájl hiányzik. A csomagolás megszakítva.');
 }
 
@@ -95,10 +139,14 @@ info('Archívum összeállítása...');
 
 const zip = new JSZip();
 
-for (const filename of Object.values(requiredFiles)) {
-	const fullPath = join(inputDir, filename);
+for (const mapping of fileMappings) {
+	const fullPath = join(inputDir, mapping.sourceFile);
 	const content = readFileSync(fullPath);
-	zip.file(filename, content);
+	// A ZIP-ben a targetFile névvel tároljuk
+	zip.file(mapping.targetFile, content);
+	if (mapping.sourceFile !== mapping.targetFile) {
+		info(`  ${mapping.sourceFile} → ${mapping.targetFile}`);
+	}
 }
 
 // Kimeneti könyvtár: dist/ a bemeneti könyvtár mellett
