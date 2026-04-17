@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://racona.hu/logo.webp" alt="Racona Logo" width="120" />
+  <img src="https://racona.hu/logo2.webp" alt="Racona Logo" width="120" />
 </p>
 
 <!-- <h1 align="center">Racona</h1> -->
