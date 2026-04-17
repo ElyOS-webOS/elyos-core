@@ -193,6 +193,18 @@ export const seedConfig: Record<string, SeedDefinition> = {
 		file: 'platform/theme_presets.sql',
 		dependsOn: ['locales'],
 		description: 'Predefined theme presets for appearance customization'
+	},
+
+	// Platform schema - AI providers
+	ai_providers: {
+		file: 'platform/ai_providers.sql',
+		dependsOn: [],
+		description: 'AI provider definitions (Gemini, OpenAI, Anthropic, etc.)'
+	},
+	ai_provider_configs: {
+		file: 'platform/ai_provider_configs.sql',
+		dependsOn: ['ai_providers'],
+		description: 'AI provider configuration values (models, URLs, defaults)'
 	}
 };
 
@@ -233,6 +245,9 @@ export const truncateOrder = [
 	// Platform - AI avatar user configs (depends on ai_avatars)
 	'platform.user_avatar_configs',
 	'platform.ai_agent_configs',
+	// Platform - AI provider configs (depends on ai_providers)
+	'platform.ai_provider_configs',
+	'platform.ai_providers',
 	// Platform - seed data
 	'auth.role_app_access',
 	'auth.group_app_access',

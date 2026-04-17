@@ -15,7 +15,7 @@
 
 	// Load current user ID
 	onMount(async () => {
-		const result = await getCurrentUserId();
+		const result = await getCurrentUserId({});
 		if (result.success && result.userId) {
 			currentUserId = result.userId;
 		}

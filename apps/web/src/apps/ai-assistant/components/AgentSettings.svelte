@@ -12,7 +12,12 @@
 	import { Label } from '$lib/components/ui/label';
 	import { Slider } from '$lib/components/ui/slider';
 	import { useI18n } from '$lib/i18n/hooks';
-	import { getAgentConfig, saveAgentConfig, testAgentConnection } from '../agent-config.remote.js';
+	import {
+		getAgentConfig,
+		saveAgentConfig,
+		testAgentConnection,
+		getAvailableProviders
+	} from '../agent-config.remote.js';
 	import type { AgentConfigWithMaskedKey } from '$lib/server/database/repositories';
 	import { Eye, EyeOff, TestTube } from 'lucide-svelte';
 
@@ -26,15 +31,15 @@
 	let saving = $state(false);
 	let testing = $state(false);
 
-	// Provider opciók
-	const providers = [
-		{ value: 'gemini', label: 'Google Gemini', recommended: true },
-		{ value: 'groq', label: 'Groq' },
-		{ value: 'openai', label: 'OpenAI' },
-		{ value: 'anthropic', label: 'Anthropic (Claude)' },
-		{ value: 'huggingface', label: 'Hugging Face' },
-		{ value: 'custom', label: 'Custom Endpoint' }
-	];
+	// Provider opciók (adatbázisból betöltve)
+	let providers = $state<
+		Array<{
+			value: string;
+			label: string;
+			recommended: boolean;
+			configs: Record<string, string>;
+		}>
+	>([]);
 
 	// Eredeti konfiguráció (a visszavonáshoz)
 	let originalConfig = $state<AgentConfigWithMaskedKey | null>(null);
@@ -77,7 +82,19 @@
 	async function loadData() {
 		loading = true;
 		try {
-			const result = await getAgentConfig();
+			// Betöltjük az elérhető provider-eket
+			const providersResult = await getAvailableProviders({});
+			if (providersResult.success && providersResult.providers) {
+				providers = providersResult.providers.map((p) => ({
+					value: p.name,
+					label: p.displayName,
+					recommended: p.isRecommended,
+					configs: p.configs
+				}));
+			}
+
+			// Betöltjük az aktuális konfigurációt
+			const result = await getAgentConfig({});
 
 			if (result.success && result.config) {
 				originalConfig = result.config;
@@ -88,6 +105,10 @@
 				maxTokens = result.config.maxTokens ?? 1000;
 				temperature = parseFloat(result.config.temperature ?? '0.70');
 				apiKeyChanged = false;
+			} else if (providers.length > 0) {
+				// Ha nincs konfiguráció, de vannak provider-ek, válasszuk az első ajánlottat
+				const recommendedProvider = providers.find((p) => p.recommended) || providers[0];
+				provider = recommendedProvider.value;
 			}
 		} catch (err) {
 			console.error('[AgentSettings] Betöltési hiba:', err);

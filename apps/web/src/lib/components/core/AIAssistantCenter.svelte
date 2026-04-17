@@ -16,6 +16,10 @@
 	// Avatar konfiguráció betöltése onMount-ban
 	onMount(async () => {
 		console.log('[AIAssistantCenter] Avatar konfiguráció betöltése...');
+
+		// Chat history betöltése
+		aiStore.loadFromStorage();
+
 		const result = await getAvatarConfig();
 		console.log('[AIAssistantCenter] Avatar config result:', result);
 		if (result.success && result.config) {

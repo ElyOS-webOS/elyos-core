@@ -31,7 +31,7 @@
 	const offlineUsers = $derived(filteredUsers.filter((user) => !chatStore.isUserOnline(user.id)));
 
 	onMount(async () => {
-		const result = await getChatUsers();
+		const result = await getChatUsers({});
 		if (result.success) {
 			users = result.users;
 		}

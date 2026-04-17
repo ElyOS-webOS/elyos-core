@@ -35,5 +35,8 @@ export { desktopShortcuts } from './desktop/desktop_shortcuts';
 // AI Avatar
 export * from './ai-avatar';
 
+// AI Providers
+export * from './ai-providers';
+
 // Relations
 export * from './relations';

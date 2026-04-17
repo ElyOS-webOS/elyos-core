@@ -5,36 +5,15 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1772881189153,
-      "tag": "0000_white_lord_tyger",
+      "when": 1776468673056,
+      "tag": "0000_magical_sue_storm",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "7",
-      "when": 1775310748808,
-      "tag": "0001_bright_polaris",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1776411533684,
-      "tag": "0002_optimal_domino",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1776436915461,
-      "tag": "0003_small_lilandra",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1776451596922,
-      "tag": "0004_useful_iron_fist",
+      "when": 1776469500092,
+      "tag": "0001_left_mister_fear",
       "breakpoints": true
     }
   ]

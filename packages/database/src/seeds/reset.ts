@@ -11,7 +11,7 @@ const schemas = (drizzleConfig.schemaFilter as string[])?.filter((s) => s !== 'p
 const execAsync = promisify(exec);
 
 const DOCKER_COMPOSE_FILE = path.join(__dirname, '../../../../docker/docker-compose.yml');
-const ENV_FILE = path.join(__dirname, '../../../../.env');
+const ENV_FILE = path.join(__dirname, '../../../../.env.local');
 const VOLUME_NAME = 'docker_racona-data';
 
 /**
@@ -122,6 +122,7 @@ async function runMigrations(): Promise<void> {
  */
 async function runSeeds(): Promise<void> {
 	const runnerModule = await import('./runner');
+	await runnerModule.truncateTables();
 	await runnerModule.runSeeds();
 	await runnerModule.runProcedures();
 	await runnerModule.applyAdminEmail();

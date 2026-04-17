@@ -7,6 +7,8 @@ import { messages } from './chat/messages';
 import { aiAvatars } from './ai-avatar/ai_avatars';
 import { userAvatarConfigs } from './ai-avatar/user_avatar_configs';
 import { aiAgentConfigs } from './ai-avatar/ai_agent_configs';
+import { aiProviders } from './ai-providers/aiProviders';
+import { aiProviderConfigs } from './ai-providers/aiProviderConfigs';
 
 // Import auth tables for cross-schema relations
 import { users } from '../auth/users/users';
@@ -65,5 +67,17 @@ export const aiAgentConfigsRelations = relations(aiAgentConfigs, ({ one }) => ({
 	user: one(users, {
 		fields: [aiAgentConfigs.userId],
 		references: [users.id]
+	})
+}));
+
+// AI Provider relations
+export const aiProvidersRelations = relations(aiProviders, ({ many }) => ({
+	configs: many(aiProviderConfigs)
+}));
+
+export const aiProviderConfigsRelations = relations(aiProviderConfigs, ({ one }) => ({
+	provider: one(aiProviders, {
+		fields: [aiProviderConfigs.providerId],
+		references: [aiProviders.id]
 	})
 }));

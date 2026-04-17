@@ -10,7 +10,7 @@ import type {
 	EmotionState,
 	ResponseCacheEntry
 } from '../types/index.js';
-import { sendChatMessage } from '../chat.remote.js';
+import { sendChatMessage, getWelcomeMessage } from '../chat.remote.js';
 
 const AI_ASSISTANT_STORE_KEY = Symbol('aiAssistantStore');
 
@@ -109,6 +109,7 @@ class AiAssistantStore {
 	isTyping = $state(false); // Felhasználó gépel-e
 	headAnimationMode = $state<'idle' | 'idle2' | 'typing' | 'breathing'>('idle'); // Fej animáció állapot
 	avatarModelUrl = $state<string | undefined>(undefined); // Avatar modell URL
+	#userId: string | null = null; // Aktuális felhasználó ID-ja
 
 	// --- Derived értékek ---
 	readonly hasMessages = $derived(this.messages.length > 0);
@@ -267,15 +268,84 @@ class AiAssistantStore {
 
 	// --- localStorage perzisztencia ---
 
+	/** Beállítja az aktuális felhasználó ID-ját */
+	setUserId(userId: string): void {
+		this.#userId = userId;
+	}
+
+	/** Visszaadja a user-specifikus localStorage kulcsot */
+	#getStorageKey(): string {
+		return this.#userId
+			? `racona_ai_assistant_history_${this.#userId}`
+			: 'racona_ai_assistant_history';
+	}
+
+	/** Visszaadja a session-specifikus kulcsot az üdvözléshez */
+	#getWelcomeSessionKey(): string {
+		return this.#userId ? `racona_ai_welcomed_${this.#userId}` : 'racona_ai_welcomed';
+	}
+
 	/** Betölti a conversation history-t localStorage-ból */
 	loadFromStorage(): void {
-		if (typeof localStorage === 'undefined') return;
+		console.log('[AiAssistantStore] loadFromStorage() called');
+		if (typeof localStorage === 'undefined' || typeof sessionStorage === 'undefined') {
+			console.log('[AiAssistantStore] localStorage or sessionStorage undefined');
+			return;
+		}
+
+		// Session-based üdvözlés ellenőrzése
+		const welcomeKey = this.#getWelcomeSessionKey();
+		const hasWelcomedThisSession = sessionStorage.getItem(welcomeKey);
+
+		console.log('[AiAssistantStore] welcomeKey:', welcomeKey);
+		console.log('[AiAssistantStore] hasWelcomedThisSession:', hasWelcomedThisSession);
 
 		try {
-			const raw = localStorage.getItem('racona_ai_assistant_history');
-			if (!raw) return;
+			const storageKey = this.#getStorageKey();
+			const raw = localStorage.getItem(storageKey);
+
+			console.log('[AiAssistantStore] storageKey:', storageKey);
+			console.log('[AiAssistantStore] raw exists:', !!raw);
+
+			if (!raw) {
+				// Ha nincs localStorage adat és még nem köszöntünk, betöltjük az üdvözlő üzenetet
+				if (!hasWelcomedThisSession) {
+					console.log(
+						'[AiAssistantStore] Nincs localStorage és nincs session flag, betöltjük az üdvözlő üzenetet'
+					);
+					// Session flag beállítása AZONNAL, hogy ne hívódjon meg többször
+					sessionStorage.setItem(welcomeKey, 'true');
+					this.loadWelcomeMessage();
+				} else {
+					console.log(
+						'[AiAssistantStore] Nincs localStorage, de már köszöntünk ebben a session-ben'
+					);
+				}
+				return;
+			}
 
 			const parsed = JSON.parse(raw) as { messages: ChatMessage[]; lastUpdated: number };
+
+			// TTL ellenőrzés - environment változóból olvassuk (órában)
+			const ttlHours =
+				typeof process !== 'undefined' && process.env?.AI_CHAT_HISTORY_TTL_HOURS
+					? parseInt(process.env.AI_CHAT_HISTORY_TTL_HOURS)
+					: 24; // Default: 24 óra
+			const ttlMs = ttlHours * 60 * 60 * 1000;
+			const isExpired = Date.now() - parsed.lastUpdated > ttlMs;
+
+			if (isExpired) {
+				// Ha lejárt, töröljük és üdvözlő üzenettel kezdünk
+				console.log(`[AiAssistantStore] Chat history lejárt (${ttlHours} óra), törlés...`);
+				localStorage.removeItem(storageKey);
+				if (!hasWelcomedThisSession) {
+					// Session flag beállítása AZONNAL
+					sessionStorage.setItem(welcomeKey, 'true');
+					this.loadWelcomeMessage();
+				}
+				return;
+			}
+
 			if (Array.isArray(parsed.messages)) {
 				// Biztosítjuk, hogy minden üzenetnek legyen isError property-je
 				const messagesWithError = parsed.messages.map((msg) => ({
@@ -283,9 +353,65 @@ class AiAssistantStore {
 					isError: msg.isError ?? false
 				}));
 				this.messages = messagesWithError.slice(-this.#config.maxHistoryLength);
+
+				// Ha még nem köszöntünk ebben a session-ben, hozzáadjuk az üdvözlő üzenetet az elejére
+				if (!hasWelcomedThisSession) {
+					// Session flag beállítása AZONNAL
+					sessionStorage.setItem(welcomeKey, 'true');
+					this.loadWelcomeMessage();
+				}
+			} else {
+				// Ha a parsed.messages nem array és még nem köszöntünk, betöltjük az üdvözlő üzenetet
+				if (!hasWelcomedThisSession) {
+					// Session flag beállítása AZONNAL
+					sessionStorage.setItem(welcomeKey, 'true');
+					this.loadWelcomeMessage();
+				}
 			}
 		} catch {
-			// Graceful degradation: ha a localStorage nem olvasható, session-only history
+			// Graceful degradation: ha a localStorage nem olvasható
+			if (!hasWelcomedThisSession) {
+				// Session flag beállítása AZONNAL
+				sessionStorage.setItem(welcomeKey, 'true');
+				this.loadWelcomeMessage();
+			}
+		}
+	}
+
+	/** Betölti az üdvözlő üzenetet */
+	async loadWelcomeMessage(): Promise<void> {
+		console.log('[AiAssistantStore] loadWelcomeMessage() called');
+		try {
+			const result = await getWelcomeMessage({});
+			console.log('[AiAssistantStore] getWelcomeMessage result:', result);
+			if (result.success && result.message) {
+				const welcomeMessage: ChatMessage = {
+					id: crypto.randomUUID(),
+					role: 'assistant',
+					content: result.message,
+					timestamp: Date.now(),
+					emotionState: 'happy',
+					isError: false
+				};
+
+				// Üdvözlő üzenetet az elejére tesszük
+				this.messages = [welcomeMessage, ...this.messages];
+				this.currentEmotion = 'happy';
+
+				console.log(
+					'[AiAssistantStore] Üdvözlő üzenet hozzáadva, messages length:',
+					this.messages.length
+				);
+
+				// 3 másodperc után visszaállítjuk neutral állapotra
+				setTimeout(() => {
+					this.currentEmotion = 'neutral';
+				}, 3000);
+
+				this.saveToStorage();
+			}
+		} catch (err) {
+			console.error('[AiAssistantStore] Üdvözlő üzenet betöltési hiba:', err);
 		}
 	}
 
@@ -294,11 +420,12 @@ class AiAssistantStore {
 		if (typeof localStorage === 'undefined') return;
 
 		try {
+			const storageKey = this.#getStorageKey();
 			const toStore = {
 				messages: this.messages.slice(-this.#config.maxHistoryLength),
 				lastUpdated: Date.now()
 			};
-			localStorage.setItem('racona_ai_assistant_history', JSON.stringify(toStore));
+			localStorage.setItem(storageKey, JSON.stringify(toStore));
 		} catch {
 			// Graceful degradation: ha a localStorage nem írható, session-only history
 		}
@@ -311,11 +438,22 @@ class AiAssistantStore {
 		this.messages = [];
 		if (typeof localStorage !== 'undefined') {
 			try {
-				localStorage.removeItem('racona_ai_assistant_history');
+				const storageKey = this.#getStorageKey();
+				localStorage.removeItem(storageKey);
 			} catch {
 				// Graceful degradation
 			}
 		}
+		if (typeof sessionStorage !== 'undefined') {
+			try {
+				const welcomeKey = this.#getWelcomeSessionKey();
+				sessionStorage.removeItem(welcomeKey);
+			} catch {
+				// Graceful degradation
+			}
+		}
+		// Üdvözlő üzenet újra betöltése
+		this.loadWelcomeMessage();
 	}
 
 	/**

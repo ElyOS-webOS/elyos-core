@@ -12,7 +12,7 @@ import {
 // Load .env file from project root
 import { config } from 'dotenv';
 if (!process.env.DATABASE_URL) {
-	config({ path: path.resolve(import.meta.dir, '../../../../.env') });
+	config({ path: path.resolve(import.meta.dir, '../../../../.env.local') });
 }
 
 console.log('🔍 DATABASE_URL:', process.env.DATABASE_URL ? '✓ Found' : '✗ Not found');
@@ -210,6 +210,7 @@ async function main() {
 
 		await runSeeds(onlySeeds);
 		await runProcedures(onlyProcedures);
+		await applyAdminEmail();
 
 		console.log('🎉 Seeding completed successfully!');
 	} catch (error) {

@@ -16,7 +16,7 @@
 
 import { command, query, getRequestEvent } from '$app/server';
 import * as v from 'valibot';
-import { agentConfigRepository } from '$lib/server/database/repositories';
+import { agentConfigRepository, aiProviderRepository } from '$lib/server/database/repositories';
 import type { AgentConfigWithMaskedKey } from '$lib/server/database/repositories';
 
 // ============================================================================
@@ -62,6 +62,18 @@ export interface GetAgentConfigResult {
 	config: AgentConfigWithMaskedKey | null;
 }
 
+export interface GetAvailableProvidersResult {
+	success: boolean;
+	error?: string;
+	providers?: Array<{
+		name: string;
+		displayName: string;
+		description: string;
+		isRecommended: boolean;
+		configs: Record<string, string>;
+	}>;
+}
+
 export interface SaveAgentConfigResult {
 	success: boolean;
 	error?: string;
@@ -75,10 +87,92 @@ export interface TestConnectionResult {
 }
 
 // ============================================================================
+// Helper funkciók
+// ============================================================================
+
+/**
+ * Provider konfiguráció lekérése adatbázisból environment változó fallback-kel
+ */
+async function getProviderConfigValue(
+	providerName: string,
+	configKey: string,
+	envKey?: string
+): Promise<string | null> {
+	try {
+		const configMap = await aiProviderRepository.getProviderConfigMap(providerName);
+		const dbValue = configMap[configKey];
+
+		// Precedencia: adatbázis érték → environment változó → null
+		if (dbValue) {
+			return dbValue;
+		}
+
+		if (envKey && process.env[envKey]) {
+			return process.env[envKey] || null;
+		}
+
+		return null;
+	} catch (err) {
+		console.error(
+			`[AgentConfig] Provider config lekérési hiba (${providerName}.${configKey}):`,
+			err
+		);
+		// Ha adatbázis hiba van, próbáljuk az environment változót
+		if (envKey && process.env[envKey]) {
+			return process.env[envKey] || null;
+		}
+		return null;
+	}
+}
+
+// ============================================================================
+// getAvailableProviders — elérhető AI szolgáltatók lekérése
+// ============================================================================
+
+export const getAvailableProviders = command(
+	v.object({}),
+	async (): Promise<GetAvailableProvidersResult> => {
+		const event = getRequestEvent();
+		const { locals } = event;
+
+		if (!locals.user?.id) {
+			return { success: false, error: 'Nem vagy bejelentkezve.' };
+		}
+
+		try {
+			const providersWithConfigs = await aiProviderRepository.getEnabledProviders();
+
+			const providers = providersWithConfigs.map((provider) => {
+				const configs: Record<string, string> = {};
+				for (const config of provider.configs) {
+					configs[config.configKey] = config.configValue;
+				}
+
+				return {
+					name: provider.name,
+					displayName: provider.displayName,
+					description: provider.description || '',
+					isRecommended: provider.isRecommended,
+					configs
+				};
+			});
+
+			return { success: true, providers };
+		} catch (err) {
+			console.error('[AgentConfig] Provider lekérési hiba:', err);
+			return {
+				success: false,
+				error: err instanceof Error ? err.message : 'Ismeretlen hiba történt.'
+			};
+		}
+	}
+);
+
+// ============================================================================
 // getAgentConfig — aktív agent konfiguráció lekérése
 // ============================================================================
 
-export const getAgentConfig = query(async (): Promise<GetAgentConfigResult> => {
+export const getAgentConfig = command(v.object({}), async (): Promise<GetAgentConfigResult> => {
 	const event = getRequestEvent();
 	const { locals } = event;
 
@@ -180,8 +274,14 @@ export const testAgentConnection = command(
 			switch (provider) {
 				case 'gemini': {
 					// Google Gemini API tesztelés
-					const url = baseUrl || 'https://generativelanguage.googleapis.com/v1beta/models';
-					const model = modelName || process.env.AI_GEMINI_DEFAULT_MODEL || 'gemini-2.0-flash-exp';
+					const url =
+						baseUrl ||
+						(await getProviderConfigValue('gemini', 'base_url')) ||
+						'https://generativelanguage.googleapis.com/v1beta/models';
+					const model =
+						modelName ||
+						(await getProviderConfigValue('gemini', 'default_model', 'AI_GEMINI_DEFAULT_MODEL')) ||
+						'gemini-2.5-flash';
 					const testUrl = `${url}/${model}:generateContent?key=${apiKey}`;
 
 					const response = await fetch(testUrl, {
@@ -208,8 +308,14 @@ export const testAgentConnection = command(
 
 				case 'groq': {
 					// Groq API tesztelés
-					const url = baseUrl || 'https://api.groq.com/openai/v1/chat/completions';
-					const model = modelName || process.env.AI_GROQ_DEFAULT_MODEL || 'llama-3.3-70b-versatile';
+					const url =
+						baseUrl ||
+						(await getProviderConfigValue('groq', 'base_url')) ||
+						'https://api.groq.com/openai/v1/chat/completions';
+					const model =
+						modelName ||
+						(await getProviderConfigValue('groq', 'default_model', 'AI_GROQ_DEFAULT_MODEL')) ||
+						'llama-3.3-70b-versatile';
 
 					const response = await fetch(url, {
 						method: 'POST',
@@ -240,8 +346,14 @@ export const testAgentConnection = command(
 
 				case 'openai': {
 					// OpenAI API tesztelés
-					const url = baseUrl || 'https://api.openai.com/v1/chat/completions';
-					const model = modelName || process.env.AI_OPENAI_DEFAULT_MODEL || 'gpt-4o-mini';
+					const url =
+						baseUrl ||
+						(await getProviderConfigValue('openai', 'base_url')) ||
+						'https://api.openai.com/v1/chat/completions';
+					const model =
+						modelName ||
+						(await getProviderConfigValue('openai', 'default_model', 'AI_OPENAI_DEFAULT_MODEL')) ||
+						'gpt-4o-mini';
 
 					const response = await fetch(url, {
 						method: 'POST',
@@ -272,9 +384,18 @@ export const testAgentConnection = command(
 
 				case 'anthropic': {
 					// Anthropic (Claude) API tesztelés
-					const url = baseUrl || 'https://api.anthropic.com/v1/messages';
+					const url =
+						baseUrl ||
+						(await getProviderConfigValue('anthropic', 'base_url')) ||
+						'https://api.anthropic.com/v1/messages';
 					const model =
-						modelName || process.env.AI_ANTHROPIC_DEFAULT_MODEL || 'claude-3-5-sonnet-20241022';
+						modelName ||
+						(await getProviderConfigValue(
+							'anthropic',
+							'default_model',
+							'AI_ANTHROPIC_DEFAULT_MODEL'
+						)) ||
+						'claude-3-5-sonnet-20241022';
 
 					const response = await fetch(url, {
 						method: 'POST',
@@ -308,10 +429,15 @@ export const testAgentConnection = command(
 					// Hugging Face API tesztelés
 					const url =
 						baseUrl ||
+						(await getProviderConfigValue('huggingface', 'base_url')) ||
 						'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2';
 					const model =
 						modelName ||
-						process.env.AI_HUGGINGFACE_DEFAULT_MODEL ||
+						(await getProviderConfigValue(
+							'huggingface',
+							'default_model',
+							'AI_HUGGINGFACE_DEFAULT_MODEL'
+						)) ||
 						'mistralai/Mistral-7B-Instruct-v0.2';
 					const testUrl = baseUrl ? url : `https://api-inference.huggingface.co/models/${model}`;
 
@@ -357,7 +483,14 @@ export const testAgentConnection = command(
 							Authorization: `Bearer ${apiKey}`
 						},
 						body: JSON.stringify({
-							model: modelName || process.env.AI_CUSTOM_DEFAULT_MODEL || 'default',
+							model:
+								modelName ||
+								(await getProviderConfigValue(
+									'custom',
+									'default_model',
+									'AI_CUSTOM_DEFAULT_MODEL'
+								)) ||
+								'default',
 							messages: [{ role: 'user', content: 'Hello' }],
 							max_tokens: 10
 						})

@@ -52,6 +52,11 @@
 	const aiAssistantStore = createAiAssistantStore();
 	setAiAssistantStore(aiAssistantStore);
 
+	// User ID beállítása a store-ban (multi-user support)
+	if (settings.userId) {
+		aiAssistantStore.setUserId(settings.userId);
+	}
+
 	// ThemeManager csak kliens oldalon
 	let themeManager = $state<ReturnType<typeof getThemeManager> | null>(null);
 	let apps = $state<Awaited<ReturnType<typeof getApps>>>([]);

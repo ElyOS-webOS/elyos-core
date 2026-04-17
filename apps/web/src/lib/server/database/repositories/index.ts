@@ -59,6 +59,10 @@ export type { InsertAvatarData, UpsertAvatarConfigData } from './avatarRepositor
 export { agentConfigRepository } from './agentConfigRepository';
 export type { UpsertAgentConfigData, AgentConfigWithMaskedKey } from './agentConfigRepository';
 
+// AI Provider repository exports
+export { aiProviderRepository } from './aiProviderRepository';
+export type { ProviderWithConfigs, ProviderConfigMap } from './aiProviderRepository';
+
 // Theme presets repository exports
 export { themePresetsRepository } from './theme-presets-repository';
 

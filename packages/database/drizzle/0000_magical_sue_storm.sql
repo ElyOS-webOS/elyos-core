@@ -18,6 +18,49 @@ CREATE TABLE "auth"."accounts" (
 	"updated_at" timestamp with time zone DEFAULT now()
 );
 --> statement-breakpoint
+CREATE TABLE "platform"."activity_logs" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"action_key" varchar(255) NOT NULL,
+	"user_id" varchar(255),
+	"resource_type" varchar(100),
+	"resource_id" varchar(255),
+	"context" jsonb,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "platform"."ai_avatars" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"idname" varchar(100) NOT NULL,
+	"display_name" varchar(255) NOT NULL,
+	"manifest" jsonb NOT NULL,
+	"available_qualities" jsonb NOT NULL,
+	"installed_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "ai_avatars_idname_unique" UNIQUE("idname")
+);
+--> statement-breakpoint
+CREATE TABLE "platform"."ai_provider_configs" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"provider_id" integer NOT NULL,
+	"config_key" varchar(100) NOT NULL,
+	"config_value" text NOT NULL,
+	"config_type" varchar(20) DEFAULT 'string' NOT NULL,
+	"is_required" boolean DEFAULT false NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "ai_provider_configs_provider_id_config_key_unique" UNIQUE("provider_id","config_key")
+);
+--> statement-breakpoint
+CREATE TABLE "platform"."ai_providers" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" varchar(50) NOT NULL,
+	"display_name" varchar(100) NOT NULL,
+	"description" text,
+	"is_enabled" boolean DEFAULT true NOT NULL,
+	"is_recommended" boolean DEFAULT false NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "ai_providers_name_unique" UNIQUE("name")
+);
+--> statement-breakpoint
 CREATE TABLE "platform"."apps" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"app_id" varchar(50) NOT NULL,
@@ -322,6 +365,15 @@ CREATE TABLE "auth"."two_factors" (
 	"user_id" integer NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "platform"."user_avatar_configs" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"user_id" integer NOT NULL,
+	"avatar_idname" varchar(100) NOT NULL,
+	"quality" varchar(2) DEFAULT 'sd' NOT NULL,
+	"custom_name" varchar(255),
+	CONSTRAINT "user_avatar_configs_user_id_unique" UNIQUE("user_id")
+);
+--> statement-breakpoint
 CREATE TABLE "auth"."user_groups" (
 	"user_id" integer,
 	"group_id" integer,
@@ -364,6 +416,7 @@ CREATE TABLE "auth"."verifications" (
 --> statement-breakpoint
 ALTER TABLE "auth"."accounts" ADD CONSTRAINT "accounts_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "auth"."accounts" ADD CONSTRAINT "accounts_provider_id_providers_name_fk" FOREIGN KEY ("provider_id") REFERENCES "auth"."providers"("name") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "platform"."ai_provider_configs" ADD CONSTRAINT "ai_provider_configs_provider_id_ai_providers_id_fk" FOREIGN KEY ("provider_id") REFERENCES "platform"."ai_providers"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "auth"."audit_logs" ADD CONSTRAINT "audit_logs_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "platform"."desktop_shortcuts" ADD CONSTRAINT "desktop_shortcuts_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "platform"."files" ADD CONSTRAINT "files_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
@@ -381,10 +434,15 @@ ALTER TABLE "auth"."role_permissions" ADD CONSTRAINT "role_permissions_role_id_r
 ALTER TABLE "auth"."role_permissions" ADD CONSTRAINT "role_permissions_permission_id_permissions_id_fk" FOREIGN KEY ("permission_id") REFERENCES "auth"."permissions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "auth"."sessions" ADD CONSTRAINT "sessions_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "auth"."two_factors" ADD CONSTRAINT "two_factors_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "platform"."user_avatar_configs" ADD CONSTRAINT "user_avatar_configs_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "platform"."user_avatar_configs" ADD CONSTRAINT "user_avatar_configs_avatar_idname_ai_avatars_idname_fk" FOREIGN KEY ("avatar_idname") REFERENCES "platform"."ai_avatars"("idname") ON DELETE restrict ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "auth"."user_groups" ADD CONSTRAINT "user_groups_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "auth"."user_groups" ADD CONSTRAINT "user_groups_group_id_groups_id_fk" FOREIGN KEY ("group_id") REFERENCES "auth"."groups"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "auth"."user_roles" ADD CONSTRAINT "user_roles_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "auth"."user_roles" ADD CONSTRAINT "user_roles_role_id_roles_id_fk" FOREIGN KEY ("role_id") REFERENCES "auth"."roles"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "activity_logs_user_id_idx" ON "platform"."activity_logs" USING btree ("user_id");--> statement-breakpoint
+CREATE INDEX "activity_logs_action_key_idx" ON "platform"."activity_logs" USING btree ("action_key");--> statement-breakpoint
+CREATE INDEX "activity_logs_created_at_idx" ON "platform"."activity_logs" USING btree ("created_at");--> statement-breakpoint
 CREATE INDEX "idx_apps_app_type" ON "platform"."apps" USING btree ("app_type");--> statement-breakpoint
 CREATE INDEX "idx_apps_plugin_status" ON "platform"."apps" USING btree ("plugin_status");--> statement-breakpoint
 CREATE INDEX "desktop_shortcuts_user_id_idx" ON "platform"."desktop_shortcuts" USING btree ("user_id");--> statement-breakpoint
