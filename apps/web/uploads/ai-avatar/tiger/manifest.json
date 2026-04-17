@@ -1,9 +1,0 @@
-{
-	"idname": "tiger",
-	"displayName": "Tiri",
-	"descriptions": {
-		"hu": "...",
-		"en": "..."
-	},
-	"availableQualities": ["sd", "hd"]
-}

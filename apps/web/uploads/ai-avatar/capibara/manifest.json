@@ -1,9 +1,0 @@
-{
-	"idname": "capibara",
-	"displayName": "Capi",
-	"descriptions": {
-		"hu": "...",
-		"en": "..."
-	},
-	"availableQualities": ["sd", "hd"]
-}

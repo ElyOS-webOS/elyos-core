@@ -1,9 +1,0 @@
-{
-	"idname": "toucan",
-	"displayName": "Tuki",
-	"descriptions": {
-		"hu": "Tuki muki",
-		"en": "Tuki muki"
-	},
-	"availableQualities": ["sd", "hd"]
-}
